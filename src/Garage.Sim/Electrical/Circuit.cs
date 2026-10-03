@@ -133,6 +133,9 @@ namespace Garage.Sim.Electrical
         /// <summary>Internal resistance of the sensor source (ohms).</summary>
         public double SourceOhms { get; set; } = 100;
 
+        /// <summary>ECU bias voltage on oxygen sensor signal inputs (0.45 V narrowband, 0 V wideband interface).</summary>
+        public double BiasVolts { get; set; } = 0.45;
+
         /// <summary>Hall output transistor on (pulling signal low).</summary>
         public bool HallOn { get; set; }
 
@@ -307,7 +310,7 @@ namespace Garage.Sim.Electrical
                     n.SetResistance(_bSensor, SourceOhms);
                     break;
                 case CircuitTopology.HeatedOxygen:
-                    n.SetVoltage(_bRef, KeyOn ? 0.45 : 0);
+                    n.SetVoltage(_bRef, KeyOn ? BiasVolts : 0);
                     n.SetVoltage(_bSensor, SensorValue);
                     n.SetResistance(_bSensor, SourceOhms);
                     n.SetResistance(_bSensor2, Math.Max(0.1, SensorValue2));
