@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "upgrade.schema.json",
+  "title": "Herramientas y mejoras del taller",
+  "type": "object",
+  "required": ["upgrades"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "upgrades": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "type", "price"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "name": { "type": "string" },
+          "type": { "enum": ["tool", "workshop"] },
+          "price": { "type": "number", "minimum": 0 },
+          "reputationRequired": { "type": "number", "minimum": 0 },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mod.schema.json",
+  "title": "Manifiesto de mod (mods/<nombre>/mod.json)",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "author": { "type": "string" },
+    "version": { "type": "string" },
+    "priority": { "type": "integer" },
+    "enabled": { "type": "boolean" },
+    "description": { "type": "string" }
+  }
+}

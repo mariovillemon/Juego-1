@@ -1,0 +1,25 @@
+{
+  "id": "aurex_strada_gt",
+  "brand": "Aurex",
+  "model": "Strada GT",
+  "year": 2016,
+  "segment": "Compacto deportivo 5 puertas",
+  "engine": "t20_turbo",
+  "template": "gasoline_turbo",
+  "calibration": "t20_stock",
+  "massKg": 1420,
+  "wheelRadiusM": 0.316,
+  "gearRatios": [3.36, 2.09, 1.47, 1.1, 0.87, 0.73],
+  "finalDrive": 3.94,
+  "drivetrainEfficiency": 0.88,
+  "dragAreaM2": 0.68,
+  "vin": "AUX1GT5D0G0012345",
+  "appearance": {
+    "ageYears": 8,
+    "kilometers": 118000,
+    "maintenance": 0.55,
+    "paintColor": "#B1121B",
+    "humidity": 0.3
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

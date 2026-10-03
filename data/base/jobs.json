@@ -1,0 +1,107 @@
+{
+  "$schema": "../schemas/job.schema.json",
+  "jobs": [
+    {
+      "id": "job_01",
+      "customer": "cust_marta",
+      "car": "aurex_strada_gt",
+      "goal": "repair",
+      "complaint": "Me sale la luz del motor y al ralentí va como a saltitos.",
+      "budget": 450,
+      "deadlineDays": 3,
+      "scenario": "sc_vacuum_leak_pcv"
+    },
+    {
+      "id": "job_02",
+      "customer": "cust_irene",
+      "car": "velmora_pico",
+      "goal": "inspection",
+      "complaint": "Tengo la ITV el lunes y me dicen que las emisiones no van a pasar.",
+      "budget": 900,
+      "deadlineDays": 5,
+      "scenario": "sc_cat_worn"
+    },
+    {
+      "id": "job_03",
+      "customer": "cust_javi",
+      "car": "aurex_strada_gt",
+      "goal": "power",
+      "complaint": "Quiero unos 285 CV para tandas, sin romper nada.",
+      "budget": 1800,
+      "deadlineDays": 10,
+      "powerTargetPs": 285
+    },
+    {
+      "id": "job_04",
+      "customer": "cust_lucia",
+      "car": "velmora_pico",
+      "goal": "repair",
+      "complaint": "Esta mañana no ha querido arrancar. ¡Lo necesito ya!",
+      "budget": 300,
+      "deadlineDays": 1,
+      "scenario": "sc_pump_fuse"
+    },
+    {
+      "id": "job_05",
+      "customer": "cust_pablo",
+      "car": "aurex_strada_gt",
+      "goal": "repair",
+      "complaint": "Va a tirones y la luz del motor parpadea.",
+      "budget": 400,
+      "deadlineDays": 1,
+      "scenario": "sc_coil2_dead"
+    },
+    {
+      "id": "job_06",
+      "customer": "cust_sara",
+      "car": "nordak_atlas_td",
+      "goal": "repair",
+      "complaint": "En las cuestas de la autopista se queda sin fuerza.",
+      "budget": 500,
+      "deadlineDays": 2,
+      "scenario": "sc_fuel_filter"
+    },
+    {
+      "id": "job_07",
+      "customer": "cust_elena",
+      "car": "kessler_rapace",
+      "goal": "track",
+      "complaint": "Lo preparo para una subida de montaña: más potencia y que aguante.",
+      "budget": 3500,
+      "deadlineDays": 14,
+      "powerTargetPs": 420
+    },
+    {
+      "id": "job_08",
+      "customer": "cust_anton",
+      "car": "velmora_pico",
+      "goal": "repair",
+      "complaint": "La calefacción no calienta nada y gasta más que antes.",
+      "budget": 250,
+      "deadlineDays": 7,
+      "scenario": "sc_thermostat_open"
+    },
+    {
+      "id": "job_09",
+      "customer": "cust_nuria",
+      "car": "aurex_strada_gt",
+      "goal": "repair",
+      "complaint": "Hace un ruido metálico al arrancar en frío y ahora tengo un código.",
+      "budget": 1200,
+      "deadlineDays": 5,
+      "scenario": "sc_timing_stretch"
+    },
+    {
+      "id": "job_10",
+      "customer": "cust_flota",
+      "car": "kessler_rapace",
+      "goal": "repair",
+      "complaint": "Revisión completa: testigo encendido tras el último cliente de alquiler.",
+      "budget": 1500,
+      "deadlineDays": 3,
+      "generate": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

@@ -1,0 +1,1985 @@
+{
+  "$schema": "../schemas/dtc.schema.json",
+  "codes": [
+    {
+      "code": "P0010",
+      "description": "\"A\" Camshaft Position Actuator Circuit (Bank 1)",
+      "descriptionEs": "Actuador de posición del árbol de levas \"A\": circuito (banco 1)",
+      "system": "vvt",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Electroválvula VVT", "Cableado"]
+    },
+    {
+      "code": "P0011",
+      "description": "\"A\" Camshaft Position - Timing Over-Advanced or System Performance (Bank 1)",
+      "descriptionEs": "Posición del árbol de levas \"A\": avance excesivo o funcionamiento (banco 1)",
+      "system": "vvt",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Aceite incorrecto o bajo nivel", "Electroválvula VVT atascada"]
+    },
+    {
+      "code": "P0012",
+      "description": "\"A\" Camshaft Position - Timing Over-Retarded (Bank 1)",
+      "descriptionEs": "Posición del árbol de levas \"A\": retraso excesivo (banco 1)",
+      "system": "vvt",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Electroválvula VVT", "Cadena estirada"]
+    },
+    {
+      "code": "P0016",
+      "description": "Crankshaft Position - Camshaft Position Correlation (Bank 1 Sensor A)",
+      "descriptionEs": "Correlación posición cigüeñal - árbol de levas (banco 1, sensor A)",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Cadena/correa de distribución estirada o saltada", "Sensor CKP/CMP", "Rueda fónica dañada"]
+    },
+    {
+      "code": "P0030",
+      "description": "HO2S Heater Control Circuit (Bank 1 Sensor 1)",
+      "descriptionEs": "Control del calefactor de sonda lambda: circuito (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Calefactor de sonda abierto", "Fusible", "Cableado"]
+    },
+    {
+      "code": "P0031",
+      "description": "HO2S Heater Control Circuit Low (Bank 1 Sensor 1)",
+      "descriptionEs": "Control del calefactor de sonda lambda: señal baja (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a masa", "Calefactor abierto"]
+    },
+    {
+      "code": "P0032",
+      "description": "HO2S Heater Control Circuit High (Bank 1 Sensor 1)",
+      "descriptionEs": "Control del calefactor de sonda lambda: señal alta (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0036",
+      "description": "HO2S Heater Control Circuit (Bank 1 Sensor 2)",
+      "descriptionEs": "Control del calefactor de sonda lambda: circuito (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Calefactor abierto", "Fusible"]
+    },
+    {
+      "code": "P0037",
+      "description": "HO2S Heater Control Circuit Low (Bank 1 Sensor 2)",
+      "descriptionEs": "Control del calefactor de sonda lambda: señal baja (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0038",
+      "description": "HO2S Heater Control Circuit High (Bank 1 Sensor 2)",
+      "descriptionEs": "Control del calefactor de sonda lambda: señal alta (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0045",
+      "description": "Turbocharger/Supercharger Boost Control \"A\" Circuit/Open",
+      "descriptionEs": "Control de presión del turbo \"A\": circuito abierto",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Electroválvula de wastegate", "Cableado"]
+    },
+    {
+      "code": "P0046",
+      "description": "Turbocharger/Supercharger Boost Control \"A\" Circuit Range/Performance",
+      "descriptionEs": "Control de presión del turbo \"A\": rango/funcionamiento",
+      "system": "turbo",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Actuador del turbo", "Fuga de vacío del actuador"]
+    },
+    {
+      "code": "P0047",
+      "description": "Turbocharger/Supercharger Boost Control \"A\" Circuit Low",
+      "descriptionEs": "Control de presión del turbo \"A\": señal baja",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0048",
+      "description": "Turbocharger/Supercharger Boost Control \"A\" Circuit High",
+      "descriptionEs": "Control de presión del turbo \"A\": señal alta",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0068",
+      "description": "MAP/MAF - Throttle Position Correlation",
+      "descriptionEs": "Correlación MAP/MAF - posición de mariposa",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga de vacío grande", "Caudalímetro", "Mariposa sucia"]
+    },
+    {
+      "code": "P0069",
+      "description": "Manifold Absolute Pressure - Barometric Pressure Correlation",
+      "descriptionEs": "Correlación presión de colector - presión barométrica",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor MAP sesgado"]
+    },
+    {
+      "code": "P0087",
+      "description": "Fuel Rail/System Pressure - Too Low",
+      "descriptionEs": "Presión de rampa/sistema de combustible demasiado baja",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bomba débil", "Filtro de combustible obstruido", "Regulador defectuoso", "Fusible/relé de bomba"]
+    },
+    {
+      "code": "P0088",
+      "description": "Fuel Rail/System Pressure - Too High",
+      "descriptionEs": "Presión de rampa/sistema de combustible demasiado alta",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Regulador atascado", "Retorno obstruido"]
+    },
+    {
+      "code": "P0089",
+      "description": "Fuel Pressure Regulator 1 Performance",
+      "descriptionEs": "Regulador de presión de combustible 1: funcionamiento",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Regulador"]
+    },
+    {
+      "code": "P0090",
+      "description": "Fuel Pressure Regulator 1 Control Circuit",
+      "descriptionEs": "Regulador de presión de combustible 1: circuito de control",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cableado", "Regulador"]
+    },
+    {
+      "code": "P0100",
+      "description": "Mass or Volume Air Flow \"A\" Circuit",
+      "descriptionEs": "Caudalímetro de aire \"A\": circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Caudalímetro sucio o averiado", "Fuga de aire tras el caudalímetro", "Cableado/conector"]
+    },
+    {
+      "code": "P0101",
+      "description": "Mass or Volume Air Flow \"A\" Circuit Range/Performance",
+      "descriptionEs": "Caudalímetro de aire \"A\": rango/funcionamiento del circuito",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Caudalímetro sucio o averiado", "Fuga de aire tras el caudalímetro", "Cableado/conector"]
+    },
+    {
+      "code": "P0102",
+      "description": "Mass or Volume Air Flow \"A\" Circuit Low",
+      "descriptionEs": "Caudalímetro de aire \"A\": señal baja en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cortocircuito a masa", "Circuito abierto de señal/referencia", "Sensor averiado"]
+    },
+    {
+      "code": "P0103",
+      "description": "Mass or Volume Air Flow \"A\" Circuit High",
+      "descriptionEs": "Caudalímetro de aire \"A\": señal alta en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto de masa", "Corto a positivo", "Sensor averiado"]
+    },
+    {
+      "code": "P0104",
+      "description": "Mass or Volume Air Flow \"A\" Circuit Intermittent",
+      "descriptionEs": "Caudalímetro de aire \"A\": circuito intermitente",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Conector flojo u oxidado", "Cableado rozado"]
+    },
+    {
+      "code": "P0105",
+      "description": "Manifold Absolute Pressure/Barometric Pressure Circuit",
+      "descriptionEs": "Sensor de presión absoluta de colector/barométrica: circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor MAP", "Toma de vacío obstruida", "Cableado"]
+    },
+    {
+      "code": "P0106",
+      "description": "Manifold Absolute Pressure/Barometric Pressure Circuit Range/Performance",
+      "descriptionEs": "Sensor de presión absoluta de colector/barométrica: rango/funcionamiento del circuito",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor MAP", "Toma de vacío obstruida", "Cableado"]
+    },
+    {
+      "code": "P0107",
+      "description": "Manifold Absolute Pressure/Barometric Pressure Circuit Low",
+      "descriptionEs": "Sensor de presión absoluta de colector/barométrica: señal baja en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cortocircuito a masa", "Circuito abierto de señal/referencia", "Sensor averiado"]
+    },
+    {
+      "code": "P0108",
+      "description": "Manifold Absolute Pressure/Barometric Pressure Circuit High",
+      "descriptionEs": "Sensor de presión absoluta de colector/barométrica: señal alta en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto de masa", "Corto a positivo", "Sensor averiado"]
+    },
+    {
+      "code": "P0109",
+      "description": "Manifold Absolute Pressure/Barometric Pressure Circuit Intermittent",
+      "descriptionEs": "Sensor de presión absoluta de colector/barométrica: circuito intermitente",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Conector flojo u oxidado", "Cableado rozado"]
+    },
+    {
+      "code": "P0110",
+      "description": "Intake Air Temperature Sensor 1 Circuit",
+      "descriptionEs": "Sensor de temperatura del aire de admisión 1: circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor IAT", "Cableado/conector"]
+    },
+    {
+      "code": "P0111",
+      "description": "Intake Air Temperature Sensor 1 Circuit Range/Performance",
+      "descriptionEs": "Sensor de temperatura del aire de admisión 1: rango/funcionamiento del circuito",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor IAT", "Cableado/conector"]
+    },
+    {
+      "code": "P0112",
+      "description": "Intake Air Temperature Sensor 1 Circuit Low",
+      "descriptionEs": "Sensor de temperatura del aire de admisión 1: señal baja en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cortocircuito a masa", "Circuito abierto de señal/referencia", "Sensor averiado"]
+    },
+    {
+      "code": "P0113",
+      "description": "Intake Air Temperature Sensor 1 Circuit High",
+      "descriptionEs": "Sensor de temperatura del aire de admisión 1: señal alta en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto de masa", "Corto a positivo", "Sensor averiado"]
+    },
+    {
+      "code": "P0114",
+      "description": "Intake Air Temperature Sensor 1 Circuit Intermittent",
+      "descriptionEs": "Sensor de temperatura del aire de admisión 1: circuito intermitente",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Conector flojo u oxidado", "Cableado rozado"]
+    },
+    {
+      "code": "P0115",
+      "description": "Engine Coolant Temperature Sensor 1 Circuit",
+      "descriptionEs": "Sensor de temperatura del refrigerante 1: circuito",
+      "system": "cooling",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor ECT", "Cableado/conector", "Termostato"]
+    },
+    {
+      "code": "P0116",
+      "description": "Engine Coolant Temperature Sensor 1 Circuit Range/Performance",
+      "descriptionEs": "Sensor de temperatura del refrigerante 1: rango/funcionamiento del circuito",
+      "system": "cooling",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor ECT", "Cableado/conector", "Termostato"]
+    },
+    {
+      "code": "P0117",
+      "description": "Engine Coolant Temperature Sensor 1 Circuit Low",
+      "descriptionEs": "Sensor de temperatura del refrigerante 1: señal baja en el circuito",
+      "system": "cooling",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cortocircuito a masa", "Circuito abierto de señal/referencia", "Sensor averiado"]
+    },
+    {
+      "code": "P0118",
+      "description": "Engine Coolant Temperature Sensor 1 Circuit High",
+      "descriptionEs": "Sensor de temperatura del refrigerante 1: señal alta en el circuito",
+      "system": "cooling",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto de masa", "Corto a positivo", "Sensor averiado"]
+    },
+    {
+      "code": "P0119",
+      "description": "Engine Coolant Temperature Sensor 1 Circuit Intermittent",
+      "descriptionEs": "Sensor de temperatura del refrigerante 1: circuito intermitente",
+      "system": "cooling",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Conector flojo u oxidado", "Cableado rozado"]
+    },
+    {
+      "code": "P0120",
+      "description": "Throttle/Pedal Position Sensor/Switch \"A\" Circuit",
+      "descriptionEs": "Sensor de posición de mariposa/pedal \"A\": circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor TPS", "Cableado"]
+    },
+    {
+      "code": "P0121",
+      "description": "Throttle/Pedal Position Sensor/Switch \"A\" Circuit Range/Performance",
+      "descriptionEs": "Sensor de posición de mariposa/pedal \"A\": rango/funcionamiento del circuito",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor TPS", "Cableado"]
+    },
+    {
+      "code": "P0122",
+      "description": "Throttle/Pedal Position Sensor/Switch \"A\" Circuit Low",
+      "descriptionEs": "Sensor de posición de mariposa/pedal \"A\": señal baja en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cortocircuito a masa", "Circuito abierto de señal/referencia", "Sensor averiado"]
+    },
+    {
+      "code": "P0123",
+      "description": "Throttle/Pedal Position Sensor/Switch \"A\" Circuit High",
+      "descriptionEs": "Sensor de posición de mariposa/pedal \"A\": señal alta en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto de masa", "Corto a positivo", "Sensor averiado"]
+    },
+    {
+      "code": "P0124",
+      "description": "Throttle/Pedal Position Sensor/Switch \"A\" Circuit Intermittent",
+      "descriptionEs": "Sensor de posición de mariposa/pedal \"A\": circuito intermitente",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Conector flojo u oxidado", "Cableado rozado"]
+    },
+    {
+      "code": "P0125",
+      "description": "Insufficient Coolant Temperature for Closed Loop Fuel Control",
+      "descriptionEs": "Temperatura de refrigerante insuficiente para lazo cerrado",
+      "system": "cooling",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Termostato abierto", "Sensor ECT"]
+    },
+    {
+      "code": "P0128",
+      "description": "Coolant Thermostat (Coolant Temperature Below Thermostat Regulating Temperature)",
+      "descriptionEs": "Termostato: temperatura del refrigerante por debajo de la de regulación",
+      "system": "cooling",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Termostato atascado abierto", "Sensor ECT sesgado", "Ventilador siempre funcionando"]
+    },
+    {
+      "code": "P0130",
+      "description": "O2 Sensor Circuit (Bank 1 Sensor 1)",
+      "descriptionEs": "Sonda lambda: circuito (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda", "Cableado"]
+    },
+    {
+      "code": "P0131",
+      "description": "O2 Sensor Circuit Low Voltage (Bank 1 Sensor 1)",
+      "descriptionEs": "Sonda lambda: tensión baja (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a masa", "Fuga de escape", "Mezcla pobre real"]
+    },
+    {
+      "code": "P0132",
+      "description": "O2 Sensor Circuit High Voltage (Bank 1 Sensor 1)",
+      "descriptionEs": "Sonda lambda: tensión alta (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a positivo", "Sonda contaminada"]
+    },
+    {
+      "code": "P0133",
+      "description": "O2 Sensor Circuit Slow Response (Bank 1 Sensor 1)",
+      "descriptionEs": "Sonda lambda: respuesta lenta (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda envejecida/contaminada", "Fuga de escape"]
+    },
+    {
+      "code": "P0134",
+      "description": "O2 Sensor Circuit No Activity Detected (Bank 1 Sensor 1)",
+      "descriptionEs": "Sonda lambda: sin actividad (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Señal abierta", "Calefactor averiado", "Sonda muerta"]
+    },
+    {
+      "code": "P0135",
+      "description": "O2 Sensor Heater Circuit (Bank 1 Sensor 1)",
+      "descriptionEs": "Calefactor de sonda lambda: circuito (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Calefactor abierto", "Fusible", "Cableado"]
+    },
+    {
+      "code": "P0136",
+      "description": "O2 Sensor Circuit (Bank 1 Sensor 2)",
+      "descriptionEs": "Sonda lambda: circuito (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda", "Cableado"]
+    },
+    {
+      "code": "P0137",
+      "description": "O2 Sensor Circuit Low Voltage (Bank 1 Sensor 2)",
+      "descriptionEs": "Sonda lambda: tensión baja (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a masa", "Fuga de escape"]
+    },
+    {
+      "code": "P0138",
+      "description": "O2 Sensor Circuit High Voltage (Bank 1 Sensor 2)",
+      "descriptionEs": "Sonda lambda: tensión alta (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0139",
+      "description": "O2 Sensor Circuit Slow Response (Bank 1 Sensor 2)",
+      "descriptionEs": "Sonda lambda: respuesta lenta (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda envejecida"]
+    },
+    {
+      "code": "P0140",
+      "description": "O2 Sensor Circuit No Activity Detected (Bank 1 Sensor 2)",
+      "descriptionEs": "Sonda lambda: sin actividad (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Circuito abierto"]
+    },
+    {
+      "code": "P0141",
+      "description": "O2 Sensor Heater Circuit (Bank 1 Sensor 2)",
+      "descriptionEs": "Calefactor de sonda lambda: circuito (B1S2)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Calefactor abierto", "Fusible"]
+    },
+    {
+      "code": "P0170",
+      "description": "Fuel Trim (Bank 1)",
+      "descriptionEs": "Corrección de combustible (banco 1)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga de vacío", "Presión de combustible", "Inyectores"]
+    },
+    {
+      "code": "P0171",
+      "description": "System Too Lean (Bank 1)",
+      "descriptionEs": "Sistema demasiado pobre (banco 1)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga de vacío/aire no medido", "Caudalímetro sucio", "Presión de combustible baja", "Inyectores obstruidos"]
+    },
+    {
+      "code": "P0172",
+      "description": "System Too Rich (Bank 1)",
+      "descriptionEs": "Sistema demasiado rico (banco 1)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Inyector que gotea", "Regulador de presión", "Fuga de presión de turbo (aire medido que se pierde)", "Sensor sesgado"]
+    },
+    {
+      "code": "P0174",
+      "description": "System Too Lean (Bank 2)",
+      "descriptionEs": "Sistema demasiado pobre (banco 2)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga de vacío", "Presión de combustible baja"]
+    },
+    {
+      "code": "P0175",
+      "description": "System Too Rich (Bank 2)",
+      "descriptionEs": "Sistema demasiado rico (banco 2)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Inyector que gotea"]
+    },
+    {
+      "code": "P0180",
+      "description": "Fuel Temperature Sensor A Circuit",
+      "descriptionEs": "Sensor de temperatura de combustible A: circuito",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor", "Cableado"]
+    },
+    {
+      "code": "P0190",
+      "description": "Fuel Rail Pressure Sensor \"A\" Circuit",
+      "descriptionEs": "Sensor de presión de rampa de combustible \"A\": circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor de presión de rampa", "Cableado"]
+    },
+    {
+      "code": "P0191",
+      "description": "Fuel Rail Pressure Sensor \"A\" Circuit Range/Performance",
+      "descriptionEs": "Sensor de presión de rampa de combustible \"A\": rango/funcionamiento del circuito",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor de presión de rampa", "Cableado"]
+    },
+    {
+      "code": "P0192",
+      "description": "Fuel Rail Pressure Sensor \"A\" Circuit Low",
+      "descriptionEs": "Sensor de presión de rampa de combustible \"A\": señal baja en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cortocircuito a masa", "Circuito abierto de señal/referencia", "Sensor averiado"]
+    },
+    {
+      "code": "P0193",
+      "description": "Fuel Rail Pressure Sensor \"A\" Circuit High",
+      "descriptionEs": "Sensor de presión de rampa de combustible \"A\": señal alta en el circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto de masa", "Corto a positivo", "Sensor averiado"]
+    },
+    {
+      "code": "P0194",
+      "description": "Fuel Rail Pressure Sensor \"A\" Circuit Intermittent",
+      "descriptionEs": "Sensor de presión de rampa de combustible \"A\": circuito intermitente",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Conector flojo u oxidado", "Cableado rozado"]
+    },
+    {
+      "code": "P0200",
+      "description": "Injector Circuit/Open",
+      "descriptionEs": "Circuito de inyectores abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Fusible de inyectores", "Cableado"]
+    },
+    {
+      "code": "P0201",
+      "description": "Injector Circuit/Open - Cylinder 1",
+      "descriptionEs": "Inyector cilindro 1: circuito abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Inyector 1 con bobinado abierto", "Cable de control abierto", "Conector"]
+    },
+    {
+      "code": "P0202",
+      "description": "Injector Circuit/Open - Cylinder 2",
+      "descriptionEs": "Inyector cilindro 2: circuito abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Inyector 2 con bobinado abierto", "Cable de control abierto", "Conector"]
+    },
+    {
+      "code": "P0203",
+      "description": "Injector Circuit/Open - Cylinder 3",
+      "descriptionEs": "Inyector cilindro 3: circuito abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Inyector 3 con bobinado abierto", "Cable de control abierto", "Conector"]
+    },
+    {
+      "code": "P0204",
+      "description": "Injector Circuit/Open - Cylinder 4",
+      "descriptionEs": "Inyector cilindro 4: circuito abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Inyector 4 con bobinado abierto", "Cable de control abierto", "Conector"]
+    },
+    {
+      "code": "P0205",
+      "description": "Injector Circuit/Open - Cylinder 5",
+      "descriptionEs": "Inyector cilindro 5: circuito abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Inyector 5 con bobinado abierto", "Cable de control abierto", "Conector"]
+    },
+    {
+      "code": "P0206",
+      "description": "Injector Circuit/Open - Cylinder 6",
+      "descriptionEs": "Inyector cilindro 6: circuito abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Inyector 6 con bobinado abierto", "Cable de control abierto", "Conector"]
+    },
+    {
+      "code": "P0217",
+      "description": "Engine Coolant Over Temperature Condition",
+      "descriptionEs": "Sobretemperatura del refrigerante",
+      "system": "cooling",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Ventilador averiado", "Termostato atascado cerrado", "Bajo nivel de refrigerante", "Junta de culata"]
+    },
+    {
+      "code": "P0218",
+      "description": "Transmission Fluid Over Temperature Condition",
+      "descriptionEs": "Sobretemperatura del aceite de la transmisión",
+      "system": "transmission",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Uso intensivo", "Enfriador"]
+    },
+    {
+      "code": "P0219",
+      "description": "Engine Overspeed Condition",
+      "descriptionEs": "Condición de sobrerrégimen del motor",
+      "system": "engine",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Reducción de marcha incorrecta", "Limitador modificado"]
+    },
+    {
+      "code": "P0220",
+      "description": "Throttle/Pedal Position Sensor/Switch \"B\" Circuit",
+      "descriptionEs": "Sensor de posición de mariposa/pedal \"B\": circuito",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor", "Cableado"]
+    },
+    {
+      "code": "P0221",
+      "description": "Throttle/Pedal Position Sensor/Switch \"B\" Circuit Range/Performance",
+      "descriptionEs": "Sensor de posición \"B\": rango/funcionamiento",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor"]
+    },
+    {
+      "code": "P0222",
+      "description": "Throttle/Pedal Position Sensor/Switch \"B\" Circuit Low",
+      "descriptionEs": "Sensor de posición \"B\": señal baja",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0223",
+      "description": "Throttle/Pedal Position Sensor/Switch \"B\" Circuit High",
+      "descriptionEs": "Sensor de posición \"B\": señal alta",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto de masa"]
+    },
+    {
+      "code": "P0230",
+      "description": "Fuel Pump Primary Circuit",
+      "descriptionEs": "Bomba de combustible: circuito primario",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Relé de bomba", "Cable de control del relé", "Fusible"]
+    },
+    {
+      "code": "P0231",
+      "description": "Fuel Pump Secondary Circuit Low",
+      "descriptionEs": "Bomba de combustible: circuito secundario bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0232",
+      "description": "Fuel Pump Secondary Circuit High",
+      "descriptionEs": "Bomba de combustible: circuito secundario alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0234",
+      "description": "Turbocharger/Supercharger \"A\" Overboost Condition",
+      "descriptionEs": "Turbo \"A\": sobrepresión",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Wastegate atascada cerrada", "Electroválvula N75", "Mapa modificado"]
+    },
+    {
+      "code": "P0235",
+      "description": "Turbocharger/Supercharger Boost Sensor \"A\" Circuit",
+      "descriptionEs": "Sensor de presión del turbo \"A\": circuito",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor", "Cableado"]
+    },
+    {
+      "code": "P0236",
+      "description": "Turbocharger/Supercharger Boost Sensor \"A\" Circuit Range/Performance",
+      "descriptionEs": "Sensor de presión del turbo \"A\": rango/funcionamiento",
+      "system": "turbo",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor", "Fuga de presión"]
+    },
+    {
+      "code": "P0237",
+      "description": "Turbocharger/Supercharger Boost Sensor \"A\" Circuit Low",
+      "descriptionEs": "Sensor de presión del turbo \"A\": señal baja",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa", "Circuito abierto"]
+    },
+    {
+      "code": "P0238",
+      "description": "Turbocharger/Supercharger Boost Sensor \"A\" Circuit High",
+      "descriptionEs": "Sensor de presión del turbo \"A\": señal alta",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Masa abierta", "Corto a positivo"]
+    },
+    {
+      "code": "P0243",
+      "description": "Turbocharger/Supercharger Wastegate Solenoid \"A\"",
+      "descriptionEs": "Electroválvula de wastegate \"A\"",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Electroválvula abierta", "Cableado", "Fusible"]
+    },
+    {
+      "code": "P0244",
+      "description": "Turbocharger/Supercharger Wastegate Solenoid \"A\" Range/Performance",
+      "descriptionEs": "Electroválvula de wastegate \"A\": rango/funcionamiento",
+      "system": "turbo",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Electroválvula"]
+    },
+    {
+      "code": "P0245",
+      "description": "Turbocharger/Supercharger Wastegate Solenoid \"A\" Low",
+      "descriptionEs": "Electroválvula de wastegate \"A\": señal baja",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0246",
+      "description": "Turbocharger/Supercharger Wastegate Solenoid \"A\" High",
+      "descriptionEs": "Electroválvula de wastegate \"A\": señal alta",
+      "system": "turbo",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a positivo", "Bobinado en corto"]
+    },
+    {
+      "code": "P0261",
+      "description": "Cylinder 1 Injector \"A\" Circuit Low",
+      "descriptionEs": "Inyector cilindro 1: circuito bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa del cable de control"]
+    },
+    {
+      "code": "P0262",
+      "description": "Cylinder 1 Injector \"A\" Circuit High",
+      "descriptionEs": "Inyector cilindro 1: circuito alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobinado en corto", "Corto a positivo"]
+    },
+    {
+      "code": "P0264",
+      "description": "Cylinder 2 Injector \"A\" Circuit Low",
+      "descriptionEs": "Inyector cilindro 2: circuito bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa del cable de control"]
+    },
+    {
+      "code": "P0265",
+      "description": "Cylinder 2 Injector \"A\" Circuit High",
+      "descriptionEs": "Inyector cilindro 2: circuito alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobinado en corto", "Corto a positivo"]
+    },
+    {
+      "code": "P0267",
+      "description": "Cylinder 3 Injector \"A\" Circuit Low",
+      "descriptionEs": "Inyector cilindro 3: circuito bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa del cable de control"]
+    },
+    {
+      "code": "P0268",
+      "description": "Cylinder 3 Injector \"A\" Circuit High",
+      "descriptionEs": "Inyector cilindro 3: circuito alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobinado en corto", "Corto a positivo"]
+    },
+    {
+      "code": "P0270",
+      "description": "Cylinder 4 Injector \"A\" Circuit Low",
+      "descriptionEs": "Inyector cilindro 4: circuito bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa del cable de control"]
+    },
+    {
+      "code": "P0271",
+      "description": "Cylinder 4 Injector \"A\" Circuit High",
+      "descriptionEs": "Inyector cilindro 4: circuito alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobinado en corto", "Corto a positivo"]
+    },
+    {
+      "code": "P0273",
+      "description": "Cylinder 5 Injector \"A\" Circuit Low",
+      "descriptionEs": "Inyector cilindro 5: circuito bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa del cable de control"]
+    },
+    {
+      "code": "P0274",
+      "description": "Cylinder 5 Injector \"A\" Circuit High",
+      "descriptionEs": "Inyector cilindro 5: circuito alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobinado en corto", "Corto a positivo"]
+    },
+    {
+      "code": "P0276",
+      "description": "Cylinder 6 Injector \"A\" Circuit Low",
+      "descriptionEs": "Inyector cilindro 6: circuito bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa del cable de control"]
+    },
+    {
+      "code": "P0277",
+      "description": "Cylinder 6 Injector \"A\" Circuit High",
+      "descriptionEs": "Inyector cilindro 6: circuito alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobinado en corto", "Corto a positivo"]
+    },
+    {
+      "code": "P0299",
+      "description": "Turbocharger/Supercharger \"A\" Underboost Condition",
+      "descriptionEs": "Turbo \"A\": presión insuficiente",
+      "system": "turbo",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga en manguitos/intercooler", "Wastegate atascada abierta", "Electroválvula N75", "Turbo desgastado"]
+    },
+    {
+      "code": "P0300",
+      "description": "Random/Multiple Cylinder Misfire Detected",
+      "descriptionEs": "Fallos de encendido aleatorios/múltiples",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Mezcla pobre general", "Presión de combustible", "Bujías desgastadas", "Fuga de vacío"]
+    },
+    {
+      "code": "P0301",
+      "description": "Cylinder 1 Misfire Detected",
+      "descriptionEs": "Fallo de encendido en el cilindro 1",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bujía o bobina del cilindro 1", "Inyector 1", "Compresión baja en cilindro 1", "Junta de admisión"]
+    },
+    {
+      "code": "P0302",
+      "description": "Cylinder 2 Misfire Detected",
+      "descriptionEs": "Fallo de encendido en el cilindro 2",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bujía o bobina del cilindro 2", "Inyector 2", "Compresión baja en cilindro 2", "Junta de admisión"]
+    },
+    {
+      "code": "P0303",
+      "description": "Cylinder 3 Misfire Detected",
+      "descriptionEs": "Fallo de encendido en el cilindro 3",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bujía o bobina del cilindro 3", "Inyector 3", "Compresión baja en cilindro 3", "Junta de admisión"]
+    },
+    {
+      "code": "P0304",
+      "description": "Cylinder 4 Misfire Detected",
+      "descriptionEs": "Fallo de encendido en el cilindro 4",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bujía o bobina del cilindro 4", "Inyector 4", "Compresión baja en cilindro 4", "Junta de admisión"]
+    },
+    {
+      "code": "P0305",
+      "description": "Cylinder 5 Misfire Detected",
+      "descriptionEs": "Fallo de encendido en el cilindro 5",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bujía o bobina del cilindro 5", "Inyector 5", "Compresión baja en cilindro 5", "Junta de admisión"]
+    },
+    {
+      "code": "P0306",
+      "description": "Cylinder 6 Misfire Detected",
+      "descriptionEs": "Fallo de encendido en el cilindro 6",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bujía o bobina del cilindro 6", "Inyector 6", "Compresión baja en cilindro 6", "Junta de admisión"]
+    },
+    {
+      "code": "P0313",
+      "description": "Misfire Detected with Low Fuel",
+      "descriptionEs": "Fallo de encendido con bajo nivel de combustible",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Depósito casi vacío"]
+    },
+    {
+      "code": "P0316",
+      "description": "Engine Misfire Detected on Startup (First 1000 Revolutions)",
+      "descriptionEs": "Fallo de encendido en el arranque (primeras 1000 vueltas)",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bujías", "Inyector que gotea"]
+    },
+    {
+      "code": "P0325",
+      "description": "Knock Sensor 1 Circuit (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de detonación 1: circuito",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor de picado", "Par de apriete incorrecto", "Cableado"]
+    },
+    {
+      "code": "P0326",
+      "description": "Knock Sensor 1 Circuit Range/Performance (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de detonación 1: rango/funcionamiento",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor flojo"]
+    },
+    {
+      "code": "P0327",
+      "description": "Knock Sensor 1 Circuit Low (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de detonación 1: señal baja",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Circuito abierto", "Sensor flojo o averiado"]
+    },
+    {
+      "code": "P0328",
+      "description": "Knock Sensor 1 Circuit High (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de detonación 1: señal alta",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Corto a positivo", "Ruido mecánico"]
+    },
+    {
+      "code": "P0335",
+      "description": "Crankshaft Position Sensor \"A\" Circuit",
+      "descriptionEs": "Sensor de posición del cigüeñal \"A\": circuito",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor CKP", "Cableado/conector", "Entrehierro excesivo"]
+    },
+    {
+      "code": "P0336",
+      "description": "Crankshaft Position Sensor \"A\" Circuit Range/Performance",
+      "descriptionEs": "Sensor de posición del cigüeñal \"A\": rango/funcionamiento",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Rueda fónica dañada", "Señal intermitente"]
+    },
+    {
+      "code": "P0337",
+      "description": "Crankshaft Position Sensor \"A\" Circuit Low",
+      "descriptionEs": "Sensor de posición del cigüeñal \"A\": señal baja",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0338",
+      "description": "Crankshaft Position Sensor \"A\" Circuit High",
+      "descriptionEs": "Sensor de posición del cigüeñal \"A\": señal alta",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0339",
+      "description": "Crankshaft Position Sensor \"A\" Circuit Intermittent",
+      "descriptionEs": "Sensor de posición del cigüeñal \"A\": intermitente",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Conector", "Cableado"]
+    },
+    {
+      "code": "P0340",
+      "description": "Camshaft Position Sensor \"A\" Circuit (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de posición del árbol de levas \"A\": circuito",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor CMP", "Alimentación 5 V", "Cableado"]
+    },
+    {
+      "code": "P0341",
+      "description": "Camshaft Position Sensor \"A\" Circuit Range/Performance (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de árbol de levas \"A\": rango/funcionamiento",
+      "system": "ignition",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Distribución", "Sensor"]
+    },
+    {
+      "code": "P0342",
+      "description": "Camshaft Position Sensor \"A\" Circuit Low (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de árbol de levas \"A\": señal baja",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0343",
+      "description": "Camshaft Position Sensor \"A\" Circuit High (Bank 1 or Single Sensor)",
+      "descriptionEs": "Sensor de árbol de levas \"A\": señal alta",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Masa abierta"]
+    },
+    {
+      "code": "P0351",
+      "description": "Ignition Coil \"A\" Primary/Secondary Circuit",
+      "descriptionEs": "Bobina de encendido \"A\": circuito primario/secundario",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobina del cilindro 1", "Cable de disparo", "Alimentación"]
+    },
+    {
+      "code": "P0352",
+      "description": "Ignition Coil \"B\" Primary/Secondary Circuit",
+      "descriptionEs": "Bobina de encendido \"B\": circuito primario/secundario",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobina del cilindro 2", "Cable de disparo", "Alimentación"]
+    },
+    {
+      "code": "P0353",
+      "description": "Ignition Coil \"C\" Primary/Secondary Circuit",
+      "descriptionEs": "Bobina de encendido \"C\": circuito primario/secundario",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobina del cilindro 3", "Cable de disparo", "Alimentación"]
+    },
+    {
+      "code": "P0354",
+      "description": "Ignition Coil \"D\" Primary/Secondary Circuit",
+      "descriptionEs": "Bobina de encendido \"D\": circuito primario/secundario",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobina del cilindro 4", "Cable de disparo", "Alimentación"]
+    },
+    {
+      "code": "P0355",
+      "description": "Ignition Coil \"E\" Primary/Secondary Circuit",
+      "descriptionEs": "Bobina de encendido \"E\": circuito primario/secundario",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobina del cilindro 5", "Cable de disparo", "Alimentación"]
+    },
+    {
+      "code": "P0356",
+      "description": "Ignition Coil \"F\" Primary/Secondary Circuit",
+      "descriptionEs": "Bobina de encendido \"F\": circuito primario/secundario",
+      "system": "ignition",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Bobina del cilindro 6", "Cable de disparo", "Alimentación"]
+    },
+    {
+      "code": "P0380",
+      "description": "Glow Plug/Heater Circuit \"A\"",
+      "descriptionEs": "Circuito de calentadores \"A\"",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Calentador", "Relé de calentadores"]
+    },
+    {
+      "code": "P0400",
+      "description": "Exhaust Gas Recirculation \"A\" Flow",
+      "descriptionEs": "Recirculación de gases de escape \"A\": caudal",
+      "system": "emissions",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Válvula EGR", "Conductos obstruidos"]
+    },
+    {
+      "code": "P0401",
+      "description": "Exhaust Gas Recirculation \"A\" Flow Insufficient Detected",
+      "descriptionEs": "EGR \"A\": caudal insuficiente",
+      "system": "emissions",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Carbonilla en conductos", "Válvula EGR atascada cerrada"]
+    },
+    {
+      "code": "P0402",
+      "description": "Exhaust Gas Recirculation \"A\" Flow Excessive Detected",
+      "descriptionEs": "EGR \"A\": caudal excesivo",
+      "system": "emissions",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Válvula EGR atascada abierta"]
+    },
+    {
+      "code": "P0403",
+      "description": "Exhaust Gas Recirculation \"A\" Control Circuit",
+      "descriptionEs": "EGR \"A\": circuito de control",
+      "system": "emissions",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cableado", "Válvula"]
+    },
+    {
+      "code": "P0404",
+      "description": "Exhaust Gas Recirculation \"A\" Control Circuit Range/Performance",
+      "descriptionEs": "EGR \"A\": rango/funcionamiento del control",
+      "system": "emissions",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Válvula EGR"]
+    },
+    {
+      "code": "P0420",
+      "description": "Catalyst System Efficiency Below Threshold (Bank 1)",
+      "descriptionEs": "Eficiencia del catalizador por debajo del umbral (banco 1)",
+      "system": "emissions",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Catalizador agotado", "Fuga de escape", "Sonda postcatalizador"]
+    },
+    {
+      "code": "P0421",
+      "description": "Warm Up Catalyst Efficiency Below Threshold (Bank 1)",
+      "descriptionEs": "Eficiencia del precatalizador por debajo del umbral (banco 1)",
+      "system": "emissions",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Precatalizador"]
+    },
+    {
+      "code": "P0440",
+      "description": "Evaporative Emission System",
+      "descriptionEs": "Sistema de control de emisiones evaporativas",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Tapón de combustible", "Cánister"]
+    },
+    {
+      "code": "P0441",
+      "description": "Evaporative Emission System Incorrect Purge Flow",
+      "descriptionEs": "Sistema EVAP: caudal de purga incorrecto",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Válvula de purga atascada abierta", "Tubos"]
+    },
+    {
+      "code": "P0442",
+      "description": "Evaporative Emission System Leak Detected (small leak)",
+      "descriptionEs": "Sistema EVAP: fuga pequeña",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Tapón", "Tubos"]
+    },
+    {
+      "code": "P0443",
+      "description": "Evaporative Emission System Purge Control Valve \"A\" Circuit",
+      "descriptionEs": "Sistema EVAP: circuito de la válvula de purga \"A\"",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Válvula de purga", "Cableado"]
+    },
+    {
+      "code": "P0446",
+      "description": "Evaporative Emission System Vent Control Circuit",
+      "descriptionEs": "Sistema EVAP: circuito de la válvula de ventilación",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Válvula de ventilación"]
+    },
+    {
+      "code": "P0455",
+      "description": "Evaporative Emission System Leak Detected (large leak)",
+      "descriptionEs": "Sistema EVAP: fuga grande",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Tapón de combustible suelto"]
+    },
+    {
+      "code": "P0456",
+      "description": "Evaporative Emission System Leak Detected (very small leak)",
+      "descriptionEs": "Sistema EVAP: fuga muy pequeña",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Juntas"]
+    },
+    {
+      "code": "P0458",
+      "description": "Evaporative Emission System Purge Control Valve \"A\" Circuit Low",
+      "descriptionEs": "Válvula de purga \"A\": circuito bajo",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0459",
+      "description": "Evaporative Emission System Purge Control Valve \"A\" Circuit High",
+      "descriptionEs": "Válvula de purga \"A\": circuito alto",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0480",
+      "description": "Fan 1 Control Circuit",
+      "descriptionEs": "Ventilador 1: circuito de control",
+      "system": "cooling",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Relé del ventilador", "Cableado"]
+    },
+    {
+      "code": "P0481",
+      "description": "Fan 2 Control Circuit",
+      "descriptionEs": "Ventilador 2: circuito de control",
+      "system": "cooling",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Relé", "Cableado"]
+    },
+    {
+      "code": "P0483",
+      "description": "Fan Rationality Check",
+      "descriptionEs": "Ventilador: comprobación de plausibilidad",
+      "system": "cooling",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Motor del ventilador"]
+    },
+    {
+      "code": "P0500",
+      "description": "Vehicle Speed Sensor \"A\"",
+      "descriptionEs": "Sensor de velocidad del vehículo \"A\"",
+      "system": "speed_idle",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor de rueda", "Comunicación con ABS"]
+    },
+    {
+      "code": "P0501",
+      "description": "Vehicle Speed Sensor \"A\" Range/Performance",
+      "descriptionEs": "Sensor de velocidad \"A\": rango/funcionamiento",
+      "system": "speed_idle",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor"]
+    },
+    {
+      "code": "P0505",
+      "description": "Idle Air Control System",
+      "descriptionEs": "Sistema de control de ralentí",
+      "system": "speed_idle",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Mariposa sucia", "Fuga de vacío"]
+    },
+    {
+      "code": "P0506",
+      "description": "Idle Air Control System - RPM Lower Than Expected",
+      "descriptionEs": "Control de ralentí: rpm inferiores a lo esperado",
+      "system": "speed_idle",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Mariposa sucia/obstruida", "Carga excesiva"]
+    },
+    {
+      "code": "P0507",
+      "description": "Idle Air Control System - RPM Higher Than Expected",
+      "descriptionEs": "Control de ralentí: rpm superiores a lo esperado",
+      "system": "speed_idle",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga de vacío", "Mariposa atascada"]
+    },
+    {
+      "code": "P0520",
+      "description": "Engine Oil Pressure Sensor/Switch \"A\" Circuit",
+      "descriptionEs": "Sensor/interruptor de presión de aceite \"A\": circuito",
+      "system": "engine",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor", "Cableado"]
+    },
+    {
+      "code": "P0521",
+      "description": "Engine Oil Pressure Sensor/Switch \"A\" Range/Performance",
+      "descriptionEs": "Presión de aceite \"A\": rango/funcionamiento",
+      "system": "engine",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Bajo nivel de aceite", "Bomba de aceite", "Cojinetes desgastados"]
+    },
+    {
+      "code": "P0560",
+      "description": "System Voltage",
+      "descriptionEs": "Tensión del sistema",
+      "system": "electrical",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Batería", "Alternador"]
+    },
+    {
+      "code": "P0562",
+      "description": "System Voltage Low",
+      "descriptionEs": "Tensión del sistema baja",
+      "system": "electrical",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Alternador averiado", "Correa", "Batería", "Masas"]
+    },
+    {
+      "code": "P0563",
+      "description": "System Voltage High",
+      "descriptionEs": "Tensión del sistema alta",
+      "system": "electrical",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Regulador del alternador"]
+    },
+    {
+      "code": "P0571",
+      "description": "Brake Switch \"A\" Circuit",
+      "descriptionEs": "Interruptor de freno \"A\": circuito",
+      "system": "electrical",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Interruptor de freno"]
+    },
+    {
+      "code": "P0600",
+      "description": "Serial Communication Link",
+      "descriptionEs": "Enlace de comunicación serie",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Comunicación interna"]
+    },
+    {
+      "code": "P0601",
+      "description": "Internal Control Module Memory Check Sum Error",
+      "descriptionEs": "Módulo de control: error de suma de comprobación de memoria",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["ECU averiada", "Reprogramación fallida"]
+    },
+    {
+      "code": "P0602",
+      "description": "Control Module Programming Error",
+      "descriptionEs": "Módulo de control: error de programación",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Software corrupto"]
+    },
+    {
+      "code": "P0603",
+      "description": "Internal Control Module Keep Alive Memory (KAM) Error",
+      "descriptionEs": "Módulo de control: error de memoria KAM",
+      "system": "ecu",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Desconexión de batería", "ECU"]
+    },
+    {
+      "code": "P0604",
+      "description": "Internal Control Module Random Access Memory (RAM) Error",
+      "descriptionEs": "Módulo de control: error de RAM",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["ECU"]
+    },
+    {
+      "code": "P0605",
+      "description": "Internal Control Module Read Only Memory (ROM) Error",
+      "descriptionEs": "Módulo de control: error de ROM",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["ECU"]
+    },
+    {
+      "code": "P0606",
+      "description": "Control Module Processor",
+      "descriptionEs": "Procesador del módulo de control",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["ECU"]
+    },
+    {
+      "code": "P0607",
+      "description": "Control Module Performance",
+      "descriptionEs": "Rendimiento del módulo de control",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["ECU"]
+    },
+    {
+      "code": "P0627",
+      "description": "Fuel Pump \"A\" Control Circuit/Open",
+      "descriptionEs": "Bomba de combustible \"A\": circuito de control abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Relé", "Cableado"]
+    },
+    {
+      "code": "P0628",
+      "description": "Fuel Pump \"A\" Control Circuit Low",
+      "descriptionEs": "Bomba de combustible \"A\": circuito de control bajo",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0629",
+      "description": "Fuel Pump \"A\" Control Circuit High",
+      "descriptionEs": "Bomba de combustible \"A\": circuito de control alto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a positivo"]
+    },
+    {
+      "code": "P0638",
+      "description": "Throttle Actuator \"A\" Control Range/Performance (Bank 1)",
+      "descriptionEs": "Actuador de mariposa \"A\": rango/funcionamiento (banco 1)",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Mariposa sucia o atascada", "Motor de mariposa"]
+    },
+    {
+      "code": "P0641",
+      "description": "Sensor Reference Voltage \"A\" Circuit/Open",
+      "descriptionEs": "Tensión de referencia de sensores \"A\": circuito abierto",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor en corto que tira de la referencia", "Cableado"]
+    },
+    {
+      "code": "P0651",
+      "description": "Sensor Reference Voltage \"B\" Circuit/Open",
+      "descriptionEs": "Tensión de referencia de sensores \"B\": circuito abierto",
+      "system": "ecu",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cableado"]
+    },
+    {
+      "code": "P0670",
+      "description": "Glow Plug Control Module Circuit",
+      "descriptionEs": "Módulo de control de calentadores: circuito",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Módulo de calentadores"]
+    },
+    {
+      "code": "P0671",
+      "description": "Cylinder 1 Glow Plug Circuit",
+      "descriptionEs": "Calentador del cilindro 1: circuito",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Calentador 1 abierto"]
+    },
+    {
+      "code": "P0672",
+      "description": "Cylinder 2 Glow Plug Circuit",
+      "descriptionEs": "Calentador del cilindro 2: circuito",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Calentador 2 abierto"]
+    },
+    {
+      "code": "P0673",
+      "description": "Cylinder 3 Glow Plug Circuit",
+      "descriptionEs": "Calentador del cilindro 3: circuito",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Calentador 3 abierto"]
+    },
+    {
+      "code": "P0674",
+      "description": "Cylinder 4 Glow Plug Circuit",
+      "descriptionEs": "Calentador del cilindro 4: circuito",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Calentador 4 abierto"]
+    },
+    {
+      "code": "P0700",
+      "description": "Transmission Control System (MIL Request)",
+      "descriptionEs": "Sistema de control de la transmisión (solicitud de MIL)",
+      "system": "transmission",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Leer códigos del módulo de cambio"]
+    },
+    {
+      "code": "P2096",
+      "description": "Post Catalyst Fuel Trim System Too Lean (Bank 1)",
+      "descriptionEs": "Corrección postcatalizador: demasiado pobre (banco 1)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga de escape", "Sonda"]
+    },
+    {
+      "code": "P2097",
+      "description": "Post Catalyst Fuel Trim System Too Rich (Bank 1)",
+      "descriptionEs": "Corrección postcatalizador: demasiado rica (banco 1)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda", "Inyector"]
+    },
+    {
+      "code": "P2100",
+      "description": "Throttle Actuator \"A\" Control Motor Circuit/Open",
+      "descriptionEs": "Motor del actuador de mariposa \"A\": circuito abierto",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Motor de mariposa", "Cableado"]
+    },
+    {
+      "code": "P2101",
+      "description": "Throttle Actuator \"A\" Control Motor Circuit Range/Performance",
+      "descriptionEs": "Motor del actuador de mariposa \"A\": rango/funcionamiento",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Mariposa atascada/sucia", "Motor"]
+    },
+    {
+      "code": "P2106",
+      "description": "Throttle Actuator \"A\" Control System - Forced Limited Power",
+      "descriptionEs": "Control de mariposa \"A\": potencia limitada forzada",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Fallo en sensores de mariposa/pedal"]
+    },
+    {
+      "code": "P2119",
+      "description": "Throttle Actuator \"A\" Control Throttle Body Range/Performance",
+      "descriptionEs": "Cuerpo de mariposa \"A\": rango/funcionamiento",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Muelle de retorno", "Mariposa"]
+    },
+    {
+      "code": "P2122",
+      "description": "Throttle/Pedal Position Sensor/Switch \"D\" Circuit Low",
+      "descriptionEs": "Sensor de posición de pedal \"D\": señal baja",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Circuito abierto", "Corto a masa"]
+    },
+    {
+      "code": "P2123",
+      "description": "Throttle/Pedal Position Sensor/Switch \"D\" Circuit High",
+      "descriptionEs": "Sensor de posición de pedal \"D\": señal alta",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Masa abierta", "Corto a positivo"]
+    },
+    {
+      "code": "P2127",
+      "description": "Throttle/Pedal Position Sensor/Switch \"E\" Circuit Low",
+      "descriptionEs": "Sensor de posición de pedal \"E\": señal baja",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P2128",
+      "description": "Throttle/Pedal Position Sensor/Switch \"E\" Circuit High",
+      "descriptionEs": "Sensor de posición de pedal \"E\": señal alta",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Masa abierta"]
+    },
+    {
+      "code": "P2135",
+      "description": "Throttle/Pedal Position Sensor/Switch \"A\"/\"B\" Voltage Correlation",
+      "descriptionEs": "Correlación de tensión sensores de mariposa \"A\"/\"B\"",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor de mariposa", "Conector"]
+    },
+    {
+      "code": "P2138",
+      "description": "Throttle/Pedal Position Sensor/Switch \"D\"/\"E\" Voltage Correlation",
+      "descriptionEs": "Correlación de tensión sensores de pedal \"D\"/\"E\"",
+      "system": "fuel_air",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor de pedal"]
+    },
+    {
+      "code": "P2187",
+      "description": "System Too Lean at Idle (Bank 1)",
+      "descriptionEs": "Sistema demasiado pobre al ralentí (banco 1)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fuga de vacío", "Junta de admisión"]
+    },
+    {
+      "code": "P2188",
+      "description": "System Too Rich at Idle (Bank 1)",
+      "descriptionEs": "Sistema demasiado rico al ralentí (banco 1)",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Inyector que gotea", "Purga del cánister"]
+    },
+    {
+      "code": "P2195",
+      "description": "O2 Sensor Signal Biased/Stuck Lean (Bank 1 Sensor 1)",
+      "descriptionEs": "Señal de sonda sesgada/bloqueada en pobre (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda", "Fuga de escape"]
+    },
+    {
+      "code": "P2196",
+      "description": "O2 Sensor Signal Biased/Stuck Rich (Bank 1 Sensor 1)",
+      "descriptionEs": "Señal de sonda sesgada/bloqueada en rico (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda", "Inyector que gotea"]
+    },
+    {
+      "code": "P2237",
+      "description": "O2 Sensor Positive Current Control Circuit/Open (Bank 1 Sensor 1)",
+      "descriptionEs": "Sonda: circuito de control de corriente positiva abierto (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda de banda ancha", "Cableado"]
+    },
+    {
+      "code": "P2243",
+      "description": "O2 Sensor Reference Voltage Circuit/Open (Bank 1 Sensor 1)",
+      "descriptionEs": "Sonda: circuito de tensión de referencia abierto (B1S1)",
+      "system": "o2",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sonda de banda ancha", "Cableado"]
+    },
+    {
+      "code": "P2263",
+      "description": "Turbocharger/Supercharger Boost System Performance",
+      "descriptionEs": "Sistema de sobrealimentación: funcionamiento",
+      "system": "turbo",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Fugas", "Turbo", "Actuador"]
+    },
+    {
+      "code": "P2279",
+      "description": "Intake Air System Leak",
+      "descriptionEs": "Fuga en el sistema de admisión",
+      "system": "fuel_air",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Manguito de vacío", "Junta de admisión"]
+    },
+    {
+      "code": "P242F",
+      "description": "Diesel Particulate Filter Restriction - Ash Accumulation",
+      "descriptionEs": "Filtro de partículas: obstrucción por cenizas",
+      "system": "diesel",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Filtro de partículas"]
+    },
+    {
+      "code": "P2463",
+      "description": "Diesel Particulate Filter Restriction - Soot Accumulation",
+      "descriptionEs": "Filtro de partículas: obstrucción por hollín",
+      "system": "diesel",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Regeneraciones incompletas"]
+    },
+    {
+      "code": "U0001",
+      "description": "High Speed CAN Communication Bus",
+      "descriptionEs": "Bus de comunicación CAN de alta velocidad",
+      "system": "network",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Cableado CAN", "Resistencia terminal", "Módulo que bloquea el bus"]
+    },
+    {
+      "code": "U0073",
+      "description": "Control Module Communication Bus \"A\" Off",
+      "descriptionEs": "Bus de comunicación \"A\" desactivado (bus off)",
+      "system": "network",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto en CAN-H/CAN-L"]
+    },
+    {
+      "code": "U0100",
+      "description": "Lost Communication With ECM/PCM \"A\"",
+      "descriptionEs": "Pérdida de comunicación con la ECU de motor \"A\"",
+      "system": "network",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Alimentación/masa de la ECU", "Cableado CAN"]
+    },
+    {
+      "code": "U0101",
+      "description": "Lost Communication With TCM",
+      "descriptionEs": "Pérdida de comunicación con el módulo del cambio",
+      "system": "network",
+      "trips": 1,
+      "mil": false,
+      "causes": ["Alimentación del TCM", "CAN"]
+    },
+    {
+      "code": "U0121",
+      "description": "Lost Communication With Anti-Lock Brake System (ABS) Control Module",
+      "descriptionEs": "Pérdida de comunicación con el módulo ABS",
+      "system": "network",
+      "trips": 1,
+      "mil": false,
+      "causes": ["Fusible del ABS", "Ramal CAN del ABS"]
+    },
+    {
+      "code": "U0140",
+      "description": "Lost Communication With Body Control Module",
+      "descriptionEs": "Pérdida de comunicación con el módulo de carrocería",
+      "system": "network",
+      "trips": 1,
+      "mil": false,
+      "causes": ["Alimentación del BCM", "CAN"]
+    },
+    {
+      "code": "U0151",
+      "description": "Lost Communication With Restraints Control Module",
+      "descriptionEs": "Pérdida de comunicación con el módulo de airbag",
+      "system": "network",
+      "trips": 1,
+      "mil": false,
+      "causes": ["Módulo de airbag"]
+    },
+    {
+      "code": "U0155",
+      "description": "Lost Communication With Instrument Panel Cluster (IPC) Control Module",
+      "descriptionEs": "Pérdida de comunicación con el cuadro de instrumentos",
+      "system": "network",
+      "trips": 1,
+      "mil": false,
+      "causes": ["Ramal CAN del cuadro", "Alimentación del cuadro"]
+    },
+    {
+      "code": "U0401",
+      "description": "Invalid Data Received From ECM/PCM A",
+      "descriptionEs": "Datos no válidos recibidos de la ECU de motor A",
+      "system": "network",
+      "trips": 1,
+      "mil": false,
+      "causes": ["ECU", "Software"]
+    },
+    {
+      "code": "U0415",
+      "description": "Invalid Data Received From Anti-Lock Brake System (ABS) Control Module",
+      "descriptionEs": "Datos no válidos recibidos del módulo ABS",
+      "system": "network",
+      "trips": 1,
+      "mil": false,
+      "causes": ["Sensor de rueda", "ABS"]
+    }
+  ]
+}

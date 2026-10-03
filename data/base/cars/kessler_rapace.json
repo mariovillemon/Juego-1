@@ -1,0 +1,34 @@
+{
+  "id": "kessler_rapace",
+  "brand": "Kessler",
+  "model": "Rapace S",
+  "year": 2019,
+  "segment": "Deportivo de altas prestaciones",
+  "engine": "v30_turbo",
+  "template": "gasoline_turbo",
+  "calibration": "v30_stock",
+  "massKg": 1610,
+  "wheelRadiusM": 0.34,
+  "gearRatios": [4.11, 2.32, 1.54, 1.18, 1, 0.85, 0.67],
+  "finalDrive": 3.15,
+  "drivetrainEfficiency": 0.86,
+  "dragAreaM2": 0.62,
+  "vin": "KSL3RPS0K00013579",
+  "fuelRon": 98,
+  "componentOverrides": [
+    {
+      "id": "maf",
+      "params": {
+        "max_gps": 300
+      }
+    }
+  ],
+  "appearance": {
+    "ageYears": 5,
+    "kilometers": 42000,
+    "maintenance": 0.9,
+    "paintColor": "#1C3F94",
+    "humidity": 0.2
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

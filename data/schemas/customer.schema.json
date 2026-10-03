@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "customer.schema.json",
+  "title": "Perfiles de cliente",
+  "type": "object",
+  "required": ["customers"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "customers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "budget", "patienceDays", "usage", "personality"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "budget": { "type": "number", "minimum": 0 },
+          "patienceDays": { "type": "integer", "minimum": 1 },
+          "usage": { "enum": ["commute", "track", "delivery", "occasional", "highway", "city", "fleet", "taxi", "resale"] },
+          "personality": { "enum": ["honest", "enthusiast", "impatient", "haggler", "demanding"] }
+        }
+      }
+    }
+  }
+}

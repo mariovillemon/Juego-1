@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "title": "Definiciones comunes",
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9_{}]+$", "minLength": 2, "maxLength": 64 },
+    "axis": {
+      "type": "object",
+      "required": ["name", "values"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "unit": { "type": "string" },
+        "values": { "type": "array", "items": { "type": "number" }, "minItems": 1 }
+      }
+    },
+    "table": {
+      "type": "object",
+      "required": ["id", "x", "y", "values"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "unit": { "type": "string" },
+        "x": { "$ref": "#/$defs/axis" },
+        "y": { "$ref": "#/$defs/axis" },
+        "values": { "type": "array", "minItems": 1, "items": { "type": "array", "items": { "type": "number" }, "minItems": 1 } }
+      }
+    },
+    "curve": {
+      "type": "object",
+      "required": ["id", "x", "values"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "unit": { "type": "string" },
+        "x": { "$ref": "#/$defs/axis" },
+        "values": { "type": "array", "items": { "type": "number" }, "minItems": 1 }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["Always", "Cold", "Hot", "AboveLoad", "AboveRpm", "BelowRpm", "Vibration", "Intermittent"] },
+        "threshold": { "type": "number" },
+        "threshold2": { "type": "number" }
+      }
+    },
+    "fault": {
+      "type": "object",
+      "required": ["mode", "component"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "type": "string" },
+        "component": { "type": "string" },
+        "severity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "pin": { "type": "string" },
+        "condition": { "$ref": "#/$defs/condition" }
+      }
+    },
+    "componentKind": {
+      "enum": ["MafSensor", "MapSensor", "IatSensor", "EctSensor", "TpsSensor", "AppSensor", "CkpSensor", "CmpSensor", "O2Narrowband",
+        "O2Wideband", "KnockSensor", "FuelPressureSensor", "BoostSensor", "Injector", "IgnitionCoil", "SparkPlug", "ElectronicThrottle",
+        "WastegateSolenoid", "Turbocharger", "Intercooler", "Thermostat", "CoolingFan", "FuelPump", "FuelPressureRegulator", "EgrValve",
+        "PurgeValve", "Cylinder", "IntakeGasket", "VacuumHose", "BoostHose", "Exhaust", "Catalyst", "AirFilter", "FuelFilter", "TimingDrive",
+        "HeadGasket", "Battery", "Alternator", "Fuse", "Relay", "GroundStrap", "ControlModule", "CanBus", "GlowPlug", "O2Downstream"]
+    }
+  }
+}

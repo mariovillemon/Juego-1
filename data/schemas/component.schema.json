@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "component.schema.json",
+  "title": "Componente de un coche",
+  "type": "object",
+  "required": ["id", "kind", "name"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "kind": { "$ref": "common.schema.json#/$defs/componentKind" },
+    "name": { "type": "string", "minLength": 2 },
+    "location": { "type": "string" },
+    "visualSlot": { "type": "string" },
+    "perCylinder": { "type": "boolean", "description": "Expande el componente para cada cilindro sustituyendo {n}" },
+    "cylinder": { "type": "integer", "minimum": -1 },
+    "params": { "type": "object", "additionalProperties": { "type": "number" } },
+    "fuse": { "type": "string" },
+    "partId": { "type": "string" },
+    "replaceMinutes": { "type": "number", "minimum": 0 },
+    "circuit": {
+      "type": "object",
+      "required": ["topology", "pins"],
+      "additionalProperties": false,
+      "properties": {
+        "topology": { "enum": ["Thermistor", "Ratiometric", "Powered", "Generator", "Hall", "HeatedOxygen", "LowSideLoad"] },
+        "fuse": { "type": "string" },
+        "pins": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["role", "ecuPin"],
+            "additionalProperties": false,
+            "properties": {
+              "role": { "enum": ["signal", "ground", "ref", "supply", "control", "signal_low", "heater_supply", "heater_control"] },
+              "ecuPin": { "oneOf": [ { "type": "string" }, { "type": "array", "items": { "type": "string" }, "minItems": 1 } ] },
+              "pin": { "type": "integer", "minimum": 1 },
+              "color": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

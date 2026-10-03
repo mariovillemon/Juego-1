@@ -1,0 +1,113 @@
+{
+  "$schema": "../schemas/customer.schema.json",
+  "customers": [
+    {
+      "id": "cust_marta",
+      "name": "Marta Ibáñez",
+      "description": "Enfermera, usa el coche a diario para ir al hospital",
+      "budget": 600,
+      "patienceDays": 3,
+      "usage": "commute",
+      "personality": "honest"
+    },
+    {
+      "id": "cust_javi",
+      "name": "Javi \"el Turbo\" Roldán",
+      "description": "Aficionado a las tandas en circuito",
+      "budget": 2500,
+      "patienceDays": 10,
+      "usage": "track",
+      "personality": "enthusiast"
+    },
+    {
+      "id": "cust_lucia",
+      "name": "Lucía Benítez",
+      "description": "Repartidora autónoma; cada día parada le cuesta dinero",
+      "budget": 800,
+      "patienceDays": 1,
+      "usage": "delivery",
+      "personality": "impatient"
+    },
+    {
+      "id": "cust_anton",
+      "name": "Antón Ferreiro",
+      "description": "Jubilado, coche viejo bien cuidado",
+      "budget": 400,
+      "patienceDays": 7,
+      "usage": "occasional",
+      "personality": "haggler"
+    },
+    {
+      "id": "cust_sara",
+      "name": "Sara Montes",
+      "description": "Comercial, 40.000 km al año por autopista",
+      "budget": 900,
+      "patienceDays": 2,
+      "usage": "highway",
+      "personality": "honest"
+    },
+    {
+      "id": "cust_dani",
+      "name": "Dani Cortés",
+      "description": "Estudiante con poco presupuesto",
+      "budget": 250,
+      "patienceDays": 5,
+      "usage": "city",
+      "personality": "haggler"
+    },
+    {
+      "id": "cust_flota",
+      "name": "Flotas Mediterráneo S.L.",
+      "description": "Empresa de alquiler, exige factura detallada",
+      "budget": 1500,
+      "patienceDays": 3,
+      "usage": "fleet",
+      "personality": "demanding"
+    },
+    {
+      "id": "cust_elena",
+      "name": "Elena Vidal",
+      "description": "Preparadora de rallyes amateur",
+      "budget": 4000,
+      "patienceDays": 14,
+      "usage": "track",
+      "personality": "enthusiast"
+    },
+    {
+      "id": "cust_pablo",
+      "name": "Pablo Sanz",
+      "description": "Taxista; el coche es su herramienta de trabajo",
+      "budget": 1000,
+      "patienceDays": 1,
+      "usage": "taxi",
+      "personality": "impatient"
+    },
+    {
+      "id": "cust_irene",
+      "name": "Irene Gallardo",
+      "description": "Necesita pasar la inspección técnica la semana que viene",
+      "budget": 500,
+      "patienceDays": 6,
+      "usage": "commute",
+      "personality": "honest"
+    },
+    {
+      "id": "cust_tomas",
+      "name": "Tomás Herrero",
+      "description": "Comprador de coches de segunda mano para revender",
+      "budget": 700,
+      "patienceDays": 4,
+      "usage": "resale",
+      "personality": "haggler"
+    },
+    {
+      "id": "cust_nuria",
+      "name": "Nuria Esteve",
+      "description": "Ingeniera, pregunta por cada lectura del diagnóstico",
+      "budget": 1200,
+      "patienceDays": 5,
+      "usage": "commute",
+      "personality": "demanding"
+    }
+  ]
+}

@@ -1,0 +1,1232 @@
+{
+  "$schema": "../schemas/part.schema.json",
+  "parts": [
+    {
+      "id": "part_mafsensor_oem",
+      "kind": "MafSensor",
+      "name": "Caudalímetro (OEM)",
+      "quality": "oem",
+      "price": 185,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_mafsensor_aftermarket",
+      "kind": "MafSensor",
+      "name": "Caudalímetro (Recambio)",
+      "quality": "aftermarket",
+      "price": 111,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_mafsensor_used",
+      "kind": "MafSensor",
+      "name": "Caudalímetro (Usada (desguace))",
+      "quality": "used",
+      "price": 55.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_mapsensor_oem",
+      "kind": "MapSensor",
+      "name": "Sensor MAP (OEM)",
+      "quality": "oem",
+      "price": 75,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_mapsensor_aftermarket",
+      "kind": "MapSensor",
+      "name": "Sensor MAP (Recambio)",
+      "quality": "aftermarket",
+      "price": 45,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_mapsensor_used",
+      "kind": "MapSensor",
+      "name": "Sensor MAP (Usada (desguace))",
+      "quality": "used",
+      "price": 22.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_iatsensor_oem",
+      "kind": "IatSensor",
+      "name": "Sensor IAT (OEM)",
+      "quality": "oem",
+      "price": 25,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_iatsensor_aftermarket",
+      "kind": "IatSensor",
+      "name": "Sensor IAT (Recambio)",
+      "quality": "aftermarket",
+      "price": 15,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_iatsensor_used",
+      "kind": "IatSensor",
+      "name": "Sensor IAT (Usada (desguace))",
+      "quality": "used",
+      "price": 7.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ectsensor_oem",
+      "kind": "EctSensor",
+      "name": "Sensor ECT (OEM)",
+      "quality": "oem",
+      "price": 28,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ectsensor_aftermarket",
+      "kind": "EctSensor",
+      "name": "Sensor ECT (Recambio)",
+      "quality": "aftermarket",
+      "price": 16.8,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ectsensor_used",
+      "kind": "EctSensor",
+      "name": "Sensor ECT (Usada (desguace))",
+      "quality": "used",
+      "price": 8.4,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_tpssensor_oem",
+      "kind": "TpsSensor",
+      "name": "Sensor TPS (OEM)",
+      "quality": "oem",
+      "price": 60,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_tpssensor_aftermarket",
+      "kind": "TpsSensor",
+      "name": "Sensor TPS (Recambio)",
+      "quality": "aftermarket",
+      "price": 36,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_tpssensor_used",
+      "kind": "TpsSensor",
+      "name": "Sensor TPS (Usada (desguace))",
+      "quality": "used",
+      "price": 18,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_appsensor_oem",
+      "kind": "AppSensor",
+      "name": "Pedal acelerador con sensor (OEM)",
+      "quality": "oem",
+      "price": 140,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_appsensor_aftermarket",
+      "kind": "AppSensor",
+      "name": "Pedal acelerador con sensor (Recambio)",
+      "quality": "aftermarket",
+      "price": 84,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_appsensor_used",
+      "kind": "AppSensor",
+      "name": "Pedal acelerador con sensor (Usada (desguace))",
+      "quality": "used",
+      "price": 42,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ckpsensor_oem",
+      "kind": "CkpSensor",
+      "name": "Sensor de cigüeñal (OEM)",
+      "quality": "oem",
+      "price": 55,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ckpsensor_aftermarket",
+      "kind": "CkpSensor",
+      "name": "Sensor de cigüeñal (Recambio)",
+      "quality": "aftermarket",
+      "price": 33,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ckpsensor_used",
+      "kind": "CkpSensor",
+      "name": "Sensor de cigüeñal (Usada (desguace))",
+      "quality": "used",
+      "price": 16.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_cmpsensor_oem",
+      "kind": "CmpSensor",
+      "name": "Sensor de árbol de levas (OEM)",
+      "quality": "oem",
+      "price": 48,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_cmpsensor_aftermarket",
+      "kind": "CmpSensor",
+      "name": "Sensor de árbol de levas (Recambio)",
+      "quality": "aftermarket",
+      "price": 28.8,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_cmpsensor_used",
+      "kind": "CmpSensor",
+      "name": "Sensor de árbol de levas (Usada (desguace))",
+      "quality": "used",
+      "price": 14.4,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2narrowband_oem",
+      "kind": "O2Narrowband",
+      "name": "Sonda lambda banda estrecha (OEM)",
+      "quality": "oem",
+      "price": 85,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2narrowband_aftermarket",
+      "kind": "O2Narrowband",
+      "name": "Sonda lambda banda estrecha (Recambio)",
+      "quality": "aftermarket",
+      "price": 51,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2narrowband_used",
+      "kind": "O2Narrowband",
+      "name": "Sonda lambda banda estrecha (Usada (desguace))",
+      "quality": "used",
+      "price": 25.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2wideband_oem",
+      "kind": "O2Wideband",
+      "name": "Sonda lambda banda ancha (OEM)",
+      "quality": "oem",
+      "price": 165,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2wideband_aftermarket",
+      "kind": "O2Wideband",
+      "name": "Sonda lambda banda ancha (Recambio)",
+      "quality": "aftermarket",
+      "price": 99,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2wideband_used",
+      "kind": "O2Wideband",
+      "name": "Sonda lambda banda ancha (Usada (desguace))",
+      "quality": "used",
+      "price": 49.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2downstream_oem",
+      "kind": "O2Downstream",
+      "name": "Sonda lambda postcatalizador (OEM)",
+      "quality": "oem",
+      "price": 90,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2downstream_aftermarket",
+      "kind": "O2Downstream",
+      "name": "Sonda lambda postcatalizador (Recambio)",
+      "quality": "aftermarket",
+      "price": 54,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_o2downstream_used",
+      "kind": "O2Downstream",
+      "name": "Sonda lambda postcatalizador (Usada (desguace))",
+      "quality": "used",
+      "price": 27,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_knocksensor_oem",
+      "kind": "KnockSensor",
+      "name": "Sensor de detonación (OEM)",
+      "quality": "oem",
+      "price": 45,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_knocksensor_aftermarket",
+      "kind": "KnockSensor",
+      "name": "Sensor de detonación (Recambio)",
+      "quality": "aftermarket",
+      "price": 27,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_knocksensor_used",
+      "kind": "KnockSensor",
+      "name": "Sensor de detonación (Usada (desguace))",
+      "quality": "used",
+      "price": 13.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpressuresensor_oem",
+      "kind": "FuelPressureSensor",
+      "name": "Sensor de presión de rampa (OEM)",
+      "quality": "oem",
+      "price": 95,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpressuresensor_aftermarket",
+      "kind": "FuelPressureSensor",
+      "name": "Sensor de presión de rampa (Recambio)",
+      "quality": "aftermarket",
+      "price": 57,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpressuresensor_used",
+      "kind": "FuelPressureSensor",
+      "name": "Sensor de presión de rampa (Usada (desguace))",
+      "quality": "used",
+      "price": 28.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_boostsensor_oem",
+      "kind": "BoostSensor",
+      "name": "Sensor de presión de turbo (OEM)",
+      "quality": "oem",
+      "price": 80,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_boostsensor_aftermarket",
+      "kind": "BoostSensor",
+      "name": "Sensor de presión de turbo (Recambio)",
+      "quality": "aftermarket",
+      "price": 48,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_boostsensor_used",
+      "kind": "BoostSensor",
+      "name": "Sensor de presión de turbo (Usada (desguace))",
+      "quality": "used",
+      "price": 24,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_injector_oem",
+      "kind": "Injector",
+      "name": "Inyector (OEM)",
+      "quality": "oem",
+      "price": 120,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_injector_aftermarket",
+      "kind": "Injector",
+      "name": "Inyector (Recambio)",
+      "quality": "aftermarket",
+      "price": 72,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_injector_used",
+      "kind": "Injector",
+      "name": "Inyector (Usada (desguace))",
+      "quality": "used",
+      "price": 36,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ignitioncoil_oem",
+      "kind": "IgnitionCoil",
+      "name": "Bobina de encendido (OEM)",
+      "quality": "oem",
+      "price": 65,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ignitioncoil_aftermarket",
+      "kind": "IgnitionCoil",
+      "name": "Bobina de encendido (Recambio)",
+      "quality": "aftermarket",
+      "price": 39,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_ignitioncoil_used",
+      "kind": "IgnitionCoil",
+      "name": "Bobina de encendido (Usada (desguace))",
+      "quality": "used",
+      "price": 19.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_sparkplug_oem",
+      "kind": "SparkPlug",
+      "name": "Bujía (OEM)",
+      "quality": "oem",
+      "price": 14,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_sparkplug_aftermarket",
+      "kind": "SparkPlug",
+      "name": "Bujía (Recambio)",
+      "quality": "aftermarket",
+      "price": 8.4,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_sparkplug_used",
+      "kind": "SparkPlug",
+      "name": "Bujía (Usada (desguace))",
+      "quality": "used",
+      "price": 4.2,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_electronicthrottle_oem",
+      "kind": "ElectronicThrottle",
+      "name": "Cuerpo de mariposa motorizado (OEM)",
+      "quality": "oem",
+      "price": 290,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_electronicthrottle_aftermarket",
+      "kind": "ElectronicThrottle",
+      "name": "Cuerpo de mariposa motorizado (Recambio)",
+      "quality": "aftermarket",
+      "price": 174,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_electronicthrottle_used",
+      "kind": "ElectronicThrottle",
+      "name": "Cuerpo de mariposa motorizado (Usada (desguace))",
+      "quality": "used",
+      "price": 87,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_wastegatesolenoid_oem",
+      "kind": "WastegateSolenoid",
+      "name": "Electroválvula de wastegate (OEM)",
+      "quality": "oem",
+      "price": 70,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_wastegatesolenoid_aftermarket",
+      "kind": "WastegateSolenoid",
+      "name": "Electroválvula de wastegate (Recambio)",
+      "quality": "aftermarket",
+      "price": 42,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_wastegatesolenoid_used",
+      "kind": "WastegateSolenoid",
+      "name": "Electroválvula de wastegate (Usada (desguace))",
+      "quality": "used",
+      "price": 21,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_turbocharger_oem",
+      "kind": "Turbocharger",
+      "name": "Turbocompresor (OEM)",
+      "quality": "oem",
+      "price": 1100,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_turbocharger_aftermarket",
+      "kind": "Turbocharger",
+      "name": "Turbocompresor (Recambio)",
+      "quality": "aftermarket",
+      "price": 660,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_turbocharger_used",
+      "kind": "Turbocharger",
+      "name": "Turbocompresor (Usada (desguace))",
+      "quality": "used",
+      "price": 330,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_intercooler_oem",
+      "kind": "Intercooler",
+      "name": "Intercooler (OEM)",
+      "quality": "oem",
+      "price": 320,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_intercooler_aftermarket",
+      "kind": "Intercooler",
+      "name": "Intercooler (Recambio)",
+      "quality": "aftermarket",
+      "price": 192,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_intercooler_used",
+      "kind": "Intercooler",
+      "name": "Intercooler (Usada (desguace))",
+      "quality": "used",
+      "price": 96,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_thermostat_oem",
+      "kind": "Thermostat",
+      "name": "Termostato (OEM)",
+      "quality": "oem",
+      "price": 38,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_thermostat_aftermarket",
+      "kind": "Thermostat",
+      "name": "Termostato (Recambio)",
+      "quality": "aftermarket",
+      "price": 22.8,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_thermostat_used",
+      "kind": "Thermostat",
+      "name": "Termostato (Usada (desguace))",
+      "quality": "used",
+      "price": 11.4,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_coolingfan_oem",
+      "kind": "CoolingFan",
+      "name": "Electroventilador (OEM)",
+      "quality": "oem",
+      "price": 210,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_coolingfan_aftermarket",
+      "kind": "CoolingFan",
+      "name": "Electroventilador (Recambio)",
+      "quality": "aftermarket",
+      "price": 126,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_coolingfan_used",
+      "kind": "CoolingFan",
+      "name": "Electroventilador (Usada (desguace))",
+      "quality": "used",
+      "price": 63,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpump_oem",
+      "kind": "FuelPump",
+      "name": "Bomba de combustible (OEM)",
+      "quality": "oem",
+      "price": 230,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpump_aftermarket",
+      "kind": "FuelPump",
+      "name": "Bomba de combustible (Recambio)",
+      "quality": "aftermarket",
+      "price": 138,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpump_used",
+      "kind": "FuelPump",
+      "name": "Bomba de combustible (Usada (desguace))",
+      "quality": "used",
+      "price": 69,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpressureregulator_oem",
+      "kind": "FuelPressureRegulator",
+      "name": "Regulador de presión (OEM)",
+      "quality": "oem",
+      "price": 85,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpressureregulator_aftermarket",
+      "kind": "FuelPressureRegulator",
+      "name": "Regulador de presión (Recambio)",
+      "quality": "aftermarket",
+      "price": 51,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelpressureregulator_used",
+      "kind": "FuelPressureRegulator",
+      "name": "Regulador de presión (Usada (desguace))",
+      "quality": "used",
+      "price": 25.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_egrvalve_oem",
+      "kind": "EgrValve",
+      "name": "Válvula EGR (OEM)",
+      "quality": "oem",
+      "price": 260,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_egrvalve_aftermarket",
+      "kind": "EgrValve",
+      "name": "Válvula EGR (Recambio)",
+      "quality": "aftermarket",
+      "price": 156,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_egrvalve_used",
+      "kind": "EgrValve",
+      "name": "Válvula EGR (Usada (desguace))",
+      "quality": "used",
+      "price": 78,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_purgevalve_oem",
+      "kind": "PurgeValve",
+      "name": "Electroválvula de purga (OEM)",
+      "quality": "oem",
+      "price": 55,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_purgevalve_aftermarket",
+      "kind": "PurgeValve",
+      "name": "Electroválvula de purga (Recambio)",
+      "quality": "aftermarket",
+      "price": 33,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_purgevalve_used",
+      "kind": "PurgeValve",
+      "name": "Electroválvula de purga (Usada (desguace))",
+      "quality": "used",
+      "price": 16.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_cylinder_oem",
+      "kind": "Cylinder",
+      "name": "Kit de pistón, segmentos y válvulas (OEM)",
+      "quality": "oem",
+      "price": 620,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_cylinder_aftermarket",
+      "kind": "Cylinder",
+      "name": "Kit de pistón, segmentos y válvulas (Recambio)",
+      "quality": "aftermarket",
+      "price": 372,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_cylinder_used",
+      "kind": "Cylinder",
+      "name": "Kit de pistón, segmentos y válvulas (Usada (desguace))",
+      "quality": "used",
+      "price": 186,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_intakegasket_oem",
+      "kind": "IntakeGasket",
+      "name": "Junta de colector de admisión (OEM)",
+      "quality": "oem",
+      "price": 18,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_intakegasket_aftermarket",
+      "kind": "IntakeGasket",
+      "name": "Junta de colector de admisión (Recambio)",
+      "quality": "aftermarket",
+      "price": 10.8,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_intakegasket_used",
+      "kind": "IntakeGasket",
+      "name": "Junta de colector de admisión (Usada (desguace))",
+      "quality": "used",
+      "price": 5.4,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vacuumhose_oem",
+      "kind": "VacuumHose",
+      "name": "Manguito de vacío (OEM)",
+      "quality": "oem",
+      "price": 22,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vacuumhose_aftermarket",
+      "kind": "VacuumHose",
+      "name": "Manguito de vacío (Recambio)",
+      "quality": "aftermarket",
+      "price": 13.2,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vacuumhose_used",
+      "kind": "VacuumHose",
+      "name": "Manguito de vacío (Usada (desguace))",
+      "quality": "used",
+      "price": 6.6,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_boosthose_oem",
+      "kind": "BoostHose",
+      "name": "Manguito de presión (OEM)",
+      "quality": "oem",
+      "price": 65,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_boosthose_aftermarket",
+      "kind": "BoostHose",
+      "name": "Manguito de presión (Recambio)",
+      "quality": "aftermarket",
+      "price": 39,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_boosthose_used",
+      "kind": "BoostHose",
+      "name": "Manguito de presión (Usada (desguace))",
+      "quality": "used",
+      "price": 19.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_exhaust_oem",
+      "kind": "Exhaust",
+      "name": "Colector/tramo de escape con juntas (OEM)",
+      "quality": "oem",
+      "price": 240,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_exhaust_aftermarket",
+      "kind": "Exhaust",
+      "name": "Colector/tramo de escape con juntas (Recambio)",
+      "quality": "aftermarket",
+      "price": 144,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_exhaust_used",
+      "kind": "Exhaust",
+      "name": "Colector/tramo de escape con juntas (Usada (desguace))",
+      "quality": "used",
+      "price": 72,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_catalyst_oem",
+      "kind": "Catalyst",
+      "name": "Catalizador (OEM)",
+      "quality": "oem",
+      "price": 680,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_catalyst_aftermarket",
+      "kind": "Catalyst",
+      "name": "Catalizador (Recambio)",
+      "quality": "aftermarket",
+      "price": 408,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_catalyst_used",
+      "kind": "Catalyst",
+      "name": "Catalizador (Usada (desguace))",
+      "quality": "used",
+      "price": 204,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_airfilter_oem",
+      "kind": "AirFilter",
+      "name": "Filtro de aire (OEM)",
+      "quality": "oem",
+      "price": 16,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_airfilter_aftermarket",
+      "kind": "AirFilter",
+      "name": "Filtro de aire (Recambio)",
+      "quality": "aftermarket",
+      "price": 9.6,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_airfilter_used",
+      "kind": "AirFilter",
+      "name": "Filtro de aire (Usada (desguace))",
+      "quality": "used",
+      "price": 4.8,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelfilter_oem",
+      "kind": "FuelFilter",
+      "name": "Filtro de combustible (OEM)",
+      "quality": "oem",
+      "price": 24,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelfilter_aftermarket",
+      "kind": "FuelFilter",
+      "name": "Filtro de combustible (Recambio)",
+      "quality": "aftermarket",
+      "price": 14.4,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelfilter_used",
+      "kind": "FuelFilter",
+      "name": "Filtro de combustible (Usada (desguace))",
+      "quality": "used",
+      "price": 7.2,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_timingdrive_oem",
+      "kind": "TimingDrive",
+      "name": "Kit de distribución (OEM)",
+      "quality": "oem",
+      "price": 340,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_timingdrive_aftermarket",
+      "kind": "TimingDrive",
+      "name": "Kit de distribución (Recambio)",
+      "quality": "aftermarket",
+      "price": 204,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_timingdrive_used",
+      "kind": "TimingDrive",
+      "name": "Kit de distribución (Usada (desguace))",
+      "quality": "used",
+      "price": 102,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_headgasket_oem",
+      "kind": "HeadGasket",
+      "name": "Junta de culata y tornillería (OEM)",
+      "quality": "oem",
+      "price": 140,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_headgasket_aftermarket",
+      "kind": "HeadGasket",
+      "name": "Junta de culata y tornillería (Recambio)",
+      "quality": "aftermarket",
+      "price": 84,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_headgasket_used",
+      "kind": "HeadGasket",
+      "name": "Junta de culata y tornillería (Usada (desguace))",
+      "quality": "used",
+      "price": 42,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_battery_oem",
+      "kind": "Battery",
+      "name": "Batería 70 Ah (OEM)",
+      "quality": "oem",
+      "price": 120,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_battery_aftermarket",
+      "kind": "Battery",
+      "name": "Batería 70 Ah (Recambio)",
+      "quality": "aftermarket",
+      "price": 72,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_battery_used",
+      "kind": "Battery",
+      "name": "Batería 70 Ah (Usada (desguace))",
+      "quality": "used",
+      "price": 36,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_alternator_oem",
+      "kind": "Alternator",
+      "name": "Alternador (OEM)",
+      "quality": "oem",
+      "price": 310,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_alternator_aftermarket",
+      "kind": "Alternator",
+      "name": "Alternador (Recambio)",
+      "quality": "aftermarket",
+      "price": 186,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_alternator_used",
+      "kind": "Alternator",
+      "name": "Alternador (Usada (desguace))",
+      "quality": "used",
+      "price": 93,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuse_oem",
+      "kind": "Fuse",
+      "name": "Fusible (OEM)",
+      "quality": "oem",
+      "price": 1,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_relay_oem",
+      "kind": "Relay",
+      "name": "Relé (OEM)",
+      "quality": "oem",
+      "price": 14,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_relay_aftermarket",
+      "kind": "Relay",
+      "name": "Relé (Recambio)",
+      "quality": "aftermarket",
+      "price": 8.4,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_relay_used",
+      "kind": "Relay",
+      "name": "Relé (Usada (desguace))",
+      "quality": "used",
+      "price": 4.2,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_groundstrap_oem",
+      "kind": "GroundStrap",
+      "name": "Trenza de masa (OEM)",
+      "quality": "oem",
+      "price": 19,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_groundstrap_aftermarket",
+      "kind": "GroundStrap",
+      "name": "Trenza de masa (Recambio)",
+      "quality": "aftermarket",
+      "price": 11.4,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_groundstrap_used",
+      "kind": "GroundStrap",
+      "name": "Trenza de masa (Usada (desguace))",
+      "quality": "used",
+      "price": 5.7,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_controlmodule_oem",
+      "kind": "ControlModule",
+      "name": "Módulo de control (reacondicionado) (OEM)",
+      "quality": "oem",
+      "price": 450,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_controlmodule_aftermarket",
+      "kind": "ControlModule",
+      "name": "Módulo de control (reacondicionado) (Recambio)",
+      "quality": "aftermarket",
+      "price": 270,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_controlmodule_used",
+      "kind": "ControlModule",
+      "name": "Módulo de control (reacondicionado) (Usada (desguace))",
+      "quality": "used",
+      "price": 135,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_canbus_oem",
+      "kind": "CanBus",
+      "name": "Reparación de ramal CAN (OEM)",
+      "quality": "oem",
+      "price": 30,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_glowplug_oem",
+      "kind": "GlowPlug",
+      "name": "Calentador (OEM)",
+      "quality": "oem",
+      "price": 28,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_glowplug_aftermarket",
+      "kind": "GlowPlug",
+      "name": "Calentador (Recambio)",
+      "quality": "aftermarket",
+      "price": 16.8,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_glowplug_used",
+      "kind": "GlowPlug",
+      "name": "Calentador (Usada (desguace))",
+      "quality": "used",
+      "price": 8.4,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "perf_injector_550",
+      "kind": "Injector",
+      "name": "Inyector alto caudal 550 cc/min",
+      "quality": "performance",
+      "price": 165,
+      "reliability": 0.95,
+      "fits": ["*"],
+      "params": {
+        "flow_ccmin": 550
+      }
+    },
+    {
+      "id": "perf_intercooler",
+      "kind": "Intercooler",
+      "name": "Intercooler de alto rendimiento",
+      "quality": "performance",
+      "price": 540,
+      "reliability": 0.96,
+      "fits": ["*"],
+      "params": {
+        "effectiveness": 0.82
+      }
+    },
+    {
+      "id": "perf_fuel_pump",
+      "kind": "FuelPump",
+      "name": "Bomba de combustible reforzada",
+      "quality": "performance",
+      "price": 290,
+      "reliability": 0.96,
+      "fits": ["*"],
+      "params": {
+        "max_pressure_kpa": 800
+      }
+    },
+    {
+      "id": "perf_spark_plug_cold",
+      "kind": "SparkPlug",
+      "name": "Bujía de grado térmico frío",
+      "quality": "performance",
+      "price": 22,
+      "reliability": 0.97,
+      "fits": ["*"],
+      "params": {
+        "gap_mm": 0.65
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "appearance.schema.json",
+  "title": "Apariencia visual de un coche (alimenta el desgaste en Unity)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "ageYears": { "type": "number", "minimum": 0, "maximum": 80 },
+    "kilometers": { "type": "number", "minimum": 0, "maximum": 2000000 },
+    "maintenance": { "type": "number", "minimum": 0, "maximum": 1, "description": "0 abandonado .. 1 impecable" },
+    "paintColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+    "humidity": { "type": "number", "minimum": 0, "maximum": 1, "description": "Clima húmedo/salitre: favorece el óxido" },
+    "slots": {
+      "type": "object",
+      "description": "Sustituciones de prefab por slot visual (opcional)",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

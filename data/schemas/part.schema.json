@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "part.schema.json",
+  "title": "Catálogo de piezas",
+  "type": "object",
+  "required": ["parts"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "name", "quality", "price", "reliability"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "kind": { "$ref": "common.schema.json#/$defs/componentKind" },
+          "name": { "type": "string" },
+          "quality": { "enum": ["oem", "aftermarket", "used", "performance"] },
+          "price": { "type": "number", "minimum": 0 },
+          "reliability": { "type": "number", "minimum": 0, "maximum": 1 },
+          "fits": { "type": "array", "items": { "type": "string" } },
+          "params": { "type": "object", "additionalProperties": { "type": "number" } }
+        }
+      }
+    }
+  }
+}

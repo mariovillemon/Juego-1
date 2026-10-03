@@ -44,6 +44,9 @@ namespace Garage.Sim.Vehicle
         /// <summary>Intercooler effectiveness 0..1.</summary>
         public double IntercoolerEffectiveness { get; set; } = 0.7;
 
+        /// <summary>Maximum compressor mass flow (g/s) before boost collapses.</summary>
+        public double MaxFlowGps { get; set; } = 200;
+
         /// <summary>Spool time constant (s).</summary>
         public double SpoolTimeConstant { get; set; } = 0.45;
     }
@@ -181,6 +184,9 @@ namespace Garage.Sim.Vehicle
 
         /// <summary>Circuit (null for non electrical components).</summary>
         public CircuitDefinition? Circuit { get; set; }
+
+        /// <summary>Feeding fuse id for components without an ECU circuit (fuel pump, fan).</summary>
+        public string Fuse { get; set; } = "";
 
         /// <summary>Default part id for replacement.</summary>
         public string PartId { get; set; } = "";

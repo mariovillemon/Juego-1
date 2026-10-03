@@ -1,0 +1,26 @@
+{
+  "id": "nordak_atlas_td",
+  "brand": "Nordak",
+  "model": "Atlas 2.0 TD",
+  "year": 2014,
+  "segment": "Berlina familiar diésel",
+  "engine": "d20_tdi",
+  "template": "diesel_turbo",
+  "calibration": "d20_stock",
+  "massKg": 1560,
+  "wheelRadiusM": 0.325,
+  "gearRatios": [3.77, 1.96, 1.26, 0.88, 0.69, 0.56],
+  "finalDrive": 3.65,
+  "drivetrainEfficiency": 0.88,
+  "dragAreaM2": 0.7,
+  "experimental": true,
+  "vin": "NDK2ATD0E00024680",
+  "appearance": {
+    "ageYears": 11,
+    "kilometers": 245000,
+    "maintenance": 0.6,
+    "paintColor": "#2E3440",
+    "humidity": 0.4
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

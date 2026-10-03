@@ -24,6 +24,8 @@ namespace Garage.Sim.Engine
         private double _prevEngineAir;
         private double _catOxygenStorage = 0.5;
         private double _coolantLossAccum;
+        private readonly double[] _lambdaHistory = CreateHistory();
+        private int _historyIndex;
 
         /// <summary>Creates the engine.</summary>
         public EngineModel(EngineDefinition def, ComponentRegistry parts, FaultSet faults, DeterministicRandom rng)
@@ -39,6 +41,17 @@ namespace Garage.Sim.Engine
             {
                 _cylPhase[i] = (double)i / def.Cylinders;
             }
+        }
+
+        private static double[] CreateHistory()
+        {
+            var h = new double[96];
+            for (int i = 0; i < h.Length; i++)
+            {
+                h[i] = 1.0;
+            }
+
+            return h;
         }
 
         /// <summary>Definition.</summary>
@@ -138,13 +151,20 @@ namespace Garage.Sim.Engine
 
             double boostTarget = 0;
             double chargeC = s.IntakeAirC;
-            if (_def.Turbo != null && !_def.IsDiesel || (_def.Turbo != null && _def.IsDiesel))
+            if (_def.Turbo != null)
             {
                 TurboDefinition t = _def.Turbo!;
                 double turboWear = F(ComponentKind.Turbocharger, EffectKind.Wear) + (Damage.TurboFailed ? 0.8 : Damage.Turbo * 0.2);
                 double exhaustEnergy = MathUtil.Clamp01(_prevEngineAir / Math.Max(1e-6, _def.DisplacementM3 * 1.2 * t.FullSpoolRpm / 120.0))
                     * MathUtil.SmoothStep(t.SpoolStartRpm * 0.6, t.FullSpoolRpm, rpm);
                 double capacity = t.MaxBoostKpa * Math.Min(1.0, exhaustEnergy * 1.25) * (1 - MathUtil.Clamp01(turboWear));
+
+                // Compressor flow limit: leaks downstream of the compressor steal flow the turbo cannot supply.
+                double demandGps = (_prevEngineAir * 1000) + State.BoostLeakGps;
+                if (demandGps > t.MaxFlowGps)
+                {
+                    capacity *= Math.Pow(t.MaxFlowGps / demandGps, 3);
+                }
 
                 // Wastegate: solenoid duty bleeds actuator pressure → higher opening pressure.
                 double duty = MathUtil.Clamp01(cmd.WastegateDuty);
@@ -500,7 +520,7 @@ namespace Garage.Sim.Engine
                     double available = 0;
                     if (cmd.SparkEnabled[i])
                     {
-                        available = 36.0 * MathUtil.Clamp01((coilVolts - 6) / 8.0);
+                        available = 36.0 * MathUtil.Clamp01((coilVolts - 5) / 6.0);
                         if (coil != null)
                         {
                             available *= 1 - _faults.Max(coil.Id, EffectKind.Weak) - 0.85 * _faults.Max(coil.Id, EffectKind.InternalShort);
@@ -517,12 +537,12 @@ namespace Garage.Sim.Engine
                     double fouling = Damage.PlugFouling;
                     if (plug != null)
                     {
-                        gap = plug.Param("gap_mm", 0.8) + _faults.Max(plug.Id, EffectKind.Wear) * 0.9 + (1 - plug.Health) * 0.5;
+                        gap = plug.Param("gap_mm", 0.8) + _faults.Max(plug.Id, EffectKind.Wear) * 1.2 + (1 - plug.Health) * 0.35;
                         fouling += _faults.Max(plug.Id, EffectKind.Weak);
                     }
 
-                    double cylPressureFactor = 0.7 + 0.5 * mapBar * compression;
-                    double required = (4 + 10 * gap) * cylPressureFactor;
+                    double cylPressureFactor = 0.6 + 0.6 * mapBar * compression;
+                    double required = (4 + 12 * gap) * cylPressureFactor;
                     available *= 1 - MathUtil.Clamp01(fouling) * 0.6;
                     double ignitionMiss = available <= 0.1 ? 1 : MathUtil.SmoothStep(available * 0.82, available * 1.02, required);
                     double leanMiss = MathUtil.SmoothStep(1.32, 1.6, lambda / Math.Max(0.3, gasQuality));
@@ -608,8 +628,7 @@ namespace Garage.Sim.Engine
             fmepBar += Damage.RodBearing * 0.4 + Damage.Piston.Length * 0;
             double frictionTorque = fmepBar * 1e5 * vd / (4 * Math.PI);
             double pumpingTorque = _def.IsDiesel ? 0 : Math.Max(0, (exhaustKpa - s.ManifoldKpa) * 1000 * vd / (4 * Math.PI)) * 0.55;
-            double accessory = rpm > 1 ? (500 + (cmd.FanOn ? 300 : 0)) / Math.Max(50, rpm * 2 * Math.PI / 60) : 0;
-            accessory = Math.Min(accessory, 12);
+            double accessory = rpm > 1 ? (500 + (cmd.FanOn ? 300 : 0)) / Math.Max(80, rpm * 2 * Math.PI / 60) : 0;
             if (rpm < 1)
             {
                 frictionTorque = 0;
@@ -644,11 +663,17 @@ namespace Garage.Sim.Engine
                 lambdaExh *= 1 + exhLeak * 0.12 * MathUtil.Remap(rpm, 800, 3500, 1, 0.2);
             }
 
-            s.ExhaustLambda = MathUtil.FirstOrder(s.ExhaustLambda, MathUtil.Clamp(lambdaExh, 0.5, 9), 0.08, dt);
+            // Transport delay from the exhaust valves to the sensor (gas travel + mixing): ~2 engine cycles plus pipe.
+            _lambdaHistory[_historyIndex] = MathUtil.Clamp(lambdaExh, 0.5, 9);
+            double delay = rpm > 50 ? 0.05 + 240.0 / rpm : 0.5;
+            int lag = (int)MathUtil.Clamp(Math.Round(delay / dt), 0, _lambdaHistory.Length - 1);
+            double delayed = _lambdaHistory[(_historyIndex - lag + _lambdaHistory.Length) % _lambdaHistory.Length];
+            _historyIndex = (_historyIndex + 1) % _lambdaHistory.Length;
+            s.ExhaustLambda = MathUtil.FirstOrder(s.ExhaustLambda, delayed, 0.06, dt);
 
             // ---------------- Thermal ----------------
             double fuelPowerW = s.FuelPowerKw * 1000;
-            double qCoolant = 0.30 * fuelPowerW + 0.2 * unburnt * lhv * rpm / 120.0 * 0.0;
+            double qCoolant = fuelPowerW * MathUtil.Lerp(0.30, 0.22, MathUtil.Clamp01(s.RelativeLoad / 1.5));
             double retard = Math.Max(0, mbt - spark);
             qCoolant *= 1 + retard * 0.006;
             Component? thermostat = _parts.Find(ComponentKind.Thermostat);
@@ -665,12 +690,12 @@ namespace Garage.Sim.Engine
                 }
             }
 
-            double airflowFactor = 0.15 + vehicleSpeedMs / 22.0 + (cmd.FanOn ? 0.9 : 0);
+            double airflowFactor = 0.02 + vehicleSpeedMs / 22.0 + (cmd.FanOn ? 0.9 : 0);
             double coolantLevel = s.CoolantLevel;
             double radiatorW = _def.RadiatorKwK * 1000 * open * airflowFactor * (s.CoolantC - env.AmbientC) * coolantLevel;
             double radiatorRestriction = 0;
             radiatorW *= 1 - radiatorRestriction;
-            double heaterW = 25 * (s.CoolantC - env.AmbientC);
+            double heaterW = 5 * (s.CoolantC - env.AmbientC);
             double heatCap = _def.ThermalCapacityKjK * 1000 * (0.4 + 0.6 * coolantLevel);
             if (s.Running || rpm > 1)
             {

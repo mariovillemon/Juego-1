@@ -104,7 +104,7 @@ namespace Garage.Sim.Faults
             l.Register(M("connector_corrosion", "Conector oxidado", "wiring", EffectKind.ConnectorCorrosion, 50, 2500, 4, "repair_wire", "ground", "Pin del conector con óxido verde.", Electrical, ConditionKind.Always, ConditionKind.Cold));
 
             l.Register(M("leak_vacuum", "Fuga de vacío", "leak", EffectKind.Leak, 1.5, 12, 2, "replace", "", "Entrada de aire no medido tras el caudalímetro.", new[] { "VacuumHose", "IntakeGasket" }, ConditionKind.Always, ConditionKind.Cold, ConditionKind.Hot));
-            l.Register(M("leak_boost", "Fuga de presión de turbo", "leak", EffectKind.Leak, 20, 250, 3, "replace", "", "Manguito o intercooler pierde aire a presión.", new[] { "BoostHose", "Intercooler" }, ConditionKind.Always, ConditionKind.AboveLoad));
+            l.Register(M("leak_boost", "Fuga de presión de turbo", "leak", EffectKind.Leak, 50, 1200, 3, "replace", "", "Manguito o intercooler pierde aire a presión.", new[] { "BoostHose", "Intercooler" }, ConditionKind.Always, ConditionKind.AboveLoad));
             l.Register(M("leak_fluid", "Fuga interna", "leak", EffectKind.Leak, 0.2, 1, 4, "replace", "", "Fuga de fluido/gases (junta, regulador).", new[] { "HeadGasket", "FuelPressureRegulator", "WastegateSolenoid" }, mech));
             l.Register(M("leak_exhaust", "Fuga de escape", "leak", EffectKind.Leak, 0.2, 1, 3, "replace", "", "Fuga en colector/escape antes de la sonda.", new[] { "Exhaust" }, ConditionKind.Always, ConditionKind.Cold));
             l.Register(M("leak_compression", "Pérdida de compresión", "mechanical", EffectKind.Leak, 0.25, 0.8, 4, "replace", "", "Válvula quemada o segmentos rotos.", new[] { "Cylinder" }, mech));

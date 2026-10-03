@@ -90,6 +90,11 @@ namespace Garage.Sim.Vehicle
                     }
                 }
 
+                if (cd.Fuse.Length > 0 && !_fuseOf.ContainsKey(cd.Id))
+                {
+                    _fuseOf[cd.Id] = cd.Fuse;
+                }
+
                 if (cd.Kind == ComponentKind.Relay)
                 {
                     if (cd.Id.IndexOf("fan", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -302,15 +307,15 @@ namespace Garage.Sim.Vehicle
             {
                 Step(DefaultDt);
                 t += DefaultDt;
-                if (Engine.State.Running && Engine.State.Rpm > 500)
+                if (Engine.State.Rpm > 650)
                 {
                     break;
                 }
             }
 
             Key = KeyPosition.On;
-            RunFor(1.0);
-            return Engine.State.Running;
+            RunFor(1.5);
+            return Engine.State.Rpm > 400;
         }
 
         /// <summary>Turns the key off then on again (ends an OBD drive cycle).</summary>
@@ -813,8 +818,8 @@ namespace Garage.Sim.Vehicle
             if (Cranking && !s.Seized)
             {
                 double v = BatteryVolts;
-                double strength = MathUtil.Clamp01((v - 7.5) / 3.5);
-                starter = 70 * strength * (1 - s.Rpm / 380.0);
+                double strength = MathUtil.Clamp01((v - 6.5) / 3.5);
+                starter = 100 * strength * Math.Max(0, 1 - s.Rpm / 380.0);
             }
 
             double omega = s.Rpm * 2 * Math.PI / 60;

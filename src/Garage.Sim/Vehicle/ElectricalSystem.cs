@@ -50,7 +50,8 @@ namespace Garage.Sim.Vehicle
                 Component? g = _car.Parts.Find(ComponentKind.GroundStrap);
                 if (g != null)
                 {
-                    r += _car.Faults.Sum(g.Id, EffectKind.WireHighResistance) + _car.Faults.Sum(g.Id, EffectKind.ConnectorCorrosion);
+                    // Fault magnitudes are in sensor-circuit ohms; a ground strap fault of the same severity is a few tens of milliohms.
+                    r += (_car.Faults.Sum(g.Id, EffectKind.WireHighResistance) + _car.Faults.Sum(g.Id, EffectKind.ConnectorCorrosion)) / 5000.0;
                 }
 
                 return r;
@@ -63,12 +64,12 @@ namespace Garage.Sim.Vehicle
             double load = 0;
             if (keyOn)
             {
-                load += 12 + (fanOn ? 18 : 0) + (pumpOn ? 7 : 0);
+                load += 25 + (fanOn ? 18 : 0) + (pumpOn ? 7 : 0);
             }
 
             if (cranking)
             {
-                load += 160;
+                load += 130;
             }
 
             LoadAmps = load;

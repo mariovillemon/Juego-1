@@ -118,6 +118,7 @@ namespace Garage.Sim.Ecu
         private double _limpTimer;
         private double _heaterCheckTime;
         private double _stallTimer;
+        private bool _wasRunning;
 
         /// <summary>Creates the ECU for a car.</summary>
         public EngineControlUnit(Car car, EcuCalibration calibration, DtcCatalog catalog)
@@ -357,7 +358,9 @@ namespace Garage.Sim.Ecu
             bool engineTurning = trueRpm > 60;
             Check("P0335", engineTurning && _car.Cranking || (engineTurning && _runTime > 1), !CrankSync, dt, 1.0, 2.0);
             double rpm = Rpm;
-            bool running = rpm > 400 && _car.Engine.State.Running;
+            // Run detection from crank speed only (as an ECU does): hysteresis between cranking and running.
+            bool running = rpm > (_wasRunning ? 300 : 450);
+            _wasRunning = running;
             if (running)
             {
                 _runTime += dt;
@@ -426,8 +429,8 @@ namespace Garage.Sim.Ecu
 
             // ---------------- Pedal and throttle ----------------
             double appV = Volts(ComponentKind.AppSensor);
-            bool appLow = !Missing(appV) && appV < 0.2;
-            bool appHigh = !Missing(appV) && appV > 4.8;
+            bool appLow = !Missing(appV) && appV < 0.25;
+            bool appHigh = !Missing(appV) && appV > 4.7;
             double pedal = Missing(appV) ? _car.Pedal : MathUtil.Clamp01((appV - 0.5) / 4.0);
             Check("P2122", _keyOnTime > 0.3, appLow, dt, 0.5, 1);
             Check("P2123", _keyOnTime > 0.3, appHigh, dt, 0.5, 1);
@@ -438,8 +441,8 @@ namespace Garage.Sim.Ecu
             }
 
             double tpsV = Volts(ComponentKind.TpsSensor);
-            bool tpsLow = !Missing(tpsV) && tpsV < 0.2;
-            bool tpsHigh = !Missing(tpsV) && tpsV > 4.8;
+            bool tpsLow = !Missing(tpsV) && tpsV < 0.25;
+            bool tpsHigh = !Missing(tpsV) && tpsV > 4.7;
             double tps = Missing(tpsV) ? _car.Engine.State.ThrottlePosition : MathUtil.Clamp01((tpsV - 0.5) / 4.0);
             Check("P0122", _keyOnTime > 0.3, tpsLow, dt, 0.5, 1);
             Check("P0123", _keyOnTime > 0.3, tpsHigh, dt, 0.5, 1);
@@ -451,8 +454,8 @@ namespace Garage.Sim.Ecu
             double mapMax = mapSensor?.Param("range_max_kpa", eng.IsTurbo ? 250 : 105) ?? 105;
             double mapMin = mapSensor?.Param("range_min_kpa", 10) ?? 10;
             double mapV = Volts(ComponentKind.MapSensor);
-            bool mapLow = !Missing(mapV) && mapV < 0.2;
-            bool mapHigh = !Missing(mapV) && mapV > 4.85;
+            bool mapLow = !Missing(mapV) && mapV < 0.25;
+            bool mapHigh = !Missing(mapV) && mapV > 4.7;
             double map = Missing(mapV) ? _car.Engine.State.ManifoldKpa : SensorCurves.LinearValue(mapV, mapMin, mapMax);
             Check("P0107", _keyOnTime > 0.5, mapLow, dt, 1, 2);
             Check("P0108", _keyOnTime > 0.5, mapHigh, dt, 1, 2);
@@ -469,8 +472,8 @@ namespace Garage.Sim.Ecu
             {
                 double bv = Volts(ComponentKind.BoostSensor);
                 double bmax = boostSensor.Param("range_max_kpa", 300);
-                bool bl = bv < 0.2;
-                bool bh = bv > 4.85;
+                bool bl = bv < 0.25;
+                bool bh = bv > 4.7;
                 Check("P0237", _keyOnTime > 0.5, bl, dt, 1, 2);
                 Check("P0238", _keyOnTime > 0.5, bh, dt, 1, 2);
                 boostValid = !bl && !bh;
@@ -522,8 +525,8 @@ namespace Garage.Sim.Ecu
             {
                 double rv = Volts(ComponentKind.FuelPressureSensor);
                 double rmax = railSensor.Param("range_max_kpa", eng.IsDiesel ? 200000 : 1000);
-                bool rl = rv < 0.2;
-                bool rh = rv > 4.85;
+                bool rl = rv < 0.25;
+                bool rh = rv > 4.7;
                 Check("P0192", _keyOnTime > 0.5, rl, dt, 1, 2);
                 Check("P0193", _keyOnTime > 0.5, rh, dt, 1, 2);
                 railValid = !rl && !rh;
@@ -538,7 +541,7 @@ namespace Garage.Sim.Ecu
             }
 
             // ---------------- Battery ----------------
-            Check("P0562", keyOn && running && _runTime > 5, vbat < 11.0, dt, 10, 5);
+            Check("P0562", keyOn && running && _runTime > 5, vbat < 11.5, dt, 10, 5);
             Check("P0563", keyOn && running, vbat > 16.0, dt, 5, 5);
 
             // ---------------- Speed ----------------
@@ -555,10 +558,10 @@ namespace Garage.Sim.Ecu
                 double err = idleTarget - rpm;
                 if (running)
                 {
-                    _idleIntegral = MathUtil.Clamp(_idleIntegral + err * 0.00002 * dt * 50, -0.05, 0.12);
+                    _idleIntegral = MathUtil.Clamp(_idleIntegral + err * 0.00002 * dt, -0.03, 0.12);
                 }
 
-                throttle = idleBase + _idleIntegral + MathUtil.Clamp(err * 0.00004, -0.02, 0.05);
+                throttle = Math.Max(0.003, idleBase + _idleIntegral + MathUtil.Clamp(err * 0.00003, -0.015, 0.05));
                 if (!running)
                 {
                     throttle = idleBase + 0.01 + Math.Max(0, _idleIntegral);
@@ -573,11 +576,12 @@ namespace Garage.Sim.Ecu
             }
 
             // Electronic throttle supervision: command vs TPS
-            bool throttleMotorOk = _car.ActuatorEnergized(ComponentKind.ElectronicThrottle);
-            double thrErr = Math.Abs(tps - _car.Engine.State.ThrottlePosition * 0 - Outputs.ThrottleTarget);
-            Check("P2101", _keyOnTime > 1 && !tpsFault && Outputs.ThrottleMotorEnabled, thrErr > 0.12, dt, 0.6, 1);
-            Check("P0638", _keyOnTime > 1 && !tpsFault, !throttleMotorOk, dt, 0.3, 1);
-            if (tpsFault || HasActive("P2101") || !throttleMotorOk)
+            bool hasEtc = !eng.IsDiesel && _car.Parts.Find(ComponentKind.ElectronicThrottle) != null;
+            bool throttleMotorOk = !hasEtc || _car.ActuatorEnergized(ComponentKind.ElectronicThrottle);
+            double thrErr = Math.Abs(tps - Outputs.ThrottleTarget);
+            Check("P2101", hasEtc && _keyOnTime > 1 && !tpsFault && Outputs.ThrottleMotorEnabled, thrErr > 0.12, dt, 0.6, 1);
+            Check("P2100", hasEtc && _keyOnTime > 1, !throttleMotorOk, dt, 0.3, 1);
+            if (hasEtc && (tpsFault || HasActive("P2101") || !throttleMotorOk))
             {
                 EnterLimp("ETC");
             }
@@ -656,7 +660,7 @@ namespace Garage.Sim.Ecu
             // ---------------- Fueling ----------------
             double lambdaTarget = cal.Lookup(EcuCalibration.LambdaTarget, rpm, load, 1.0);
             bool powerEnrich = lambdaTarget < 0.98;
-            bool decelCut = !eng.IsDiesel && pedal < 0.01 && rpm > 1600 && ect > 50 && running;
+            bool decelCut = !eng.IsDiesel && pedal < 0.01 && rpm > idleTarget + 900 && ect > 50 && running && !LimpMode;
             double revLimit = cal.Scalar(EcuCalibration.Keys.RevLimit, eng.RedlineRpm);
             bool revCut = rpm > revLimit;
             double speedLimit = cal.Scalar(EcuCalibration.Keys.SpeedLimit, 250);
@@ -780,7 +784,7 @@ namespace Garage.Sim.Ecu
             if (!running && rpm > 30)
             {
                 // Cranking: speed-density estimate, rich mixture depending on temperature.
-                double crankAir = SpeedDensityGps(map, iat, Math.Max(rpm, 150)) * 120.0 / (Math.Max(rpm, 150) * _n);
+                double crankAir = SpeedDensityGps(mapValid ? map : baro, iat, Math.Max(rpm, 150)) * 120.0 / (Math.Max(rpm, 150) * _n);
                 fuelG = crankAir / (Physics.AfrGasoline * 0.75) * warmup;
             }
             else

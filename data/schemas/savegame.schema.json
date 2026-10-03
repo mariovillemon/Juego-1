@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "savegame.schema.json",
+  "title": "Partida guardada",
+  "type": "object",
+  "required": ["formatVersion", "workshop"],
+  "properties": {
+    "formatVersion": { "type": "integer", "minimum": 1 },
+    "savedAt": { "type": "string" },
+    "workshop": {
+      "type": "object",
+      "required": ["money", "reputation", "day"],
+      "properties": {
+        "money": { "type": "number" },
+        "reputation": { "type": "number" },
+        "day": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

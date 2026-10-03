@@ -1,0 +1,26 @@
+{
+  "id": "velmora_pico",
+  "brand": "Velmora",
+  "model": "Pico 1.4",
+  "year": 2011,
+  "segment": "Utilitario urbano",
+  "engine": "k14_na",
+  "template": "gasoline_na_sd",
+  "calibration": "k14_stock",
+  "massKg": 1090,
+  "wheelRadiusM": 0.29,
+  "gearRatios": [3.42, 1.95, 1.28, 0.97, 0.78],
+  "finalDrive": 4.07,
+  "drivetrainEfficiency": 0.9,
+  "dragAreaM2": 0.62,
+  "vin": "VLM0PC14B00067890",
+  "removeComponents": [],
+  "appearance": {
+    "ageYears": 14,
+    "kilometers": 196000,
+    "maintenance": 0.35,
+    "paintColor": "#D9D4C7",
+    "humidity": 0.6
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

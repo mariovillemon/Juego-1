@@ -1,0 +1,101 @@
+{
+  "$schema": "../schemas/upgrade.schema.json",
+  "upgrades": [
+    {
+      "id": "tool_multimeter",
+      "name": "Multímetro digital",
+      "type": "tool",
+      "price": 0,
+      "reputationRequired": 0,
+      "description": "Medición de tensión, resistencia y continuidad"
+    },
+    {
+      "id": "tool_scanner",
+      "name": "Escáner OBD-II básico",
+      "type": "tool",
+      "price": 0,
+      "reputationRequired": 0,
+      "description": "Lectura/borrado de códigos y datos en vivo"
+    },
+    {
+      "id": "tool_fuel_gauge",
+      "name": "Manómetro de combustible",
+      "type": "tool",
+      "price": 180,
+      "reputationRequired": 0,
+      "description": "Presión de rampa, residual y de corte"
+    },
+    {
+      "id": "tool_compression",
+      "name": "Compresímetro",
+      "type": "tool",
+      "price": 120,
+      "reputationRequired": 0,
+      "description": "Compresión por cilindro"
+    },
+    {
+      "id": "tool_leakdown",
+      "name": "Comprobador de fugas de cilindro",
+      "type": "tool",
+      "price": 260,
+      "reputationRequired": 10,
+      "description": "Porcentaje de fuga y dónde se escapa"
+    },
+    {
+      "id": "tool_smoke",
+      "name": "Máquina de humo",
+      "type": "tool",
+      "price": 650,
+      "reputationRequired": 15,
+      "description": "Localiza fugas de vacío y de escape"
+    },
+    {
+      "id": "tool_scope",
+      "name": "Osciloscopio de 4 canales",
+      "type": "tool",
+      "price": 1200,
+      "reputationRequired": 25,
+      "description": "Formas de onda de sensores y actuadores"
+    },
+    {
+      "id": "tool_ecu_flash",
+      "name": "Interfaz de reprogramación ECU",
+      "type": "tool",
+      "price": 900,
+      "reputationRequired": 20,
+      "description": "Lectura y escritura de mapas"
+    },
+    {
+      "id": "tool_dyno",
+      "name": "Banco de potencia de rodillos",
+      "type": "tool",
+      "price": 18000,
+      "reputationRequired": 40,
+      "description": "Medición de potencia y datalog"
+    },
+    {
+      "id": "upg_lift2",
+      "name": "Segundo elevador",
+      "type": "workshop",
+      "price": 4500,
+      "reputationRequired": 30,
+      "description": "Permite dos coches a la vez"
+    },
+    {
+      "id": "upg_parts_account",
+      "name": "Cuenta con distribuidor OEM",
+      "type": "workshop",
+      "price": 1500,
+      "reputationRequired": 20,
+      "description": "10 % de descuento en recambio OEM"
+    },
+    {
+      "id": "upg_training",
+      "name": "Curso de diagnosis avanzada",
+      "type": "workshop",
+      "price": 800,
+      "reputationRequired": 10,
+      "description": "Reduce el tiempo de cada medición un 15 %"
+    }
+  ]
+}

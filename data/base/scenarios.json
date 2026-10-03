@@ -1,0 +1,745 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "scenarios": [
+    {
+      "id": "sc_vacuum_leak_pcv",
+      "name": "Fuga en el manguito PCV",
+      "car": "aurex_strada_gt",
+      "difficulty": 1,
+      "faults": [
+        {
+          "mode": "leak_vacuum",
+          "component": "pcv_hose",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Ralentí irregular y testigo de motor encendido."
+    },
+    {
+      "id": "sc_vacuum_leak_gasket3",
+      "name": "Junta de admisión del cilindro 3",
+      "car": "aurex_strada_gt",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "leak_vacuum",
+          "component": "intake_gasket3",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Tiembla al ralentí, sobre todo en frío."
+    },
+    {
+      "id": "sc_thermostat_open",
+      "name": "Termostato abierto",
+      "car": "velmora_pico",
+      "difficulty": 1,
+      "faults": [
+        {
+          "mode": "stuck_open",
+          "component": "thermostat",
+          "severity": 0.8
+        }
+      ],
+      "complaint": "La calefacción no calienta y gasta más."
+    },
+    {
+      "id": "sc_thermostat_closed",
+      "name": "Termostato atascado cerrado",
+      "car": "velmora_pico",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "stuck_closed",
+          "component": "thermostat",
+          "severity": 1
+        }
+      ],
+      "complaint": "Se le sube la temperatura en atascos."
+    },
+    {
+      "id": "sc_ect_open",
+      "name": "Cable de señal ECT abierto",
+      "car": "aurex_strada_gt",
+      "difficulty": 1,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "ect",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "Ventilador siempre a tope y consume mucho."
+    },
+    {
+      "id": "sc_ect_short",
+      "name": "Señal ECT en corto a masa",
+      "car": "velmora_pico",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wire_short_ground",
+          "component": "ect",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "Arranca mal en frío y ventilador a tope."
+    },
+    {
+      "id": "sc_ect_corroded",
+      "name": "Conector ECT oxidado",
+      "car": "velmora_pico",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "connector_corrosion",
+          "component": "ect",
+          "severity": 0.6,
+          "pin": "ground"
+        }
+      ],
+      "complaint": "Arranca mal en caliente, gasta mucho."
+    },
+    {
+      "id": "sc_coil2_dead",
+      "name": "Bobina 2 averiada",
+      "car": "aurex_strada_gt",
+      "difficulty": 1,
+      "faults": [
+        {
+          "mode": "dead",
+          "component": "coil2",
+          "severity": 1
+        }
+      ],
+      "complaint": "Va a tirones y vibra mucho."
+    },
+    {
+      "id": "sc_coil4_weak_load",
+      "name": "Bobina 4 débil bajo carga",
+      "car": "aurex_strada_gt",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "weak",
+          "component": "coil4",
+          "severity": 0.6,
+          "condition": {
+            "kind": "AboveLoad",
+            "threshold": 0.8
+          }
+        }
+      ],
+      "complaint": "Petardea al acelerar fuerte en autopista."
+    },
+    {
+      "id": "sc_plug1_worn",
+      "name": "Bujía 1 desgastada",
+      "car": "velmora_pico",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wear",
+          "component": "plug1",
+          "severity": 0.9
+        }
+      ],
+      "complaint": "Tirones suaves al acelerar."
+    },
+    {
+      "id": "sc_all_plugs_worn",
+      "name": "Bujías gastadas + bobina débil",
+      "car": "kessler_rapace",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "wear",
+          "component": "plug1",
+          "severity": 0.8
+        },
+        {
+          "mode": "wear",
+          "component": "plug5",
+          "severity": 0.9
+        },
+        {
+          "mode": "weak",
+          "component": "coil5",
+          "severity": 0.4
+        }
+      ],
+      "complaint": "Pierde fuerza arriba y tiembla."
+    },
+    {
+      "id": "sc_injector3_clogged",
+      "name": "Inyector 3 obstruido",
+      "car": "aurex_strada_gt",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "clog",
+          "component": "inj3",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Ralentí con vibración y huele raro."
+    },
+    {
+      "id": "sc_injector1_open",
+      "name": "Inyector 1 bobinado abierto",
+      "car": "velmora_pico",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "dead",
+          "component": "inj1",
+          "severity": 1
+        }
+      ],
+      "complaint": "Va con tres cilindros."
+    },
+    {
+      "id": "sc_injector2_wire",
+      "name": "Cable de control del inyector 2 abierto",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "inj2",
+          "severity": 1,
+          "pin": "control"
+        }
+      ],
+      "complaint": "Va con tres cilindros."
+    },
+    {
+      "id": "sc_injector4_dribble",
+      "name": "Inyector 4 gotea",
+      "car": "kessler_rapace",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "dribble",
+          "component": "inj4",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Huele a gasolina y arranca mal en caliente."
+    },
+    {
+      "id": "sc_maf_dirty",
+      "name": "Caudalímetro sucio",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "signal_gain_low",
+          "component": "maf",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Le falta fuerza y a veces se cala."
+    },
+    {
+      "id": "sc_maf_open",
+      "name": "Señal MAF abierta",
+      "car": "kessler_rapace",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "maf",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "Funciona raro y el testigo está encendido."
+    },
+    {
+      "id": "sc_map_ref_open",
+      "name": "Referencia 5 V del MAP abierta",
+      "car": "velmora_pico",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "map",
+          "severity": 1,
+          "pin": "ref"
+        }
+      ],
+      "complaint": "Va fatal, gasta muchísimo."
+    },
+    {
+      "id": "sc_tps_ground_open",
+      "name": "Masa del TPS abierta",
+      "car": "aurex_strada_gt",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "tps",
+          "severity": 1,
+          "pin": "ground"
+        }
+      ],
+      "complaint": "Se queda sin fuerza (modo emergencia)."
+    },
+    {
+      "id": "sc_app_short",
+      "name": "Pedal en corto a masa",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wire_short_ground",
+          "component": "app",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "El acelerador no responde."
+    },
+    {
+      "id": "sc_ckp_intermittent",
+      "name": "Sensor de cigüeñal intermitente en caliente",
+      "car": "velmora_pico",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "signal_dropout",
+          "component": "ckp",
+          "severity": 1,
+          "condition": {
+            "kind": "Hot",
+            "threshold": 85
+          }
+        }
+      ],
+      "complaint": "Se para en caliente y luego no arranca hasta que enfría."
+    },
+    {
+      "id": "sc_ckp_open",
+      "name": "Sensor de cigüeñal abierto",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "ckp",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "Gira pero no arranca."
+    },
+    {
+      "id": "sc_cmp_dead",
+      "name": "Sensor de árbol de levas averiado",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "dead",
+          "component": "cmp",
+          "severity": 1
+        }
+      ],
+      "complaint": "Tarda en arrancar."
+    },
+    {
+      "id": "sc_o2_heater_open",
+      "name": "Calefactor de sonda abierto",
+      "car": "velmora_pico",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "heater_open",
+          "component": "o2_up",
+          "severity": 1
+        }
+      ],
+      "complaint": "Testigo encendido, consume algo más."
+    },
+    {
+      "id": "sc_o2_slow",
+      "name": "Sonda lambda lenta",
+      "car": "velmora_pico",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "signal_slow",
+          "component": "o2_up",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Testigo de motor, sin síntomas claros."
+    },
+    {
+      "id": "sc_cat_worn",
+      "name": "Catalizador agotado",
+      "car": "velmora_pico",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "wear",
+          "component": "catalyst",
+          "severity": 0.85
+        }
+      ],
+      "complaint": "No pasa la ITV por emisiones."
+    },
+    {
+      "id": "sc_exhaust_leak",
+      "name": "Fuga de escape antes de la sonda",
+      "car": "aurex_strada_gt",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "leak_exhaust",
+          "component": "exhaust",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Hace tic-tic en frío."
+    },
+    {
+      "id": "sc_boost_leak",
+      "name": "Manguito de presión agrietado",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "leak_boost",
+          "component": "charge_pipe",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Sopla al acelerar y no tira."
+    },
+    {
+      "id": "sc_wastegate_stuck_open",
+      "name": "Wastegate atascada abierta",
+      "car": "kessler_rapace",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "stuck_open",
+          "component": "turbo",
+          "severity": 0.8
+        }
+      ],
+      "complaint": "No tiene fuerza, como si no tuviera turbo."
+    },
+    {
+      "id": "sc_n75_open",
+      "name": "Electroválvula de wastegate sin señal",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "wastegate_valve",
+          "severity": 1,
+          "pin": "control"
+        }
+      ],
+      "complaint": "Va flojo y testigo encendido."
+    },
+    {
+      "id": "sc_overboost",
+      "name": "Wastegate agarrotada cerrada",
+      "car": "aurex_strada_gt",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "stuck_closed",
+          "component": "turbo",
+          "severity": 1
+        }
+      ],
+      "complaint": "Da un tirón brutal y luego se corta."
+    },
+    {
+      "id": "sc_fuel_pump_weak",
+      "name": "Bomba de combustible débil",
+      "car": "aurex_strada_gt",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "weak",
+          "component": "fuel_pump",
+          "severity": 0.5
+        }
+      ],
+      "complaint": "Se queda sin fuerza a altas vueltas."
+    },
+    {
+      "id": "sc_fuel_filter",
+      "name": "Filtro de combustible obstruido",
+      "car": "nordak_atlas_td",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "clog",
+          "component": "fuel_filter",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Pierde potencia subiendo puertos."
+    },
+    {
+      "id": "sc_pump_fuse",
+      "name": "Fusible de bomba fundido",
+      "car": "velmora_pico",
+      "difficulty": 1,
+      "faults": [
+        {
+          "mode": "dead",
+          "component": "fuse_pump",
+          "severity": 1
+        }
+      ],
+      "complaint": "No arranca, se oye el motor de arranque."
+    },
+    {
+      "id": "sc_pump_relay",
+      "name": "Relé de bomba con contactos quemados",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "stuck_open",
+          "component": "fuel_pump_relay",
+          "severity": 1
+        }
+      ],
+      "complaint": "No arranca."
+    },
+    {
+      "id": "sc_fan_dead",
+      "name": "Ventilador averiado",
+      "car": "velmora_pico",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "dead",
+          "component": "fan",
+          "severity": 1
+        }
+      ],
+      "complaint": "Se calienta en ciudad."
+    },
+    {
+      "id": "sc_alternator_weak",
+      "name": "Alternador débil",
+      "car": "aurex_strada_gt",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "weak",
+          "component": "alternator",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Luces débiles y testigo de batería."
+    },
+    {
+      "id": "sc_battery_weak",
+      "name": "Batería sulfatada",
+      "car": "velmora_pico",
+      "difficulty": 1,
+      "faults": [
+        {
+          "mode": "weak",
+          "component": "battery",
+          "severity": 0.8
+        }
+      ],
+      "complaint": "Arranca con dificultad por la mañana."
+    },
+    {
+      "id": "sc_ground_strap",
+      "name": "Masa motor corroída",
+      "car": "aurex_strada_gt",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "connector_corrosion",
+          "component": "ground_strap",
+          "severity": 0.02
+        }
+      ],
+      "complaint": "Arranque lento y fallos raros."
+    },
+    {
+      "id": "sc_knock_open",
+      "name": "Sensor de picado sin señal",
+      "car": "kessler_rapace",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "knock",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "Va algo más flojo y testigo encendido."
+    },
+    {
+      "id": "sc_timing_stretch",
+      "name": "Cadena de distribución estirada",
+      "car": "aurex_strada_gt",
+      "difficulty": 5,
+      "faults": [
+        {
+          "mode": "slack",
+          "component": "timing_chain",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Ruido metálico al arrancar en frío."
+    },
+    {
+      "id": "sc_compression_cyl2",
+      "name": "Válvula de escape quemada en cilindro 2",
+      "car": "velmora_pico",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "leak_compression",
+          "component": "cyl2",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Vibra mucho y le falta fuerza."
+    },
+    {
+      "id": "sc_head_gasket",
+      "name": "Junta de culata en las últimas",
+      "car": "aurex_strada_gt",
+      "difficulty": 5,
+      "faults": [
+        {
+          "mode": "leak_fluid",
+          "component": "head_gasket",
+          "severity": 0.5
+        }
+      ],
+      "complaint": "Pierde agua y echa humo blanco."
+    },
+    {
+      "id": "sc_can_ipc",
+      "name": "Ramal CAN del cuadro abierto",
+      "car": "aurex_strada_gt",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "can_stub_open",
+          "component": "can_bus",
+          "severity": 1,
+          "pin": "ipc"
+        }
+      ],
+      "complaint": "El cuadro se apaga a veces."
+    },
+    {
+      "id": "sc_abs_dead",
+      "name": "Módulo ABS sin alimentación",
+      "car": "kessler_rapace",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "dead",
+          "component": "module_abs",
+          "severity": 1
+        }
+      ],
+      "complaint": "Testigos de ABS y velocímetro a cero."
+    },
+    {
+      "id": "sc_throttle_dirty",
+      "name": "Mariposa muy sucia",
+      "car": "velmora_pico",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "restriction",
+          "component": "throttle",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Se le baja el ralentí y a veces se cala."
+    },
+    {
+      "id": "sc_combo_leak_maf",
+      "name": "Fuga de vacío + caudalímetro sucio",
+      "car": "aurex_strada_gt",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "leak_vacuum",
+          "component": "brake_booster_hose",
+          "severity": 0.4
+        },
+        {
+          "mode": "signal_gain_low",
+          "component": "maf",
+          "severity": 0.4
+        }
+      ],
+      "complaint": "Ralentí inestable y le falta fuerza."
+    },
+    {
+      "id": "sc_combo_coil_plug",
+      "name": "Bobina en corto interno + bujía gastada",
+      "car": "kessler_rapace",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "internal_short",
+          "component": "coil3",
+          "severity": 0.6
+        },
+        {
+          "mode": "wear",
+          "component": "plug3",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Petardea al acelerar."
+    },
+    {
+      "id": "sc_diesel_egr_open",
+      "name": "EGR atascada abierta (diésel)",
+      "car": "nordak_atlas_td",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "stuck_open",
+          "component": "egr_valve",
+          "severity": 0.8
+        }
+      ],
+      "complaint": "Humo negro y falta de fuerza."
+    },
+    {
+      "id": "sc_diesel_boost_leak",
+      "name": "Fuga de presión en diésel",
+      "car": "nordak_atlas_td",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "leak_boost",
+          "component": "intercooler",
+          "severity": 0.6
+        }
+      ],
+      "complaint": "Pierde fuerza y echa humo negro al acelerar."
+    }
+  ]
+}

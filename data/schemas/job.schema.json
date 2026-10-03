@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "job.schema.json",
+  "title": "Encargos de cliente",
+  "type": "object",
+  "required": ["jobs"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "customer", "car", "goal", "complaint", "budget", "deadlineDays"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "customer": { "type": "string" },
+          "car": { "type": "string" },
+          "goal": { "enum": ["repair", "power", "inspection", "track"] },
+          "scenario": { "type": "string" },
+          "generate": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": { "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 } }
+          },
+          "powerTargetPs": { "type": "number", "minimum": 0 },
+          "complaint": { "type": "string" },
+          "budget": { "type": "number", "minimum": 0 },
+          "deadlineDays": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}

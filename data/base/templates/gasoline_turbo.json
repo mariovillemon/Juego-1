@@ -1,0 +1,955 @@
+{
+  "id": "gasoline_turbo",
+  "description": "Gasolina turbo, inyección indirecta, MAF + MAP, sonda de banda ancha",
+  "components": [
+    {
+      "id": "maf",
+      "kind": "MafSensor",
+      "name": "Caudalímetro (MAF)",
+      "location": "Tubo de admisión tras el filtro",
+      "visualSlot": "maf",
+      "params": {
+        "max_gps": 200
+      },
+      "circuit": {
+        "topology": "Powered",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F12",
+            "pin": 1,
+            "color": "RJ/NE"
+          },
+          {
+            "role": "signal",
+            "ecuPin": "A23",
+            "pin": 2,
+            "color": "VE"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A24",
+            "pin": 3,
+            "color": "MA"
+          }
+        ],
+        "fuse": "fuse_injectors"
+      },
+      "partId": "part_mafsensor",
+      "replaceMinutes": 15
+    },
+    {
+      "id": "map",
+      "kind": "MapSensor",
+      "name": "Sensor de presión de colector (MAP)",
+      "location": "Colector de admisión",
+      "visualSlot": "map_sensor",
+      "params": {
+        "range_min_kpa": 10,
+        "range_max_kpa": 250
+      },
+      "circuit": {
+        "topology": "Ratiometric",
+        "pins": [
+          {
+            "role": "ref",
+            "ecuPin": "A31",
+            "pin": 1,
+            "color": "GR"
+          },
+          {
+            "role": "signal",
+            "ecuPin": "A32",
+            "pin": 2,
+            "color": "VE/AM"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A33",
+            "pin": 3,
+            "color": "MA"
+          }
+        ]
+      },
+      "partId": "part_mapsensor",
+      "replaceMinutes": 15
+    },
+    {
+      "id": "iat",
+      "kind": "IatSensor",
+      "name": "Sensor de temperatura de aire (IAT)",
+      "location": "Colector de admisión",
+      "visualSlot": "iat",
+      "params": {
+        "post_intercooler": 1,
+        "r25": 2000,
+        "beta": 3450,
+        "time_constant_s": 3
+      },
+      "circuit": {
+        "topology": "Thermistor",
+        "pins": [
+          {
+            "role": "signal",
+            "ecuPin": "A34",
+            "pin": 1,
+            "color": "AZ"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A35",
+            "pin": 2,
+            "color": "MA"
+          }
+        ]
+      },
+      "partId": "part_iatsensor",
+      "replaceMinutes": 10
+    },
+    {
+      "id": "ect",
+      "kind": "EctSensor",
+      "name": "Sensor de temperatura de refrigerante (ECT)",
+      "location": "Caja del termostato, culata",
+      "visualSlot": "ect_sensor",
+      "params": {
+        "r25": 2000,
+        "beta": 3450,
+        "time_constant_s": 2
+      },
+      "circuit": {
+        "topology": "Thermistor",
+        "pins": [
+          {
+            "role": "signal",
+            "ecuPin": "A40",
+            "pin": 1,
+            "color": "AM/NE"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A41",
+            "pin": 2,
+            "color": "MA"
+          }
+        ]
+      },
+      "partId": "part_ectsensor",
+      "replaceMinutes": 20
+    },
+    {
+      "id": "tps",
+      "kind": "TpsSensor",
+      "name": "Sensor de posición de mariposa (TPS)",
+      "location": "Cuerpo de mariposa",
+      "visualSlot": "tps",
+      "circuit": {
+        "topology": "Ratiometric",
+        "pins": [
+          {
+            "role": "ref",
+            "ecuPin": "A50",
+            "pin": 1,
+            "color": "GR"
+          },
+          {
+            "role": "signal",
+            "ecuPin": "A51",
+            "pin": 2,
+            "color": "BL"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A52",
+            "pin": 3,
+            "color": "MA"
+          }
+        ]
+      },
+      "partId": "part_tpssensor",
+      "replaceMinutes": 45
+    },
+    {
+      "id": "app",
+      "kind": "AppSensor",
+      "name": "Sensor de pedal de acelerador (APP)",
+      "location": "Pedal del acelerador",
+      "visualSlot": "app",
+      "circuit": {
+        "topology": "Ratiometric",
+        "pins": [
+          {
+            "role": "ref",
+            "ecuPin": "B10",
+            "pin": 1,
+            "color": "GR/RJ"
+          },
+          {
+            "role": "signal",
+            "ecuPin": "B11",
+            "pin": 2,
+            "color": "VI"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "B12",
+            "pin": 3,
+            "color": "MA/BL"
+          }
+        ]
+      },
+      "partId": "part_appsensor",
+      "replaceMinutes": 25
+    },
+    {
+      "id": "ckp",
+      "kind": "CkpSensor",
+      "name": "Sensor de cigüeñal (CKP)",
+      "location": "Bloque, junto al volante motor",
+      "visualSlot": "ckp_sensor",
+      "params": {
+        "coil_ohms": 850,
+        "air_gap_factor": 1
+      },
+      "circuit": {
+        "topology": "Generator",
+        "pins": [
+          {
+            "role": "signal",
+            "ecuPin": "A60",
+            "pin": 1,
+            "color": "NE"
+          },
+          {
+            "role": "signal_low",
+            "ecuPin": "A61",
+            "pin": 2,
+            "color": "BL"
+          }
+        ]
+      },
+      "partId": "part_ckpsensor",
+      "replaceMinutes": 35
+    },
+    {
+      "id": "cmp",
+      "kind": "CmpSensor",
+      "name": "Sensor de árbol de levas (CMP)",
+      "location": "Tapa de culata, lado distribución",
+      "visualSlot": "cmp",
+      "circuit": {
+        "topology": "Hall",
+        "pins": [
+          {
+            "role": "ref",
+            "ecuPin": "A62",
+            "pin": 1,
+            "color": "GR"
+          },
+          {
+            "role": "signal",
+            "ecuPin": "A63",
+            "pin": 2,
+            "color": "VE/BL"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A64",
+            "pin": 3,
+            "color": "MA"
+          }
+        ]
+      },
+      "partId": "part_cmpsensor",
+      "replaceMinutes": 20
+    },
+    {
+      "id": "knock",
+      "kind": "KnockSensor",
+      "name": "Sensor de detonación",
+      "location": "Bloque motor, entre cilindros 2 y 3",
+      "visualSlot": "knock",
+      "circuit": {
+        "topology": "Generator",
+        "pins": [
+          {
+            "role": "signal",
+            "ecuPin": "A80",
+            "pin": 1,
+            "color": "NE/BL"
+          },
+          {
+            "role": "signal_low",
+            "ecuPin": "A81",
+            "pin": 2,
+            "color": "MA/BL"
+          }
+        ]
+      },
+      "partId": "part_knocksensor",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "o2_up",
+      "kind": "O2Wideband",
+      "name": "Sonda lambda de banda ancha (B1S1)",
+      "location": "Salida del turbo, antes del catalizador",
+      "visualSlot": "o2_upstream",
+      "params": {
+        "heater_ohms": 3.3
+      },
+      "circuit": {
+        "topology": "HeatedOxygen",
+        "pins": [
+          {
+            "role": "signal",
+            "ecuPin": "A70",
+            "pin": 1,
+            "color": "NE"
+          },
+          {
+            "role": "signal_low",
+            "ecuPin": "A71",
+            "pin": 2,
+            "color": "GR"
+          },
+          {
+            "role": "heater_supply",
+            "ecuPin": "F09",
+            "pin": 3,
+            "color": "BL"
+          },
+          {
+            "role": "heater_control",
+            "ecuPin": "A72",
+            "pin": 4,
+            "color": "BL/VE"
+          }
+        ],
+        "fuse": "fuse_o2"
+      },
+      "partId": "part_o2wideband",
+      "replaceMinutes": 25
+    },
+    {
+      "id": "o2_down",
+      "kind": "O2Downstream",
+      "name": "Sonda lambda postcatalizador (B1S2)",
+      "location": "Tras el catalizador",
+      "visualSlot": "o2_downstream",
+      "params": {
+        "heater_ohms": 4.5
+      },
+      "circuit": {
+        "topology": "HeatedOxygen",
+        "pins": [
+          {
+            "role": "signal",
+            "ecuPin": "A73",
+            "pin": 1,
+            "color": "NE"
+          },
+          {
+            "role": "signal_low",
+            "ecuPin": "A74",
+            "pin": 2,
+            "color": "GR"
+          },
+          {
+            "role": "heater_supply",
+            "ecuPin": "F09",
+            "pin": 3,
+            "color": "BL"
+          },
+          {
+            "role": "heater_control",
+            "ecuPin": "A75",
+            "pin": 4,
+            "color": "BL/RJ"
+          }
+        ],
+        "fuse": "fuse_o2"
+      },
+      "partId": "part_o2downstream",
+      "replaceMinutes": 25
+    },
+    {
+      "id": "fuel_pressure",
+      "kind": "FuelPressureSensor",
+      "name": "Sensor de presión de rampa",
+      "location": "Rampa de inyectores",
+      "visualSlot": "fuel_pressure",
+      "params": {
+        "range_max_kpa": 1000
+      },
+      "circuit": {
+        "topology": "Ratiometric",
+        "pins": [
+          {
+            "role": "ref",
+            "ecuPin": "A84",
+            "pin": 1,
+            "color": "GR"
+          },
+          {
+            "role": "signal",
+            "ecuPin": "A85",
+            "pin": 2,
+            "color": "VE/NE"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A86",
+            "pin": 3,
+            "color": "MA"
+          }
+        ]
+      },
+      "partId": "part_fuelpressuresensor",
+      "replaceMinutes": 30
+    },
+    {
+      "id": "inj{n}",
+      "kind": "Injector",
+      "name": "Inyector cilindro {n}",
+      "location": "Rampa de inyección",
+      "visualSlot": "injector_{n}",
+      "perCylinder": true,
+      "params": {
+        "ohms": 12.5
+      },
+      "circuit": {
+        "topology": "LowSideLoad",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F10",
+            "pin": 1,
+            "color": "RJ/BL"
+          },
+          {
+            "role": "control",
+            "ecuPin": ["A01", "A02", "A03", "A04", "A05", "A06"],
+            "pin": 2,
+            "color": "NE/AM"
+          }
+        ],
+        "fuse": "fuse_injectors"
+      },
+      "partId": "part_injector",
+      "replaceMinutes": 25
+    },
+    {
+      "id": "coil{n}",
+      "kind": "IgnitionCoil",
+      "name": "Bobina cilindro {n}",
+      "location": "Sobre la bujía (bobina tipo lápiz)",
+      "visualSlot": "coil_{n}",
+      "perCylinder": true,
+      "params": {
+        "ohms": 0.7
+      },
+      "circuit": {
+        "topology": "LowSideLoad",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F11",
+            "pin": 1,
+            "color": "RJ/NE"
+          },
+          {
+            "role": "control",
+            "ecuPin": ["A13", "A14", "A15", "A16", "A17", "A18"],
+            "pin": 2,
+            "color": "VE/BL"
+          }
+        ],
+        "fuse": "fuse_injectors"
+      },
+      "partId": "part_ignitioncoil",
+      "replaceMinutes": 8
+    },
+    {
+      "id": "plug{n}",
+      "kind": "SparkPlug",
+      "name": "Bujía cilindro {n}",
+      "location": "Culata, bajo la bobina",
+      "visualSlot": "spark_plug_{n}",
+      "perCylinder": true,
+      "params": {
+        "gap_mm": 0.75
+      },
+      "partId": "part_sparkplug",
+      "replaceMinutes": 10
+    },
+    {
+      "id": "cyl{n}",
+      "kind": "Cylinder",
+      "name": "Cilindro {n} (segmentos, válvulas)",
+      "location": "Bloque/culata",
+      "visualSlot": "cylinder_{n}",
+      "perCylinder": true,
+      "partId": "part_cylinder",
+      "replaceMinutes": 600
+    },
+    {
+      "id": "intake_gasket{n}",
+      "kind": "IntakeGasket",
+      "name": "Junta de colector, cilindro {n}",
+      "location": "Unión colector-culata",
+      "visualSlot": "intake_gasket_{n}",
+      "perCylinder": true,
+      "partId": "part_intakegasket",
+      "replaceMinutes": 120
+    },
+    {
+      "id": "throttle",
+      "kind": "ElectronicThrottle",
+      "name": "Cuerpo de mariposa motorizado",
+      "location": "Entrada del colector",
+      "visualSlot": "throttle_body",
+      "params": {
+        "ohms": 1.6
+      },
+      "circuit": {
+        "topology": "LowSideLoad",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F13",
+            "pin": 1,
+            "color": "RJ"
+          },
+          {
+            "role": "control",
+            "ecuPin": "A90",
+            "pin": 2,
+            "color": "AM"
+          }
+        ],
+        "fuse": "fuse_ecu"
+      },
+      "partId": "part_electronicthrottle",
+      "replaceMinutes": 40
+    },
+    {
+      "id": "purge_valve",
+      "kind": "PurgeValve",
+      "name": "Electroválvula de purga del cánister",
+      "location": "Colector de admisión",
+      "visualSlot": "purge_valve",
+      "params": {
+        "ohms": 24
+      },
+      "circuit": {
+        "topology": "LowSideLoad",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F10",
+            "pin": 1,
+            "color": "RJ/BL"
+          },
+          {
+            "role": "control",
+            "ecuPin": "A92",
+            "pin": 2,
+            "color": "GR/VE"
+          }
+        ],
+        "fuse": "fuse_injectors"
+      },
+      "partId": "part_purgevalve",
+      "replaceMinutes": 15
+    },
+    {
+      "id": "pcv_hose",
+      "kind": "VacuumHose",
+      "name": "Manguito de respiradero (PCV)",
+      "location": "Tapa de balancines a colector",
+      "visualSlot": "vacuum_hose_pcv",
+      "partId": "part_vacuumhose",
+      "replaceMinutes": 20
+    },
+    {
+      "id": "brake_booster_hose",
+      "kind": "VacuumHose",
+      "name": "Manguito del servofreno",
+      "location": "Colector a servofreno",
+      "visualSlot": "vacuum_hose_brake",
+      "partId": "part_vacuumhose",
+      "replaceMinutes": 15
+    },
+    {
+      "id": "thermostat",
+      "kind": "Thermostat",
+      "name": "Termostato",
+      "location": "Caja del termostato",
+      "visualSlot": "thermostat",
+      "partId": "part_thermostat",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "head_gasket",
+      "kind": "HeadGasket",
+      "name": "Junta de culata",
+      "location": "Entre bloque y culata",
+      "visualSlot": "head_gasket",
+      "partId": "part_headgasket",
+      "replaceMinutes": 720
+    },
+    {
+      "id": "timing_chain",
+      "kind": "TimingDrive",
+      "name": "Cadena de distribución",
+      "location": "Tapa de distribución",
+      "visualSlot": "timing_chain",
+      "partId": "part_timingdrive",
+      "replaceMinutes": 480
+    },
+    {
+      "id": "exhaust",
+      "kind": "Exhaust",
+      "name": "Colector y línea de escape",
+      "location": "Escape",
+      "visualSlot": "exhaust_manifold",
+      "partId": "part_exhaust",
+      "replaceMinutes": 90
+    },
+    {
+      "id": "catalyst",
+      "kind": "Catalyst",
+      "name": "Catalizador",
+      "location": "Bajo el vehículo",
+      "visualSlot": "catalyst",
+      "partId": "part_catalyst",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "air_filter",
+      "kind": "AirFilter",
+      "name": "Filtro de aire",
+      "location": "Caja del filtro",
+      "visualSlot": "air_filter",
+      "partId": "part_airfilter",
+      "replaceMinutes": 5
+    },
+    {
+      "id": "fuel_regulator",
+      "kind": "FuelPressureRegulator",
+      "name": "Regulador de presión de combustible",
+      "location": "Módulo de bomba",
+      "visualSlot": "fuel_regulator",
+      "partId": "part_fuelpressureregulator",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "boost",
+      "kind": "BoostSensor",
+      "name": "Sensor de presión de sobrealimentación",
+      "location": "Tubo tras el intercooler",
+      "visualSlot": "boost",
+      "params": {
+        "range_max_kpa": 300
+      },
+      "circuit": {
+        "topology": "Ratiometric",
+        "pins": [
+          {
+            "role": "ref",
+            "ecuPin": "A36",
+            "pin": 1,
+            "color": "GR"
+          },
+          {
+            "role": "signal",
+            "ecuPin": "A37",
+            "pin": 2,
+            "color": "BL/AM"
+          },
+          {
+            "role": "ground",
+            "ecuPin": "A38",
+            "pin": 3,
+            "color": "MA"
+          }
+        ]
+      },
+      "partId": "part_boostsensor",
+      "replaceMinutes": 15
+    },
+    {
+      "id": "turbo",
+      "kind": "Turbocharger",
+      "name": "Turbocompresor",
+      "location": "Colector de escape",
+      "visualSlot": "turbo",
+      "partId": "part_turbocharger",
+      "replaceMinutes": 300
+    },
+    {
+      "id": "wastegate_valve",
+      "kind": "WastegateSolenoid",
+      "name": "Electroválvula de wastegate (N75)",
+      "location": "Junto a la caja del filtro",
+      "visualSlot": "wastegate_valve",
+      "params": {
+        "ohms": 26
+      },
+      "circuit": {
+        "topology": "LowSideLoad",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F10",
+            "pin": 1,
+            "color": "RJ/BL"
+          },
+          {
+            "role": "control",
+            "ecuPin": "A91",
+            "pin": 2,
+            "color": "VI/BL"
+          }
+        ],
+        "fuse": "fuse_injectors"
+      },
+      "partId": "part_wastegatesolenoid",
+      "replaceMinutes": 20
+    },
+    {
+      "id": "intercooler",
+      "kind": "Intercooler",
+      "name": "Intercooler",
+      "location": "Frontal, tras el paragolpes",
+      "visualSlot": "intercooler",
+      "partId": "part_intercooler",
+      "replaceMinutes": 120
+    },
+    {
+      "id": "charge_pipe",
+      "kind": "BoostHose",
+      "name": "Manguito de presión (turbo-intercooler)",
+      "location": "Lado derecho del motor",
+      "visualSlot": "boost_hose",
+      "partId": "part_boosthose",
+      "replaceMinutes": 30
+    },
+    {
+      "id": "battery",
+      "kind": "Battery",
+      "name": "Batería 12 V",
+      "location": "Vano motor, lado izquierdo",
+      "visualSlot": "battery",
+      "params": {
+        "capacity_ah": 70
+      },
+      "partId": "part_battery",
+      "replaceMinutes": 15
+    },
+    {
+      "id": "alternator",
+      "kind": "Alternator",
+      "name": "Alternador",
+      "location": "Frontal del motor, correa auxiliar",
+      "visualSlot": "alternator",
+      "partId": "part_alternator",
+      "replaceMinutes": 75
+    },
+    {
+      "id": "ground_strap",
+      "kind": "GroundStrap",
+      "name": "Masa motor-carrocería",
+      "location": "Junto a la caja de cambios",
+      "visualSlot": "ground_strap",
+      "partId": "part_groundstrap",
+      "replaceMinutes": 20
+    },
+    {
+      "id": "fuse_ecu",
+      "kind": "Fuse",
+      "name": "Fusible ECU F01 (10 A)",
+      "location": "Caja de fusibles del vano motor",
+      "visualSlot": "fuse_ecu",
+      "params": {
+        "amps": 10
+      },
+      "partId": "part_fuse",
+      "replaceMinutes": 2
+    },
+    {
+      "id": "fuse_pump",
+      "kind": "Fuse",
+      "name": "Fusible bomba F05 (20 A)",
+      "location": "Caja de fusibles del vano motor",
+      "visualSlot": "fuse_pump",
+      "params": {
+        "amps": 20
+      },
+      "partId": "part_fuse",
+      "replaceMinutes": 2
+    },
+    {
+      "id": "fuse_o2",
+      "kind": "Fuse",
+      "name": "Fusible sondas F09 (15 A)",
+      "location": "Caja de fusibles del vano motor",
+      "visualSlot": "fuse_o2",
+      "params": {
+        "amps": 15
+      },
+      "partId": "part_fuse",
+      "replaceMinutes": 2
+    },
+    {
+      "id": "fuse_injectors",
+      "kind": "Fuse",
+      "name": "Fusible inyectores/solenoides F10 (15 A)",
+      "location": "Caja de fusibles del vano motor",
+      "visualSlot": "fuse_injectors",
+      "params": {
+        "amps": 15
+      },
+      "partId": "part_fuse",
+      "replaceMinutes": 2
+    },
+    {
+      "id": "fuse_fan",
+      "kind": "Fuse",
+      "name": "Fusible ventilador F20 (40 A)",
+      "location": "Caja de fusibles del vano motor",
+      "visualSlot": "fuse_fan",
+      "params": {
+        "amps": 40
+      },
+      "partId": "part_fuse",
+      "replaceMinutes": 2
+    },
+    {
+      "id": "can_bus",
+      "kind": "CanBus",
+      "name": "Bus CAN motor",
+      "location": "Arnés principal",
+      "visualSlot": "can_bus",
+      "partId": "part_canbus",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "module_abs",
+      "kind": "ControlModule",
+      "name": "Módulo ABS/ESP",
+      "location": "Grupo hidráulico, vano motor",
+      "visualSlot": "module_abs",
+      "partId": "part_controlmodule",
+      "replaceMinutes": 90
+    },
+    {
+      "id": "module_ipc",
+      "kind": "ControlModule",
+      "name": "Cuadro de instrumentos",
+      "location": "Salpicadero",
+      "visualSlot": "module_ipc",
+      "partId": "part_controlmodule",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "module_bcm",
+      "kind": "ControlModule",
+      "name": "Módulo de carrocería BCM",
+      "location": "Bajo el salpicadero",
+      "visualSlot": "module_bcm",
+      "partId": "part_controlmodule",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "fan",
+      "kind": "CoolingFan",
+      "name": "Electroventilador",
+      "location": "Detrás del radiador",
+      "visualSlot": "fan",
+      "fuse": "fuse_fan",
+      "partId": "part_coolingfan",
+      "replaceMinutes": 60
+    },
+    {
+      "id": "fan_relay",
+      "kind": "Relay",
+      "name": "Relé ventilador",
+      "location": "Caja de fusibles",
+      "visualSlot": "fan_relay",
+      "params": {
+        "ohms": 85
+      },
+      "circuit": {
+        "topology": "LowSideLoad",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F20",
+            "pin": 1,
+            "color": "RJ"
+          },
+          {
+            "role": "control",
+            "ecuPin": "A94",
+            "pin": 2,
+            "color": "VE/BL"
+          }
+        ],
+        "fuse": "fuse_ecu"
+      },
+      "partId": "part_relay",
+      "replaceMinutes": 5
+    },
+    {
+      "id": "fuel_pump_relay",
+      "kind": "Relay",
+      "name": "Relé bomba de combustible",
+      "location": "Caja de fusibles",
+      "visualSlot": "fuel_pump_relay",
+      "params": {
+        "ohms": 85
+      },
+      "circuit": {
+        "topology": "LowSideLoad",
+        "pins": [
+          {
+            "role": "supply",
+            "ecuPin": "F05",
+            "pin": 1,
+            "color": "RJ"
+          },
+          {
+            "role": "control",
+            "ecuPin": "A93",
+            "pin": 2,
+            "color": "NE/VI"
+          }
+        ],
+        "fuse": "fuse_ecu"
+      },
+      "partId": "part_relay",
+      "replaceMinutes": 5
+    },
+    {
+      "id": "fuel_pump",
+      "kind": "FuelPump",
+      "name": "Bomba de combustible",
+      "location": "Depósito (bajo asiento trasero)",
+      "visualSlot": "fuel_pump",
+      "fuse": "fuse_pump",
+      "partId": "part_fuelpump",
+      "replaceMinutes": 90
+    },
+    {
+      "id": "fuel_filter",
+      "kind": "FuelFilter",
+      "name": "Filtro de combustible",
+      "location": "Bajo el piso, junto al depósito",
+      "visualSlot": "fuel_filter",
+      "partId": "part_fuelfilter",
+      "replaceMinutes": 30
+    }
+  ]
+}

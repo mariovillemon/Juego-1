@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ecu_map.schema.json",
+  "title": "Calibración de ECU (mapas)",
+  "type": "object",
+  "required": ["id", "tables", "scalars"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "engine": { "type": "string" },
+    "description": { "type": "string" },
+    "tables": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/table" } },
+    "curves": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/curve" } },
+    "scalars": { "type": "object", "additionalProperties": { "type": "number" } }
+  }
+}
