@@ -1,0 +1,7 @@
+{
+  "id": "velmora_pico",
+  "$patch": true,
+  "appearance": {
+    "paintColor": "#2B4C7E"
+  }
+}

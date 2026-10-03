@@ -111,6 +111,7 @@ namespace Garage.Sim.Tools
                 AppendCode(sb, c, store, training);
             }
 
+            pending.RemoveAll(confirmed.Contains);
             sb.AppendLine($"Modo 07 (pendientes): {(pending.Count == 0 ? "ninguno" : "")}");
             foreach (string c in pending)
             {

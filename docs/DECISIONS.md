@@ -130,3 +130,11 @@ Fundamentals*, Bosch *Automotive Handbook*), no copia de datos propietarios.
 - Creación del HDRP Asset por script: `ScriptableObject.CreateInstance<HDRenderPipelineAsset>()` y asignación en
   `GraphicsSettings.defaultRenderPipeline` + `QualitySettings.renderPipeline`. El Global Settings se crea con
   `HDRenderPipelineGlobalSettings` vía el asistente del paquete si no existe (el menú avisa).
+- **D-55 — Mezclador de audio**: no existe API pública para crear un `.mixer` por script; `AudioBuses` aplica
+  volúmenes por grupo (motor, taller, herramientas, ambiente, UI) y, si se asigna un AudioMixer creado a mano con
+  grupos de esos nombres, enruta las fuentes a él. Reverb de nave con `AudioReverbZone` (preset Hangar).
+- **D-56 — Sonido procedural provisional**: pulsos de combustión a la frecuencia real de encendido (rpm/120 × cilindros),
+  huecos al fallar un cilindro, silbido del turbo y picado; las muestras CC0/CC-BY se mezclan por rpm cuando existan.
+- **D-57 — Poly Haven**: se eligen por categoría los recursos más descargados (sin ids fijos en el código) para no
+  romperse si cambia el catálogo. La red del entorno de desarrollo no permitía acceder a la API, así que la estructura
+  JSON (`Diffuse`, `nor_gl`, `Rough`, `AO`, `Metal`, `hdri`) se basa en la documentación pública conocida.

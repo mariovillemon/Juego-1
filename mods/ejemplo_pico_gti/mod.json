@@ -1,0 +1,8 @@
+{
+  "name": "Ejemplo: Velmora Pico GTi",
+  "author": "Equipo Garage",
+  "version": "1.0.0",
+  "priority": 100,
+  "enabled": false,
+  "description": "Mod de ejemplo (desactivado). Añade una versión deportiva del Pico y retoca el color del Pico de serie. Cambia enabled a true para probarlo."
+}

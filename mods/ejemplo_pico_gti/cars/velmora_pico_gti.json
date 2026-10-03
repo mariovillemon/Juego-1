@@ -1,0 +1,46 @@
+{
+  "id": "velmora_pico_gti",
+  "brand": "Velmora",
+  "model": "Pico GTi",
+  "year": 2013,
+  "segment": "Utilitario deportivo",
+  "engine": "k14_na",
+  "template": "gasoline_na_sd",
+  "calibration": "k14_stock",
+  "massKg": 1120,
+  "wheelRadiusM": 0.29,
+  "gearRatios": [
+    3.42,
+    1.95,
+    1.28,
+    0.97,
+    0.78
+  ],
+  "finalDrive": 4.07,
+  "drivetrainEfficiency": 0.9,
+  "dragAreaM2": 0.62,
+  "vin": "VLM0PG16D00011111",
+  "removeComponents": [],
+  "appearance": {
+    "ageYears": 11,
+    "kilometers": 143000,
+    "maintenance": 0.8,
+    "paintColor": "#F2B705",
+    "humidity": 0.3
+  },
+  "modules": [
+    "ecm",
+    "abs",
+    "ipc",
+    "bcm"
+  ],
+  "componentOverrides": [
+    {
+      "id": "map",
+      "params": {
+        "range_min_kpa": 10,
+        "range_max_kpa": 105
+      }
+    }
+  ]
+}
