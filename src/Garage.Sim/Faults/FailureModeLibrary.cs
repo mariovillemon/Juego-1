@@ -24,6 +24,16 @@ namespace Garage.Sim.Faults
             "PurgeValve", "Relay", "ElectronicThrottle",
         };
 
+        private static readonly string[] ElectricalAndGround = Concat(Electrical, "GroundStrap");
+
+        private static string[] Concat(string[] a, string extra)
+        {
+            var r = new string[a.Length + 1];
+            a.CopyTo(r, 0);
+            r[a.Length] = extra;
+            return r;
+        }
+
         /// <summary>Built-in library.</summary>
         public static FailureModeLibrary Default { get; } = CreateDefault();
 
@@ -100,8 +110,8 @@ namespace Garage.Sim.Faults
             l.Register(M("wire_open", "Cable abierto", "wiring", EffectKind.WireOpen, 1, 1, 2, "repair_wire", "signal", "Circuito abierto en el cable indicado.", Electrical, ConditionKind.Always, ConditionKind.Vibration, ConditionKind.Intermittent));
             l.Register(M("wire_short_ground", "Corto a masa", "wiring", EffectKind.WireShortGround, 1, 1, 2, "repair_wire", "signal", "El cable toca masa.", Electrical, ConditionKind.Always, ConditionKind.Vibration));
             l.Register(M("wire_short_power", "Corto a positivo", "wiring", EffectKind.WireShortPower, 1, 1, 3, "repair_wire", "signal", "El cable toca tensión de batería.", Electrical, mech));
-            l.Register(M("wire_high_resistance", "Alta resistencia en cable", "wiring", EffectKind.WireHighResistance, 80, 3000, 4, "repair_wire", "signal", "Cable dañado o empalme deficiente.", Electrical, ConditionKind.Always, ConditionKind.Hot, ConditionKind.Vibration));
-            l.Register(M("connector_corrosion", "Conector oxidado", "wiring", EffectKind.ConnectorCorrosion, 50, 2500, 4, "repair_wire", "ground", "Pin del conector con óxido verde.", Electrical, ConditionKind.Always, ConditionKind.Cold));
+            l.Register(M("wire_high_resistance", "Alta resistencia en cable", "wiring", EffectKind.WireHighResistance, 80, 3000, 4, "repair_wire", "signal", "Cable dañado o empalme deficiente.", ElectricalAndGround, ConditionKind.Always, ConditionKind.Hot, ConditionKind.Vibration));
+            l.Register(M("connector_corrosion", "Conector oxidado", "wiring", EffectKind.ConnectorCorrosion, 50, 2500, 4, "repair_wire", "ground", "Pin del conector con óxido verde.", ElectricalAndGround, ConditionKind.Always, ConditionKind.Cold));
 
             l.Register(M("leak_vacuum", "Fuga de vacío", "leak", EffectKind.Leak, 1.5, 12, 2, "replace", "", "Entrada de aire no medido tras el caudalímetro.", new[] { "VacuumHose", "IntakeGasket" }, ConditionKind.Always, ConditionKind.Cold, ConditionKind.Hot));
             l.Register(M("leak_boost", "Fuga de presión de turbo", "leak", EffectKind.Leak, 50, 1200, 3, "replace", "", "Manguito o intercooler pierde aire a presión.", new[] { "BoostHose", "Intercooler" }, ConditionKind.Always, ConditionKind.AboveLoad));

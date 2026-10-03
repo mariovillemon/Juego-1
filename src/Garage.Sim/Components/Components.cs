@@ -183,6 +183,12 @@ namespace Garage.Sim.Components
         /// <summary>Installed part number.</summary>
         public string PartId { get; set; } = "";
 
+        /// <summary>Where it is on the car (Spanish).</summary>
+        public string Location { get; set; } = "";
+
+        /// <summary>Labour minutes to replace it.</summary>
+        public double ReplaceMinutes { get; set; } = 30;
+
         /// <summary>Parameter with default.</summary>
         public double Param(string key, double fallback) => _parameters.TryGetValue(key, out double v) ? v : fallback;
 

@@ -22,7 +22,7 @@
   "thermostatOpenC": 88,
   "radiatorKwK": 0.9,
   "frictionFactor": 1,
-  "indicatedEfficiency": 0.385,
+  "indicatedEfficiency": 0.395,
   "ve": {
     "id": "ve",
     "unit": "fraction",

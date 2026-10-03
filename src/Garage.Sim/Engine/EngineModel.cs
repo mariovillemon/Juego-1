@@ -199,6 +199,11 @@ namespace Garage.Sim.Engine
                     // Little exhaust energy at closed throttle: boost collapses.
                     boostTarget *= MathUtil.SmoothStep(0.05, 0.35, s.ThrottlePosition);
                 }
+                else
+                {
+                    // Diesel exhaust energy follows fuelling, not airflow.
+                    boostTarget *= MathUtil.SmoothStep(6, 30, cmd.DieselMgPerStroke);
+                }
 
                 double tau = t.SpoolTimeConstant * (1.5 - exhaustEnergy);
                 _boostState = MathUtil.FirstOrder(_boostState, boostTarget, Math.Max(0.08, tau), dt);
@@ -411,7 +416,7 @@ namespace Garage.Sim.Engine
 
             // Ignition energy
             double coilVolts = cmd.IgnitionVolts;
-            double gasQuality = 1 - s.EgrFraction * 1.6;
+            double gasQuality = _def.IsDiesel ? 1 - 0.25 * s.EgrFraction : Math.Max(0.2, 1 - s.EgrFraction * 1.6);
             double injDeadMs = 0.5 * Math.Pow(14.0 / Math.Max(8, cmd.IgnitionVolts), 1.3);
             double flowGms = _def.InjectorFlowCcMin * Physics.GasolineDensity / 60000.0;
             double fuelDensity = _def.IsDiesel ? Physics.DieselDensity : Physics.GasolineDensity;
@@ -459,7 +464,7 @@ namespace Garage.Sim.Engine
                 s.CylinderCompression[i] = compression;
 
                 // Air trapped (unmetered air distribution: cylinder-specific leaks go mostly to their cylinder)
-                double cylAir = engineAirPerCylKg * (0.6 + 0.4 * compression);
+                double cylAir = engineAirPerCylKg * (0.6 + 0.4 * compression) * (1 - s.EgrFraction);
                 if (perCylLeakSum > 0 && vacuumLeakMm2 > 0)
                 {
                     double share = (perCylA[i] + perCylB[i]) / vacuumLeakMm2;
@@ -721,8 +726,17 @@ namespace Garage.Sim.Engine
             if (rpm > 1 && (totalBurntFuelKg > 0 || unburnt > 0))
             {
                 double avgLambda = lambdaExh;
-                egtTarget = 380 + 520 * MathUtil.Clamp01(s.RelativeLoad / (_def.IsTurbo ? 1.9 : 1.0)) * MathUtil.Remap(rpm, 800, 6000, 0.75, 1.1)
-                    + retard * 9 - (avgLambda < 1 ? (1 - avgLambda) * 650 : -(avgLambda - 1) * 180) + (_def.IsDiesel ? -120 : 0);
+                if (_def.IsDiesel)
+                {
+                    // Diesel: overall lean; exhaust temperature follows fuelling (1/λ). Idle ~200 °C, full load ~750 °C.
+                    egtTarget = 120 + 850 / Math.Max(1.05, avgLambda) * MathUtil.Remap(rpm, 800, 4000, 0.9, 1.05);
+                }
+                else
+                {
+                    double mixture = avgLambda < 1 ? -(1 - avgLambda) * 650 : 250 * (avgLambda - 1) * Math.Max(0, 1 - (avgLambda - 1) / 0.6);
+                    egtTarget = 380 + 520 * MathUtil.Clamp01(s.RelativeLoad / (_def.IsTurbo ? 1.9 : 1.0)) * MathUtil.Remap(rpm, 800, 6000, 0.75, 1.1)
+                        + retard * 9 + mixture;
+                }
             }
 
             s.ExhaustGasC = MathUtil.FirstOrder(s.ExhaustGasC, egtTarget, s.Running ? 1.2 : 20, dt);
@@ -816,7 +830,7 @@ namespace Garage.Sim.Engine
                 }
 
                 // Lean high load → melting
-                if (s.CylinderLambda[i] > 1.05 && s.RelativeLoad > 1.1 && s.CylinderBurn[i] > 0.5)
+                if (!_def.IsDiesel && s.CylinderLambda[i] > 1.05 && s.RelativeLoad > 1.1 && s.CylinderBurn[i] > 0.5)
                 {
                     d.Piston[i] = Math.Min(1.2, d.Piston[i] + 0.02 * (s.CylinderLambda[i] - 1.0) * 10 * dt);
                 }

@@ -210,6 +210,9 @@ namespace Garage.Sim.Ecu
 
         private double _lastLoad;
 
+        /// <summary>Freezes idle speed control (scan tool cylinder balance test).</summary>
+        public bool FreezeIdle { get; set; }
+
         /// <summary>Sets fuel trims (save/load, tests).</summary>
         public void SetTrims(double stft, double ltftIdle, double ltftCruise)
         {
@@ -297,8 +300,10 @@ namespace Garage.Sim.Ecu
             }
 
             Array.Clear(_misfireWindow, 0, _n);
+            Array.Clear(_misfireShort, 0, _n);
             Array.Clear(MisfireCounts, 0, _n);
             _revsInWindow = 0;
+            _revsInShortWindow = 0;
         }
 
         private double Volts(ComponentKind kind, string role = "signal")
@@ -556,6 +561,11 @@ namespace Garage.Sim.Ecu
             if (idling)
             {
                 double err = idleTarget - rpm;
+                if (FreezeIdle)
+                {
+                    err = 0;
+                }
+
                 if (running)
                 {
                     _idleIntegral = MathUtil.Clamp(_idleIntegral + err * 0.00002 * dt, -0.03, 0.12);
@@ -806,7 +816,7 @@ namespace Garage.Sim.Ecu
                 if (idling || pedal < 0.02)
                 {
                     double err = idleTarget - rpm;
-                    _idleIntegral = MathUtil.Clamp(_idleIntegral + err * 0.0004 * dt, -3, 6);
+                    _idleIntegral = MathUtil.Clamp(_idleIntegral + err * 0.004 * dt, -3, 6);
                     q = 6 + _idleIntegral + MathUtil.Clamp(err * 0.01, -3, 6);
                 }
 
@@ -836,7 +846,7 @@ namespace Garage.Sim.Ecu
             double adv = cal.Lookup(EcuCalibration.IgnitionAdvance, rpm, load, 10);
             adv += cal.Lookup(EcuCalibration.IatIgnitionCorrection, iat, 0);
             adv += cal.Lookup(EcuCalibration.EctIgnitionCorrection, ect, 0);
-            if (idling && running)
+            if (idling && running && !FreezeIdle)
             {
                 adv += MathUtil.Clamp((idleTarget - rpm) * 0.02, -5, 6);
             }

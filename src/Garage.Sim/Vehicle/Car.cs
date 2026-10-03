@@ -51,6 +51,7 @@ namespace Garage.Sim.Vehicle
         private double _vehicleSpeedMs;
         private double _probeTimer;
         private int _chainFlags;
+        private double _sensorDt = DefaultDt;
 
         private struct ProbeResult
         {
@@ -73,6 +74,8 @@ namespace Garage.Sim.Vehicle
                 var comp = new Component(cd.Id, cd.Kind, cd.Name, cd.Parameters, cd.Cylinder, string.IsNullOrEmpty(cd.VisualSlot) ? cd.Id : cd.VisualSlot)
                 {
                     PartId = cd.PartId,
+                    Location = cd.Location,
+                    ReplaceMinutes = cd.ReplaceMinutes,
                 };
                 Parts.Add(comp);
                 if (cd.Circuit != null)
@@ -122,6 +125,7 @@ namespace Garage.Sim.Vehicle
             StockCalibration = calibration.Clone();
             ReplaceEcmStore();
             Engine.Soak(Environment.AmbientC, false);
+            UpdateSensorCircuits(0);
         }
 
         private void ReplaceEcmStore()
@@ -290,6 +294,8 @@ namespace Garage.Sim.Vehicle
         public void Soak(bool warm)
         {
             Engine.Soak(Environment.AmbientC, warm);
+            _lagState.Clear();
+            UpdateSensorCircuits(0);
         }
 
         /// <summary>Starts the engine: cranks up to maxSeconds. Returns true if it runs.</summary>
@@ -459,7 +465,7 @@ namespace Garage.Sim.Vehicle
                 prev = value;
             }
 
-            double filtered = MathUtil.FirstOrder(prev, value, tau, DefaultDt);
+            double filtered = MathUtil.FirstOrder(prev, value, tau, _sensorDt);
             _lagState[c.Id] = filtered;
             return filtered;
         }
@@ -474,8 +480,12 @@ namespace Garage.Sim.Vehicle
             return !Faults.Has(fuse, EffectKind.Dead);
         }
 
+        /// <summary>Updates circuit drive values from the current physical state without advancing time (tools call this).</summary>
+        public void RefreshCircuits() => UpdateSensorCircuits(0);
+
         private void UpdateSensorCircuits(double dt)
         {
+            _sensorDt = dt;
             EngineState s = Engine.State;
             double vbat = BatteryVolts;
             foreach (KeyValuePair<string, Circuit> kv in _circuits)

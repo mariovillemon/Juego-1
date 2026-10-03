@@ -119,3 +119,23 @@ namespace Garage.Sim.Core
         }
     }
 }
+
+namespace Garage.Sim.Core
+{
+    /// <summary>Stable (process independent) hashing, unlike string.GetHashCode.</summary>
+    public static class StableHash
+    {
+        /// <summary>FNV-1a 32 bit hash of a string.</summary>
+        public static uint Of(string s)
+        {
+            uint h = 2166136261;
+            foreach (char c in s)
+            {
+                h ^= c;
+                h *= 16777619;
+            }
+
+            return h;
+        }
+    }
+}
