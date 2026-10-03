@@ -1,0 +1,32 @@
+name: build-and-test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore
+        run: dotnet restore Garage.sln
+      - name: Build (warnings as errors)
+        run: dotnet build Garage.sln --no-restore -c Release
+      - name: Validate game data against JSON Schemas
+        run: dotnet run --project src/Garage.Cli -c Release --no-build -- validate
+      - name: Test
+        run: dotnet test tests/Garage.Sim.Tests -c Release --no-build --collect:"XPlat Code Coverage" --results-directory TestResults
+      - name: Scripted CLI session (smoke test)
+        run: dotnet run --project src/Garage.Cli -c Release --no-build -- --formacion --script tools/demo_session.txt > cli_demo.txt && grep -q "TRABAJO TERMINADO" cli_demo.txt
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: TestResults/**/coverage.cobertura.xml

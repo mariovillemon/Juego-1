@@ -236,34 +236,74 @@ namespace Garage.Sim.Game
             Car car = _content.CreateCar(def.CarId, seed, faults, warm: false);
             var job = new Job(def, cust, car, seed);
             job.OriginalFaults.AddRange(faults);
+            string observed = CustomerDrive(car);
             if (def.Complaint.Length == 0)
             {
-                def.Complaint = DescribeComplaint(car);
+                def.Complaint = observed;
             }
 
             return job;
         }
 
-        /// <summary>Builds a complaint from what the customer would notice (sensory cues after a short drive).</summary>
-        public static string DescribeComplaint(Car car)
+        /// <summary>
+        /// Simulates how the customer used the car before bringing it in (two cold-start trips), so it arrives with
+        /// realistic DTC memory, adapted fuel trims and freeze frame. Returns what the customer noticed.
+        /// </summary>
+        public static string CustomerDrive(Car car, int trips = 2)
         {
-            bool started = car.Start(4);
-            if (!started)
+            const double dt = 0.05;
+            var noticed = new List<SensoryCue>();
+            bool everStarted = false;
+            for (int t = 0; t < trips; t++)
+            {
+                car.Soak(false);
+                bool started = car.Start(4);
+                everStarted |= started;
+                if (started)
+                {
+                    car.Pedal = 0;
+                    car.RunFor(60, dt);
+                    noticed.AddRange(car.Cues);
+                    int gear = Math.Min(3, car.Definition.GearRatios.Length);
+                    car.Gear = gear;
+                    car.Mode = LoadMode.DynoHoldRpm;
+                    double ratio = car.Definition.GearRatios[gear - 1] * car.Definition.FinalDrive;
+                    car.DynoHoldRpm = 2400;
+                    car.SetVehicleSpeed(2400 / 60.0 * 2 * Math.PI / ratio * car.Definition.WheelRadiusM * 3.6);
+                    car.Pedal = 0.3;
+                    car.RunFor(420, dt);
+                    car.Pedal = 0.9;
+                    car.RunFor(6, dt);
+                    noticed.AddRange(car.Cues);
+                    car.Pedal = 0;
+                    car.Mode = LoadMode.Neutral;
+                    car.Gear = 0;
+                    car.SetVehicleSpeed(0);
+                    car.RunFor(30, dt);
+                    noticed.AddRange(car.Cues);
+                }
+
+                car.Key = KeyPosition.Off;
+                car.RunFor(1, dt);
+            }
+
+            // The car sat overnight at the workshop door.
+            car.Soak(false);
+            car.Clock.Spend(0);
+            if (!everStarted)
             {
                 return "No arranca: el motor gira pero no se pone en marcha.";
             }
 
-            car.Pedal = 0;
-            car.RunFor(30);
-            var cues = car.Cues.Where(c => c.Channel != CueChannel.Sound || c.Id != "sound.fan").OrderByDescending(c => c.Intensity).Take(2).ToList();
-            car.Key = KeyPosition.Off;
-            car.RunFor(1);
-            if (cues.Count == 0)
+            var best = noticed.Where(c => c.Id != "sound.fan" && c.Id != "sound.turbo_spool" || c.Description.Contains("sirena"))
+                .GroupBy(c => c.Id).Select(g => g.OrderByDescending(c => c.Intensity).First())
+                .OrderByDescending(c => c.Intensity).Take(2).ToList();
+            if (best.Count == 0)
             {
-                return "Se le encendió la luz del motor hace unos días; aparte de eso, va normal.";
+                return car.Ecu.Dtcs.MilOn ? "Se le encendió la luz del motor; aparte de eso, va normal." : "Notaba algo raro, pero ahora mismo no sabría decir qué.";
             }
 
-            return string.Join(". ", cues.Select(c => c.Description)) + ".";
+            return string.Join(". ", best.Select(c => c.Description)) + ".";
         }
 
         /// <summary>Estimated quote for a job (diagnosis + expected work).</summary>
@@ -290,6 +330,7 @@ namespace Garage.Sim.Game
                 job.Status = JobStatus.InProgress;
                 job.QuotedAmount = amount;
                 job.AcceptedDay = Day;
+                job.Lines.Add(new InvoiceLine("Diagnosis electrónica (1 h)", LabourRate));
                 Messages.Add($"{job.Customer.Name} acepta el presupuesto de {amount:0} €.");
                 return true;
             }
@@ -416,7 +457,8 @@ namespace Garage.Sim.Game
         {
             JobOutcome o = JobEvaluator.Evaluate(job);
             double labourCharge = job.LabourMinutes / 60.0 * LabourRate;
-            double invoice = Math.Max(job.PartsTotal, 0) + Math.Max(0, labourCharge - job.Lines.Where(l => l.Description.StartsWith("Mano de obra", StringComparison.Ordinal)).Sum(l => l.Amount));
+            double billedLabour = job.Lines.Where(l => l.Description.StartsWith("Mano de obra", StringComparison.Ordinal) || l.Description.StartsWith("Diagnosis", StringComparison.Ordinal)).Sum(l => l.Amount);
+            double invoice = Math.Max(job.PartsTotal, 0) + Math.Max(0, labourCharge - billedLabour);
             double cap = job.QuotedAmount > 0 ? job.QuotedAmount * 1.1 : invoice;
             o.Payment = o.Success ? Math.Min(invoice, cap) : Math.Min(invoice, cap) * 0.4;
             bool late = Day - job.AcceptedDay > job.Definition.DeadlineDays;
@@ -517,7 +559,9 @@ namespace Garage.Sim.Game
                     }
                     else if (mil)
                     {
-                        o.Notes.Add("El testigo de avería sigue encendido en la prueba de carretera.");
+                        o.Notes.Add(remaining == 0
+                            ? "El testigo de avería sigue encendido: la avería está reparada pero quedaron códigos memorizados (bórralos tras reparar)."
+                            : "El testigo de avería sigue encendido en la prueba de carretera.");
                     }
 
                     if (remaining > 0)

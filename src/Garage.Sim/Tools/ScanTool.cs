@@ -201,6 +201,11 @@ namespace Garage.Sim.Tools
                 };
             }
 
+            if (key.StartsWith("lambda", StringComparison.Ordinal))
+            {
+                return v.ToString("0.000", CultureInfo.InvariantCulture);
+            }
+
             return v.ToString(Math.Abs(v) >= 100 ? "0" : "0.0#", CultureInfo.InvariantCulture);
         }
 

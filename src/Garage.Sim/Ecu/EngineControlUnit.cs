@@ -869,7 +869,7 @@ namespace Garage.Sim.Ecu
                 Check("P0328", running, high, dt, 2, 3);
                 Check("P0325", running && rpm > 1500, low || high, dt, 2.5, 3);
                 knockSensorOk = !low && !high;
-                bool knockEvent = knockSensorOk && amp > background * 1.6;
+                bool knockEvent = knockSensorOk && rpm > 1200 && amp > background * 1.6;
                 if (knockEvent)
                 {
                     _knockRetard = Math.Min(cal.Scalar(EcuCalibration.Keys.KnockMax, 10), _knockRetard + cal.Scalar(EcuCalibration.Keys.KnockStep, 1.5) * dt * 10);
@@ -980,7 +980,7 @@ namespace Garage.Sim.Ecu
             }
 
             // ---------------- Coolant / thermostat ----------------
-            bool thermostatTest = running && ectValid && _airIntegralG > 2500 && _car.Environment.AmbientC > -7;
+            bool thermostatTest = running && ectValid && _airIntegralG > 4500 * eng.DisplacementL && _car.Environment.AmbientC > -7;
             Check("P0128", thermostatTest, ect < 75, dt, 5, 30);
             Check("P0217", running && ectValid, ect > 120, dt, 5, 10);
             Check("P0116", running && ectValid && _runTime > 1200, ect < 30, dt, 30, 60);

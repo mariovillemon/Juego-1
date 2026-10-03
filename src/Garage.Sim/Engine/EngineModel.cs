@@ -832,9 +832,11 @@ namespace Garage.Sim.Engine
                 }
 
                 // Lean high load → melting
-                if (!_def.IsDiesel && s.CylinderLambda[i] > 1.05 && s.RelativeLoad > 1.1 && s.CylinderBurn[i] > 0.5)
+                // Lean mixture that still burns under boost/high load → piston crown overheating.
+                double lam = s.CylinderLambda[i];
+                if (!_def.IsDiesel && lam > 1.05 && lam < 1.6 && s.CylinderFuelMg[i] > 0 && s.RelativeLoad > 1.1 && s.CylinderBurn[i] > 0.5)
                 {
-                    d.Piston[i] = Math.Min(1.2, d.Piston[i] + 0.02 * (s.CylinderLambda[i] - 1.0) * 10 * dt);
+                    d.Piston[i] = Math.Min(1.2, d.Piston[i] + 0.2 * Math.Min(lam - 1.0, 0.3) * dt);
                 }
 
                 if (s.ExhaustGasC > 980)

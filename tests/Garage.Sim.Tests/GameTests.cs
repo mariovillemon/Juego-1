@@ -36,6 +36,8 @@ public class GameTests
         double money = w.Money;
         double rep = w.Reputation;
         _out.WriteLine(w.InstallPart(job, "pcv_hose", "part_vacuumhose_oem"));
+        job.Car.Key = Garage.Sim.Vehicle.KeyPosition.On;
+        new Garage.Sim.Tools.DiagnosticSession(job.Car).Scanner.ClearCodes();
         JobOutcome o = w.Deliver(job);
         _out.WriteLine(string.Join("\n", o.Notes));
         Assert.True(o.Success);
