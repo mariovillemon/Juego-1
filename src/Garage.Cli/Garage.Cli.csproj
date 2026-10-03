@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <AssemblyName>garage</AssemblyName>
+    <RootNamespace>Garage.Cli</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Garage.Sim\Garage.Sim.csproj" />
+    <ProjectReference Include="..\Garage.Data\Garage.Data.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,52 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+*.swp
+TestResults/
+coverage/
+*.coverage
+out/
+# CLI save/export files
+saves/
+*.csv
+!data/**/*.csv
+# Unity
+Unity/[Ll]ibrary/
+Unity/[Tt]emp/
+Unity/[Oo]bj/
+Unity/[Bb]uild/
+Unity/[Bb]uilds/
+Unity/[Ll]ogs/
+Unity/[Uu]ser[Ss]ettings/
+Unity/[Mm]emoryCaptures/
+Unity/[Rr]ecordings/
+Unity/*.csproj
+Unity/*.sln
+Unity/*.slnx
+Unity/*.unityproj
+Unity/*.pidb
+Unity/*.booproj
+Unity/*.svd
+Unity/*.pdb
+Unity/*.mdb
+Unity/*.opendb
+Unity/*.VC.db
+Unity/sysinfo.txt
+Unity/crashlytics-build.properties
+Unity/Assets/AssetStoreTools*
+Unity/Assets/Plugins/Editor/JetBrains*
+Unity/.gradle/
+Unity/ExportedObj/
+Unity/.consulo/
+# Generated: synced copy of the simulation sources
+Unity/Assets/Garage/Sim/Generated/
+Unity/Assets/Garage/Sim/Generated.meta
+# Downloaded at runtime by the editor menu (CC0, re-downloadable)
+Unity/Assets/Garage/Downloaded/
+Unity/Assets/Garage/Downloaded.meta
+.DS_Store
+Thumbs.db
