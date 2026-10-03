@@ -106,7 +106,7 @@ ENGINES = {
         radiatorKwK=0.9, frictionFactor=1.0, indicatedEfficiency=0.395,
         ve=(ve_fn(4200, 0.97, redline=6500), MAP_AXIS_T), mbt=mbt_fn(40, 27, 1.0), loads=LOAD_T,
         turbo=dict(maxBoostKpa=160, fullSpoolRpm=2300, spoolStartRpm=1300, wastegateSpringKpa=40,
-                   maxSafeBoostKpa=175, compressorEfficiency=0.72, intercoolerEffectiveness=0.68, spoolTimeConstant=0.45, maxFlowGps=200)),
+                   maxSafeBoostKpa=175, compressorEfficiency=0.72, intercoolerEffectiveness=0.68, spoolTimeConstant=0.45, maxFlowGps=235)),
     "k14_na": dict(
         name="K14 1.4 16V atmosférico", kind="GasolineNA", cylinders=4,
         displacementL=1.390, boreMm=76.5, strokeMm=75.6, compressionRatio=10.5, firingOrder=[1, 3, 4, 2],
@@ -141,7 +141,7 @@ ENGINES = {
 def kla(e, mbt, rpm, mapkpa, lam, charge_c=45.0, ect=90.0):
     """Same knock-limited-advance formula as EngineModel (keep in sync)."""
     map_bar = mapkpa / 100.0
-    return (mbt + e["knockMarginDeg"] + 1.2 * (95 - 95) - 11.0 * (map_bar - 1.0) - 0.18 * (charge_c - 40)
+    return (mbt + e["knockMarginDeg"] + 1.2 * (95 - 95) - 9.0 * (map_bar - 1.0) - 0.18 * (charge_c - 40)
             - 0.12 * max(0, ect - 95) + 18.0 * max(-0.15, min(0.2, 1.0 - lam)) - 1.5 * (e["compressionRatio"] - 9.6)
             + 0.0006 * (rpm - 3000))
 

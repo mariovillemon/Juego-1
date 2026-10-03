@@ -360,7 +360,7 @@ def scenarios_entries():
 JOBS = [
     ("job_01", "cust_marta", "aurex_strada_gt", "repair", "sc_vacuum_leak_pcv", None, "Me sale la luz del motor y al ralentí va como a saltitos.", 450, 3),
     ("job_02", "cust_irene", "velmora_pico", "inspection", "sc_cat_worn", None, "Tengo la ITV el lunes y me dicen que las emisiones no van a pasar.", 900, 5),
-    ("job_03", "cust_javi", "aurex_strada_gt", "power", None, 285, "Quiero unos 285 CV para tandas, sin romper nada.", 1800, 10),
+    ("job_03", "cust_javi", "aurex_strada_gt", "power", None, 275, "Quiero unos 275 CV para tandas, sin romper nada.", 1800, 10),
     ("job_04", "cust_lucia", "velmora_pico", "repair", "sc_pump_fuse", None, "Esta mañana no ha querido arrancar. ¡Lo necesito ya!", 300, 1),
     ("job_05", "cust_pablo", "aurex_strada_gt", "repair", "sc_coil2_dead", None, "Va a tirones y la luz del motor parpadea.", 400, 1),
     ("job_06", "cust_sara", "nordak_atlas_td", "repair", "sc_fuel_filter", None, "En las cuestas de la autopista se queda sin fuerza.", 500, 2),

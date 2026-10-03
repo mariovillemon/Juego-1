@@ -213,7 +213,8 @@ namespace Garage.Sim.Engine
                 double t1 = Physics.ToKelvin(s.IntakeAirC);
                 double t2 = t1 * (1 + (Math.Pow(pr, 0.2857) - 1) / t.CompressorEfficiency);
                 double icLeak = F(ComponentKind.Intercooler, EffectKind.Restriction);
-                double eff = t.IntercoolerEffectiveness * (1 - icLeak) * MathUtil.Clamp(0.6 + vehicleSpeedMs / 40.0, 0.6, 1.0);
+                Component? ic = _parts.Find(ComponentKind.Intercooler);
+                double eff = (ic?.Param("effectiveness", t.IntercoolerEffectiveness) ?? t.IntercoolerEffectiveness) * (1 - icLeak) * MathUtil.Clamp(0.6 + vehicleSpeedMs / 40.0, 0.6, 1.0);
                 double tc = t2 - eff * (t2 - Physics.ToKelvin(env.AmbientC));
                 chargeC = tc - Physics.KelvinOffset;
             }
@@ -354,7 +355,7 @@ namespace Garage.Sim.Engine
             Component? pump = _parts.Find(ComponentKind.FuelPump);
             double pumpCap = pump == null ? 1 : 1 - _faults.Max(pump.Id, EffectKind.Weak) - (pump.Id.Length > 0 && _faults.Has(pump.Id, EffectKind.Dead) ? 1 : 0);
             pumpCap = MathUtil.Clamp01(pumpCap) * (0.8 + 0.2 * (pump?.Health ?? 1));
-            double pumpMax = cmd.FuelPumpPowered ? _def.PumpMaxPressureKpa * pumpCap * MathUtil.Clamp01((cmd.FuelPumpVolts - 6) / 7.5) : 0;
+            double pumpMax = cmd.FuelPumpPowered ? (pump?.Param("max_pressure_kpa", _def.PumpMaxPressureKpa) ?? _def.PumpMaxPressureKpa) * pumpCap * MathUtil.Clamp01((cmd.FuelPumpVolts - 6) / 7.5) : 0;
             double regTarget = _def.RailPressureKpa;
             if (Has(ComponentKind.FuelPressureRegulator, EffectKind.StuckClosed))
             {
@@ -409,7 +410,7 @@ namespace Garage.Sim.Engine
             }
 
             lambdaAvgPrev /= n;
-            double kla = mbt + _def.KnockMarginDeg + 1.2 * (_def.FuelRon - 95) - 11.0 * (mapBar - 1.0) - 0.18 * (s.ChargeAirC - 40)
+            double kla = mbt + _def.KnockMarginDeg + 1.2 * (_def.FuelRon - 95) - 9.0 * (mapBar - 1.0) - 0.18 * (s.ChargeAirC - 40)
                 - 0.12 * Math.Max(0, s.CoolantC - 95) + 18.0 * MathUtil.Clamp(1.0 - lambdaAvgPrev, -0.15, 0.2) - 1.5 * (cr - 9.6) - 4 * deposits
                 + 0.0006 * (rpm - 3000);
             s.KnockLimitDeg = kla;
@@ -498,7 +499,8 @@ namespace Garage.Sim.Engine
                 {
                     double pressureFactor = Math.Sqrt(Math.Max(0, s.FuelRailKpa) / _def.InjectorRefPressureKpa);
                     double effMs = cmd.InjectorEnabled[i] && !dead ? Math.Max(0, cmd.InjectorPulseMs[i] - injDeadMs) : 0;
-                    fuelKg = effMs * flowGms * pressureFactor * (1 - clog) / 1000.0;
+                    double injFlow = inj == null ? flowGms : inj.Param("flow_ccmin", _def.InjectorFlowCcMin) * Physics.GasolineDensity / 60000.0;
+                    fuelKg = effMs * injFlow * pressureFactor * (1 - clog) / 1000.0;
                     fuelKg += dribble * 0.012 * pressureFactor / 1000.0 + (stuckOpen ? 0.06 * pressureFactor / 1000.0 : 0);
                 }
 

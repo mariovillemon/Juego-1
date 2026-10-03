@@ -84,6 +84,6 @@
     "compressorEfficiency": 0.72,
     "intercoolerEffectiveness": 0.68,
     "spoolTimeConstant": 0.45,
-    "maxFlowGps": 200
+    "maxFlowGps": 235
   }
 }

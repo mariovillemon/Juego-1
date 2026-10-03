@@ -26,10 +26,10 @@
       "customer": "cust_javi",
       "car": "aurex_strada_gt",
       "goal": "power",
-      "complaint": "Quiero unos 285 CV para tandas, sin romper nada.",
+      "complaint": "Quiero unos 275 CV para tandas, sin romper nada.",
       "budget": 1800,
       "deadlineDays": 10,
-      "powerTargetPs": 285
+      "powerTargetPs": 275
     },
     {
       "id": "job_04",
