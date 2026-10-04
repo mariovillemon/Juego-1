@@ -22,6 +22,12 @@ namespace UnityEditor
     }
     public class EditorBuildSettingsScene { public EditorBuildSettingsScene(string path, bool enabled) { } public string path; public bool enabled; }
     public static class EditorBuildSettings { public static EditorBuildSettingsScene[] scenes; }
+    public enum BuildTarget { StandaloneWindows64 = 19 }
+    public enum BuildTargetGroup { Standalone = 1 }
+    [Flags] public enum BuildOptions { None = 0, Development = 1 }
+    public struct BuildPlayerOptions { public string[] scenes; public string locationPathName; public BuildTarget target; public BuildTargetGroup targetGroup; public BuildOptions options; }
+    public static class BuildPipeline { public static UnityEditor.Build.Reporting.BuildReport BuildPlayer(BuildPlayerOptions o) => null; }
+    public static class EditorApplication { public static void Exit(int code) { } }
     [Flags] public enum StaticEditorFlags { ContributeGI = 1, OccluderStatic = 2, BatchingStatic = 4, NavigationStatic = 8, OccludeeStatic = 16, OffMeshLinkGeneration = 32, ReflectionProbeStatic = 64 }
     public static class GameObjectUtility { public static void SetStaticEditorFlags(GameObject g, StaticEditorFlags f) { } public static bool AreStaticEditorFlagsSet(GameObject g, StaticEditorFlags f) => false; }
     public class AssetImporter : UnityEngine.Object { public static AssetImporter GetAtPath(string p) => null; public void SaveAndReimport() { } }
@@ -60,4 +66,11 @@ namespace UnityEngine.Rendering.HighDefinition
 {
     public class HDRenderPipelineAsset : UnityEngine.Rendering.RenderPipelineAsset { public override UnityEngine.Rendering.RenderPipeline CreatePipeline() => null; }
     public class HDAdditionalReflectionData : MonoBehaviour { }
+}
+
+namespace UnityEditor.Build.Reporting
+{
+    public enum BuildResult { Unknown, Succeeded, Failed, Cancelled }
+    public class BuildSummary { public BuildResult result; public ulong totalSize; public System.TimeSpan totalTime; public int totalErrors; }
+    public class BuildReport { public BuildSummary summary; }
 }
