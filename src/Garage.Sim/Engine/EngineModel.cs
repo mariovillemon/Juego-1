@@ -885,7 +885,7 @@ namespace Garage.Sim.Engine
 
             if (s.CatalystC > 900)
             {
-                d.Catalyst = Math.Min(1.2, d.Catalyst + (s.CatalystC - 900) * 0.00012 * dt);
+                d.Catalyst = Math.Min(1.2, d.Catalyst + (s.CatalystC - 900) * 0.000015 * dt); // ≈ 5–10 min of severe misfire (D-59)
             }
 
             if (s.CylinderLambda.Length > 0)

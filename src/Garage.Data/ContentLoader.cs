@@ -22,6 +22,7 @@ namespace Garage.Data
             { "scenarios", "scenarios" },
             { "jobs", "jobs" },
             { "upgrades", "upgrades" },
+            { "tutorials", "tutorials" },
         };
 
         /// <summary>Schema file for a category.</summary>
@@ -40,6 +41,7 @@ namespace Garage.Data
                 case "scenarios": return "scenario.schema.json";
                 case "jobs": return "job.schema.json";
                 case "upgrades": return "upgrade.schema.json";
+                case "tutorials": return "tutorial.schema.json";
                 default: return "";
             }
         }

@@ -309,4 +309,38 @@ namespace Garage.Sim.Game
         /// <summary>Refund owed (€).</summary>
         public double Refund { get; set; }
     }
+
+    /// <summary>Customer answer to a quote.</summary>
+    public enum QuoteAnswer
+    {
+        /// <summary>Accepted: the job starts.</summary>
+        Accepted,
+
+        /// <summary>The customer proposes a lower amount (the job stays on offer).</summary>
+        Counter,
+
+        /// <summary>Rejected: the customer leaves.</summary>
+        Rejected,
+    }
+
+    /// <summary>Structured answer to a quote.</summary>
+    public sealed class QuoteDecision
+    {
+        /// <summary>Creates a decision.</summary>
+        public QuoteDecision(QuoteAnswer answer, double amount, string message)
+        {
+            Answer = answer;
+            Amount = amount;
+            Message = message;
+        }
+
+        /// <summary>Answer.</summary>
+        public QuoteAnswer Answer { get; }
+
+        /// <summary>Accepted amount or counter-offer.</summary>
+        public double Amount { get; }
+
+        /// <summary>What the customer says.</summary>
+        public string Message { get; }
+    }
 }

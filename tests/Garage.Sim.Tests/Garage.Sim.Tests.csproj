@@ -14,5 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Garage.Sim\Garage.Sim.csproj" />
     <ProjectReference Include="..\..\src\Garage.Data\Garage.Data.csproj" />
+    <ProjectReference Include="..\..\src\Garage.Game\Garage.Game.csproj" />
   </ItemGroup>
 </Project>

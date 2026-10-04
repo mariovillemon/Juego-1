@@ -138,3 +138,24 @@ Fundamentals*, Bosch *Automotive Handbook*), no copia de datos propietarios.
 - **D-57 — Poly Haven**: se eligen por categoría los recursos más descargados (sin ids fijos en el código) para no
   romperse si cambia el catálogo. La red del entorno de desarrollo no permitía acceder a la API, así que la estructura
   JSON (`Diffuse`, `nor_gl`, `Rough`, `AO`, `Metal`, `hdri`) se basa en la documentación pública conocida.
+
+## Sesión 3 — Jugable dentro de Unity
+
+- **D-58 — Capa de aplicación `src/Garage.Game`** (netstandard2.1, C# 9, sin Unity): `GameSession` orquesta el ciclo
+  completo (tablón, presupuesto, tienda e inventario, reparación, entrega, tiempo, mejoras, ranuras de guardado,
+  tutorial) y `CarWork` todas las acciones sobre el coche (motor, herramientas, ECU, banco). La CLI y Unity usan
+  exactamente esta capa; las reglas siguen en `Garage.Sim` (`Workshop`). Los comandos devuelven `CommandResult`
+  con `CommandError` y texto legible; todo cambio se publica en un `GameEventBus` (la UI no sondea).
+  Plazos de entrega por calidad: recambio y usada inmediatas, original al día siguiente, competición 2 días.
+  Desde la CLI (y en Unity con «Comprar e instalar») se puede hacer una **compra urgente** al proveedor local
+  al precio de catálogo, inmediata, para no bloquear una reparación.
+- **D-59 — Protección del catalizador**: con un fallo de encendido que daña el catalizador (ventana de 200 vueltas,
+  MIL intermitente) la ECU corta la inyección del cilindro afectado hasta parar el motor o borrar códigos, como
+  hacen la mayoría de estrategias OEM. Además el daño térmico del catalizador se recalibró de ~40 s a varios minutos
+  de sobretemperatura. Antes, un cliente que llegaba con una bobina muerta traía siempre el catalizador fundido.
+- **D-60 — Eventos de presentación**: lo que sólo existe en Unity (andar, coger una herramienta, enchufar el
+  escáner al OBD, abrir un panel) se notifica con `GameSession.Notify`. El estado lógico que dependa de ello
+  (escáner enchufado) vive en `CarWork`; la CLI lo enchufa implícitamente.
+- **D-61 — Tutorial basado en datos** (`data/base/tutorials.json` + `tutorial.schema.json`): pasos con el evento
+  que los completa y un fragmento de asunto opcional; el `TutorialRunner` observa el bus. Crea su propio encargo
+  guionizado (escenario `sc_coil2_dead`).

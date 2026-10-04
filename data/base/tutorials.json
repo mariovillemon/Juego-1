@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/tutorial.schema.json",
+  "tutorials": [
+    {
+      "id": "tut_first_car",
+      "name": "Primer coche: fallo de encendido",
+      "job": {
+        "customer": "cust_marta",
+        "car": "aurex_strada_gt",
+        "scenario": "sc_coil2_dead",
+        "complaint": "Va a tirones y vibra mucho, y se ha encendido la luz del motor.",
+        "budget": 600,
+        "deadlineDays": 3
+      },
+      "steps": [
+        { "id": "move", "title": "Muévete por el taller", "text": "Usa W A S D para andar y el ratón para mirar. Acércate al coche del elevador.", "event": "PlayerMoved" },
+        { "id": "accept", "title": "Acepta el encargo", "text": "Abre el tablón de encargos (tecla Tab) y envía un presupuesto a Marta para su Strada.", "event": "JobAccepted", "highlight": "ui:board" },
+        { "id": "pick_scanner", "title": "Coge el escáner", "text": "El escáner OBD está en el carro de herramientas. Apúntalo y pulsa E para cogerlo.", "event": "ToolPickedUp", "subject": "tool_scanner", "highlight": "tool:tool_scanner" },
+        { "id": "plug", "title": "Enchúfalo al conector OBD", "text": "El conector OBD está bajo el salpicadero, lado del conductor. Apúntalo y pulsa E con el escáner en la mano.", "event": "ScannerPlugged", "highlight": "obd" },
+        { "id": "connect", "title": "Contacto y conexión", "text": "En la pantalla del escáner pulsa «Conectar». Si no responde, pon el contacto (tecla K).", "event": "ScannerConnected", "explanation": "Sin contacto la ECU no está alimentada y no contesta: es lo primero a comprobar cuando un escáner no comunica." },
+        { "id": "read", "title": "Lee los códigos", "text": "Pulsa «Leer códigos». Apunta qué código aparece.", "event": "DtcRead", "subject": "P0302", "explanation": "P0302 = fallo de encendido en el cilindro 2. El código dice DÓNDE hay combustión defectuosa, no QUÉ pieza falla: puede ser bobina, bujía, inyector o compresión." },
+        { "id": "live", "title": "Mira los datos en vivo", "text": "Arranca el motor (tecla K dos veces) y abre «Datos en vivo».", "event": "LiveDataRead", "explanation": "Con un cilindro sin chispa, el oxígeno sin quemar llega a la sonda: la ECU ve mezcla pobre y sube STFT. El régimen oscila: ralentí inestable." },
+        { "id": "test_coil", "title": "Comprueba la bobina 2", "text": "Selecciona la bobina 2 y usa «Inspeccionar», o mide su primario con el multímetro (Ω entre sus pines de alimentación y control).", "event": "ComponentTested", "subject": "coil2", "highlight": "coil2", "explanation": "Un truco clásico: intercambiar la bobina 2 con la 3 y ver si el fallo se mueve a P0303. Si se mueve, la culpable es la bobina; si no, mira bujía e inyector." },
+        { "id": "buy", "title": "Compra una bobina", "text": "Abre la tienda de piezas (tecla P), filtra por «Bobina» y compra una de recambio.", "event": "PartsOrdered", "subject": "part_ignitioncoil", "highlight": "ui:shop" },
+        { "id": "replace", "title": "Sustituye la bobina 2", "text": "Apunta a la bobina 2, pulsa R y elige la pieza del inventario. Mantén pulsado para acelerar los pasos.", "event": "PartInstalled", "subject": "coil2", "highlight": "coil2" },
+        { "id": "clear", "title": "Borra los códigos", "text": "En el escáner pulsa «Borrar códigos».", "event": "DtcCleared", "explanation": "Los códigos confirmados quedan en memoria aunque la avería esté reparada: hay que borrarlos o el testigo seguirá encendido en la entrega." },
+        { "id": "verify", "title": "Verifica", "text": "Haz una prueba de carretera (tecla T) y vuelve a leer códigos: no debe quedar ninguno.", "event": "RoadTestDone", "explanation": "Verificar tras reparar evita devoluciones: así compruebas que el monitor de fallos de encendido no vuelve a detectar nada." },
+        { "id": "deliver", "title": "Entrega el coche", "text": "Abre la hoja de trabajo (tecla J) y pulsa «Entregar y cobrar».", "event": "JobDelivered" }
+      ]
+    }
+  ]
+}

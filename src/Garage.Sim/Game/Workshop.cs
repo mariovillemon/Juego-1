@@ -313,8 +313,8 @@ namespace Garage.Sim.Game
             return Math.Round(diagnosis + job.Customer.Budget * 0.5, 0);
         }
 
-        /// <summary>Presents a quote; the customer accepts or rejects depending on budget and personality.</summary>
-        public bool ProposeQuote(Job job, double amount)
+        /// <summary>Most a customer will accept for a job (budget × personality × reputation).</summary>
+        public double QuoteLimit(Job job)
         {
             double tolerance = job.Customer.Personality switch
             {
@@ -324,32 +324,43 @@ namespace Garage.Sim.Game
                 "impatient" => 1.1,
                 _ => 1.0,
             };
-            double limit = Math.Max(job.Customer.Budget, job.Definition.Budget) * tolerance * (0.9 + Reputation / 250);
+            return Math.Max(job.Customer.Budget, job.Definition.Budget) * tolerance * (0.9 + Reputation / 250);
+        }
+
+        /// <summary>Presents a quote and returns the customer's structured answer (accept, counter-offer, reject).</summary>
+        public QuoteDecision EvaluateQuote(Job job, double amount)
+        {
+            double limit = QuoteLimit(job);
             if (amount <= limit)
             {
                 job.Status = JobStatus.InProgress;
                 job.QuotedAmount = amount;
                 job.AcceptedDay = Day;
                 job.Lines.Add(new InvoiceLine("Diagnosis electrónica (1 h)", LabourRate));
-                Messages.Add($"{job.Customer.Name} acepta el presupuesto de {amount:0} €.");
-                return true;
+                string msg = $"{job.Customer.Name} acepta el presupuesto de {amount:0} €.";
+                Messages.Add(msg);
+                return new QuoteDecision(QuoteAnswer.Accepted, amount, msg);
             }
 
             if (job.Customer.Personality != "haggler" || amount > limit * 1.3)
             {
                 job.Status = JobStatus.Cancelled;
-                Messages.Add($"{job.Customer.Name} rechaza el presupuesto ({amount:0} € supera lo que está dispuesto a pagar).");
-            }
-            else
-            {
-                Messages.Add($"{job.Customer.Name} regatea: «a {limit:0} € lo dejo».");
+                string msg = $"{job.Customer.Name} rechaza el presupuesto ({amount:0} € supera lo que está dispuesto a pagar).";
+                Messages.Add(msg);
+                return new QuoteDecision(QuoteAnswer.Rejected, 0, msg);
             }
 
-            return false;
+            double counter = Math.Floor(limit);
+            string haggle = $"{job.Customer.Name} regatea: «a {counter:0} € lo dejo».";
+            Messages.Add(haggle);
+            return new QuoteDecision(QuoteAnswer.Counter, counter, haggle);
         }
 
+        /// <summary>Presents a quote; the customer accepts or rejects depending on budget and personality.</summary>
+        public bool ProposeQuote(Job job, double amount) => EvaluateQuote(job, amount).Answer == QuoteAnswer.Accepted;
+
         /// <summary>Replaces a component with a part from the catalog.</summary>
-        public string InstallPart(Job job, string componentId, string partId)
+        public string InstallPart(Job job, string componentId, string partId, bool prepaid = false)
         {
             Component? comp = job.Car.Parts.Get(componentId);
             PartDefinition? part = _content.Parts.Get(partId);
@@ -363,12 +374,16 @@ namespace Garage.Sim.Game
                 return $"La pieza {part.Name} no corresponde a {comp.Name}.";
             }
 
-            if (Money < part.Price)
+            if (!prepaid && Money < part.Price)
             {
                 return "No hay dinero suficiente para comprar la pieza.";
             }
 
-            Money -= part.Price;
+            if (!prepaid)
+            {
+                Money -= part.Price;
+            }
+
             double labour = comp.ReplaceMinutes;
             job.LabourMinutes += labour;
             SpendMinutes(labour * TimeFactor);

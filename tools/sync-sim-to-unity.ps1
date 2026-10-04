@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 $Dest = Join-Path $Root "Unity/Assets/Garage/Sim/Generated"
 if (Test-Path $Dest) { Remove-Item $Dest -Recurse -Force }
-foreach ($p in @("Garage.Sim", "Garage.Data")) {
+foreach ($p in @("Garage.Sim", "Garage.Data", "Garage.Game")) {
   $src = Join-Path $Root "src/$p"
   Get-ChildItem $src -Recurse -Filter *.cs | Where-Object { $_.FullName -notmatch '[\\/](obj|bin)[\\/]' } | ForEach-Object {
     $rel = $_.FullName.Substring((Resolve-Path $src).Path.Length + 1)

@@ -109,6 +109,7 @@ namespace Garage.Sim.Ecu
         private readonly int[] _misfireWindow;
         private double _revsInShortWindow;
         private readonly int[] _misfireShort;
+        private readonly bool[] _fuelCut;
         private double _ectAtStart = double.NaN;
         private double _maxEctThisTrip;
         private double _airIntegralG;
@@ -131,6 +132,7 @@ namespace Garage.Sim.Ecu
             Outputs = new EcuOutputs(_n);
             _misfireWindow = new int[_n];
             _misfireShort = new int[_n];
+            _fuelCut = new bool[_n];
             MisfireCounts = new int[_n];
             var supported = new List<ReadinessMonitor> { ReadinessMonitor.Misfire, ReadinessMonitor.FuelSystem, ReadinessMonitor.Components };
             if (car.Definition.Engine.IsDiesel)
@@ -292,6 +294,7 @@ namespace Garage.Sim.Ecu
         /// <summary>Clears codes (mode 04) — also resets readiness and trims like a real ECU.</summary>
         public void ClearCodes()
         {
+            Array.Clear(_fuelCut, 0, _n);
             Dtcs.Clear();
             Readiness.Reset();
             foreach (DebouncedTest t in _tests.Values)
@@ -1127,8 +1130,19 @@ namespace Garage.Sim.Ecu
             Check(highCode, enabled, shortHigh, dt, 0.5, 1);
         }
 
+        /// <summary>
+        /// Injector shut off on a cylinder with catalyst-damaging misfire (protects the catalyst, as most OEM
+        /// strategies do). Cleared when the engine stops.
+        /// </summary>
+        public bool IsFuelCut(int cylinder) => cylinder >= 0 && cylinder < _n && _fuelCut[cylinder];
+
         private void UpdateMisfire(double dt, bool enabled, double rpm)
         {
+            if (rpm < 300)
+            {
+                Array.Clear(_fuelCut, 0, _n);
+            }
+
             if (!enabled)
             {
                 return;
@@ -1158,6 +1172,14 @@ namespace Garage.Sim.Ecu
                 {
                     Dtcs.MilFlashing = true;
                     ReportMisfireCodes(_misfireShort, total, true);
+                    double perCylinder = _revsInShortWindow / 2.0;
+                    for (int i = 0; i < _n; i++)
+                    {
+                        if (_misfireShort[i] / perCylinder > 0.5)
+                        {
+                            _fuelCut[i] = true;
+                        }
+                    }
                 }
 
                 Array.Clear(_misfireShort, 0, _n);

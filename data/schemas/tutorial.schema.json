@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tutorial.schema.json",
+  "title": "Tutoriales guiados (pasos con condición de completado observada mediante eventos)",
+  "type": "object",
+  "required": ["tutorials"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "tutorials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "steps"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "name": { "type": "string" },
+          "job": {
+            "type": "object",
+            "description": "Encargo guionizado que crea el tutorial.",
+            "required": ["customer", "car", "scenario"],
+            "additionalProperties": false,
+            "properties": {
+              "customer": { "type": "string" },
+              "car": { "type": "string" },
+              "scenario": { "type": "string" },
+              "complaint": { "type": "string" },
+              "budget": { "type": "number", "minimum": 0 },
+              "deadlineDays": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "title", "text", "event"],
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string" },
+                "title": { "type": "string" },
+                "text": { "type": "string" },
+                "explanation": { "type": "string", "description": "Razonamiento diagnóstico (sólo en modo formación)." },
+                "event": { "type": "string", "description": "Nombre de GameEventKind que completa el paso." },
+                "subject": { "type": "string", "description": "Si existe, el asunto del evento debe contener este texto." },
+                "highlight": { "type": "string", "description": "Objeto de la escena a resaltar (id de componente, herramienta o elemento de UI)." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

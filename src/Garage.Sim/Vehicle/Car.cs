@@ -770,7 +770,7 @@ namespace Garage.Sim.Vehicle
                 Component? inj = Parts.Find(ComponentKind.Injector, i);
                 Component? coil = Parts.Find(ComponentKind.IgnitionCoil, i);
                 cmd.InjectorPulseMs[i] = o.InjectorPulseMs[i];
-                cmd.InjectorEnabled[i] = KeyOn && (inj == null || ActuatorEnergized(inj.Id));
+                cmd.InjectorEnabled[i] = KeyOn && (inj == null || ActuatorEnergized(inj.Id)) && !Ecu.IsFuelCut(i);
                 cmd.SparkEnabled[i] = KeyOn && o.FireCylinder[i] && (coil == null || ActuatorEnergized(coil.Id));
             }
 
