@@ -72,7 +72,7 @@ namespace Garage.Unity.EditorTools
             s.shadows = LightShadows.Soft;
             UnityCompat.EnsureHd(s);
             UnityCompat.SetTemperature(s, 5600f);
-            UnityCompat.SetLightIntensity(s, 100000f, "Lux");
+            UnityCompat.SetLightIntensity(s, 30000f, "Lux");
             WorkshopController.ApplySun(sun.transform, 10f, 40f);
 
             // Global volume (exposure, tonemapping, sky...).

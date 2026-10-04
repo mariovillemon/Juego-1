@@ -23,6 +23,7 @@ namespace Garage.Unity
         protected Texture2D GraphTexture;
         private RenderTexture _rt;
         private float _timer;
+        private Camera _cam;
         private static int _slot;
 
         /// <summary>Content refresh.</summary>
@@ -42,6 +43,9 @@ namespace Garage.Unity
             cam.targetTexture = _rt;
             cam.nearClipPlane = 0.1f;
             cam.farClipPlane = 10f;
+            // Rendered on demand only (an always-on HDRP camera per screen is very expensive).
+            cam.enabled = false;
+            _cam = cam;
 
             var canvasGo = new GameObject(name + "_Canvas");
             canvasGo.layer = UnityCompat.DeviceUiLayer;
@@ -97,6 +101,7 @@ namespace Garage.Unity
             {
                 _timer = 0;
                 Refresh();
+                _cam.Render();
             }
         }
 

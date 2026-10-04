@@ -150,7 +150,7 @@ namespace Garage.Unity.EditorTools
             VolumeComponent exposure = EditorUtil.AddOverride(profile, "Exposure");
             EditorUtil.SetParam(exposure, "mode", "AutomaticHistogram");
             EditorUtil.SetParam(exposure, "limitMin", 4f);
-            EditorUtil.SetParam(exposure, "limitMax", 13f);
+            EditorUtil.SetParam(exposure, "limitMax", 15f);
             EditorUtil.SetParam(exposure, "compensation", 0.3f);
 
             VolumeComponent tone = EditorUtil.AddOverride(profile, "Tonemapping");
@@ -187,6 +187,7 @@ namespace Garage.Unity.EditorTools
             VolumeComponent fog = EditorUtil.AddOverride(profile, "Fog");
             EditorUtil.SetParam(fog, "enabled", true);
             EditorUtil.SetParam(fog, "meanFreePath", 120f);
+            EditorUtil.SetParam(fog, "enableVolumetricFog", false);
 
             EditorUtility.SetDirty(profile);
             AssetDatabase.SaveAssets();
