@@ -52,6 +52,21 @@ namespace Garage.Unity.EditorTools
                     Object.DestroyImmediate(r);
                 }
             }
+
+            ModelFix.Apply(root); // LODGroup from the _LOD0/1/2 names
+        }
+
+        /// <summary>Forces the import rules on every generated model (needed when the models were imported before
+        /// this script compiled, e.g. the first time the project is opened).</summary>
+        [MenuItem("Garage/Assets/Reimport Generated Models", priority = 21)]
+        public static void ReimportAll()
+        {
+            foreach (string guid in AssetDatabase.FindAssets("t:Model", new[] { "Assets/Garage/Resources" }))
+            {
+                AssetDatabase.ImportAsset(AssetDatabase.GUIDToAssetPath(guid), ImportAssetOptions.ForceUpdate);
+            }
+
+            Debug.Log("[Garage] Modelos reimportados.");
         }
     }
 }

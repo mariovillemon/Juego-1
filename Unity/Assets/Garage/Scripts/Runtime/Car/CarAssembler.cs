@@ -97,7 +97,7 @@ namespace Garage.Unity
                 GameObject go;
                 if (prefab != null)
                 {
-                    go = Instantiate(prefab, bay);
+                    go = ModelFix.Spawn(prefab, bay);
                     go.transform.localPosition = s.Pos;
                     go.transform.localRotation = Quaternion.Euler(s.Rot);
                 }
@@ -150,7 +150,7 @@ namespace Garage.Unity
 
             if (model != null)
             {
-                GameObject body = Instantiate(model, root);
+                GameObject body = ModelFix.Spawn(model, root);
                 body.name = "Body_Model";
                 SetLayer(body, 2);
                 foreach (Renderer r in body.GetComponentsInChildren<Renderer>())
@@ -244,7 +244,7 @@ namespace Garage.Unity
             if (model != null)
             {
                 // Generated model (tools/blender/models.py) with the same dimensions as the placeholder below.
-                GameObject m = Instantiate(model, e);
+                GameObject m = ModelFix.Spawn(model, e);
                 m.name = "EngineModel";
                 SetLayer(m, 2);
                 foreach (Renderer r in m.GetComponentsInChildren<Renderer>())

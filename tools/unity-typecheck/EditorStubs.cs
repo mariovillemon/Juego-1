@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace UnityEditor
 {
+    [Flags] public enum ImportAssetOptions { Default = 0, ForceUpdate = 1 }
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public sealed class MenuItem : Attribute { public MenuItem(string itemName) { } public MenuItem(string itemName, bool isValidateFunction) { } public MenuItem(string itemName, bool isValidateFunction, int priority) { } public int priority; }
     public static class AssetDatabase
@@ -12,7 +13,7 @@ namespace UnityEditor
         public static T LoadAssetAtPath<T>(string p) where T : UnityEngine.Object => null;
         public static UnityEngine.Object[] LoadAllAssetsAtPath(string p) => null;
         public static void SaveAssets() { } public static void Refresh() { } public static void CreateAsset(UnityEngine.Object o, string p) { }
-        public static bool IsValidFolder(string p) => true; public static string CreateFolder(string a, string b) => ""; public static void ImportAsset(string p) { }
+        public static bool IsValidFolder(string p) => true; public static string CreateFolder(string a, string b) => ""; public static void ImportAsset(string p) { } public static void ImportAsset(string p, ImportAssetOptions o) { } public static string[] FindAssets(string filter, string[] folders) => null; public static string GUIDToAssetPath(string guid) => null;
         public static bool Contains(UnityEngine.Object o) => true; public static void AddObjectToAsset(UnityEngine.Object o, UnityEngine.Object a) { }
     }
     public static class EditorUtility

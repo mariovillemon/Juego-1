@@ -344,6 +344,7 @@ namespace Garage.Unity.EditorTools
             }
 
             var go = (GameObject)PrefabUtility.InstantiatePrefab(asset, parent);
+            ModelFix.Apply(go);
             go.transform.localPosition = localPos;
             go.transform.localRotation = Quaternion.identity;
             // LOD0 contributes to GI and gets an exact static collider; lower LODs are only drawn.
