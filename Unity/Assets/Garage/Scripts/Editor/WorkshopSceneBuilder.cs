@@ -422,7 +422,7 @@ namespace Garage.Unity.EditorTools
             importer.sRGBTexture = true;
             importer.SaveAndReimport();
             Shader s = Shader.Find("HDRP/Decal");
-            var m = new Material(s != null ? s : Shader.Find("Unlit/Transparent")) { name = name };
+            var m = new Material(s != null ? s : Shader.Find("Unlit/Transparent")) { name = name, enableInstancing = true };
             m.SetTexture("_BaseColorMap", AssetDatabase.LoadAssetAtPath<Texture2D>(texPath));
             m.SetColor("_BaseColor", tint);
             return EditorUtil.SaveMaterial(m, "Decal_" + name);

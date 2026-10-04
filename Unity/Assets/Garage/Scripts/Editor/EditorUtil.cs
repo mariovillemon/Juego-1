@@ -62,6 +62,12 @@ namespace Garage.Unity.EditorTools
             VolumeComponent existing = profile.components.FirstOrDefault(c => c != null && c.GetType() == t);
             if (existing != null)
             {
+                if (m.enableInstancing && !existing.enableInstancing)
+                {
+                    existing.enableInstancing = true; // HDRP decals require GPU instancing
+                    EditorUtility.SetDirty(existing);
+                }
+
                 return existing;
             }
 

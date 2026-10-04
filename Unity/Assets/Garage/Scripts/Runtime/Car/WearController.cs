@@ -116,7 +116,7 @@ namespace Garage.Unity
                     return;
                 }
 
-                mat = new Material(s) { name = "WearDecal" };
+                mat = new Material(s) { name = "WearDecal", enableInstancing = true };
                 mat.SetColor("_BaseColor", Rust > Dirt ? new Color(0.35f, 0.16f, 0.07f, Rust) : new Color(0.25f, 0.2f, 0.15f, Dirt));
             }
 
