@@ -9,5 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Garage.Sim\Garage.Sim.csproj" />
     <ProjectReference Include="..\Garage.Data\Garage.Data.csproj" />
+    <ProjectReference Include="..\Garage.Game\Garage.Game.csproj" />
   </ItemGroup>
 </Project>

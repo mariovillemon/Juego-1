@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Garage.Data;
 using Garage.Data.Json;
+using Garage.Game;
 using Garage.Sim.Dyno;
 using Garage.Sim.Faults;
 using Garage.Sim.Game;
@@ -138,8 +139,14 @@ Opciones:
                         Console.WriteLine("Atención: hay errores en los datos (ejecute 'garage validate').");
                     }
 
-                    Workshop ws = opts.TryGetValue("load", out string? load) ? SaveGame.Load(db, load) : new Workshop(db, seed);
-                    new GameShell(ui, db, ws, training).Run();
+                    var session = new GameSession(db, seed, training);
+                    if (opts.TryGetValue("load", out string? load))
+                    {
+                        session.LoadFile(load);
+                        session.Training = training || session.Training;
+                    }
+
+                    new GameShell(ui, session).Run();
                     return 0;
                 }
         }
@@ -220,7 +227,7 @@ Opciones:
 
         Car car = db.CreateCar(carId, seed, faults, warm: false);
         ui.Title($"Sandbox: {car.Definition.DisplayName} ({faults.Count} averías ocultas)");
-        new CarShell(ui, car, null, null, training).Run();
+        new CarShell(ui, GameSession.Sandbox(car, training), null).Run();
         if (faults.Count > 0 && ui.Confirm("¿Revelar las averías?"))
         {
             foreach (FaultInstance f in car.Faults.All)
@@ -233,30 +240,34 @@ Opciones:
     }
 }
 
-/// <summary>Workshop level menus.</summary>
+/// <summary>Workshop level menus (every action goes through <see cref="GameSession"/>).</summary>
 public sealed class GameShell
 {
     private readonly Ui _ui;
-    private readonly ContentDatabase _db;
-    private Workshop _ws;
-    private readonly bool _training;
+    private readonly GameSession _s;
+    private readonly List<string> _feed = new();
 
-    public GameShell(Ui ui, ContentDatabase db, Workshop ws, bool training)
+    public GameShell(Ui ui, GameSession session)
     {
         _ui = ui;
-        _db = db;
-        _ws = ws;
-        _training = training;
+        _s = session;
+        _s.Events.Raised += e =>
+        {
+            if (e.Kind == GameEventKind.MessagePosted || e.Kind == GameEventKind.PartsDelivered)
+            {
+                _feed.Add(e.Text);
+            }
+        };
     }
 
     public void Run()
     {
         _ui.Title("TALLER VILLA-MOTOR — Simulador de diagnosis");
-        _ui.Info(_training ? "Modo FORMACIÓN: verás el razonamiento diagnóstico." : "Modo REALISTA: sin pistas.");
+        _ui.Info(_s.Training ? "Modo FORMACIÓN: verás el razonamiento diagnóstico." : "Modo REALISTA: sin pistas.");
         while (true)
         {
             FlushMessages();
-            string header = $"Día {_ws.Day}  {(int)(_ws.Minute / 60):00}:{(int)(_ws.Minute % 60):00} | Caja {_ws.Money:0} € | Reputación {_ws.Reputation:0}/100";
+            string header = $"Día {_s.Day}  {_s.Clock} | Caja {_s.Money:0} € | Reputación {_s.Reputation:0}/100";
             int o = _ui.Menu(header, new[] { "Tablón de encargos", "Coches en el taller", "Tienda de herramientas y mejoras", "Guardar partida", "Cargar partida", "Terminar el día" }, zeroIsBack: false);
             switch (o)
             {
@@ -277,8 +288,8 @@ public sealed class GameShell
                         f = f.Length == 0 ? Path.Combine("saves", "partida.json") : f;
                         if (File.Exists(f))
                         {
-                            _ws = SaveGame.Load(_db, f);
-                            _ui.Info($"Partida cargada: día {_ws.Day}, {_ws.Money:0} €.");
+                            _s.LoadFile(f);
+                            _ui.Info($"Partida cargada: día {_s.Day}, {_s.Money:0} €.");
                         }
                         else
                         {
@@ -288,32 +299,33 @@ public sealed class GameShell
                         break;
                     }
 
-                case 6: _ws.EndDay(); break;
+                case 6: _s.EndDay(); break;
             }
         }
     }
 
     private void FlushMessages()
     {
-        foreach (string m in _ws.Messages)
+        _s.Sync();
+        foreach (string m in _feed)
         {
             _ui.Info("» " + m);
         }
 
-        _ws.Messages.Clear();
+        _feed.Clear();
     }
 
     private void Save()
     {
         string f = _ui.Ask("Fichero [saves/partida.json]");
         f = f.Length == 0 ? Path.Combine("saves", "partida.json") : f;
-        SaveGame.Save(_ws, f);
+        _s.SaveFile(f);
         _ui.Info($"Partida guardada en {f} (formato v{SaveGame.FormatVersion}).");
     }
 
     private void Board()
     {
-        List<Job> offers = _ws.Offers(3);
+        List<Job> offers = _s.Offers(3);
         var labels = offers.Select(j => $"{j.Customer.Name,-26} {j.Car.Definition.DisplayName,-30} {j.Definition.Goal,-10} plazo {j.Definition.DeadlineDays} d").ToList();
         int n = _ui.Menu("Tablón de encargos", labels);
         if (n == 0)
@@ -327,22 +339,23 @@ public sealed class GameShell
         _ui.Info($"Coche: {job.Car.Definition.DisplayName}, {job.Car.OdometerKm:0} km");
         _ui.Info($"Dice: «{job.Definition.Complaint}»");
         _ui.Info($"Objetivo: {CarShell.GoalText(job.Definition)}");
-        double suggested = _ws.SuggestQuote(job);
+        double suggested = _s.SuggestQuote(job);
         double amount = _ui.AskNumber($"Presupuesto a proponer en € (sugerido {suggested:0}; 0 = rechazar el encargo)", suggested);
         if (amount <= 0)
         {
-            job.Status = JobStatus.Cancelled;
+            _s.RejectOffer(job);
             _ui.Info("Encargo rechazado.");
             return;
         }
 
-        if (!_ws.ProposeQuote(job, amount))
+        QuoteDecision d = _s.SendQuote(job, amount);
+        if (d.Answer != QuoteAnswer.Accepted)
         {
             FlushMessages();
             double retry = _ui.AskNumber("Nuevo presupuesto (0 = dejarlo)", 0);
             if (retry > 0 && job.Status == JobStatus.Offered)
             {
-                _ws.ProposeQuote(job, retry);
+                _s.SendQuote(job, retry);
             }
         }
 
@@ -351,7 +364,7 @@ public sealed class GameShell
 
     private void Garage()
     {
-        var active = _ws.Jobs.Where(j => j.Status == JobStatus.InProgress).ToList();
+        var active = _s.ActiveJobs;
         if (active.Count == 0)
         {
             _ui.Info("No hay coches en el taller. Acepta un encargo en el tablón.");
@@ -365,6 +378,7 @@ public sealed class GameShell
         }
 
         Job job = active[n - 1];
+        _s.SetActiveJob(job);
         while (true)
         {
             int o = _ui.Menu($"{job.Car.Definition.DisplayName} — {job.Customer.Name}", new[] { "Trabajar en el coche", "Ver factura provisional", "Entregar el coche y cobrar" });
@@ -375,7 +389,7 @@ public sealed class GameShell
 
             if (o == 1)
             {
-                new CarShell(_ui, job.Car, job, _ws, _training).Run();
+                new CarShell(_ui, _s.WorkFor(job), _s).Run();
             }
             else if (o == 2)
             {
@@ -385,7 +399,7 @@ public sealed class GameShell
                     _ui.Info($"{l.Description,-72} {l.Amount,8:0.00} €");
                 }
 
-                _ui.Info($"Tiempo total en el coche: {job.LabourMinutes:0} min ({job.LabourMinutes / 60 * _ws.LabourRate:0.00} € de mano de obra) | Presupuesto: {job.QuotedAmount:0} €");
+                _ui.Info($"Tiempo total en el coche: {job.LabourMinutes:0} min ({job.LabourMinutes / 60 * _s.Workshop.LabourRate:0.00} € de mano de obra) | Presupuesto: {job.QuotedAmount:0} €");
             }
             else
             {
@@ -394,7 +408,13 @@ public sealed class GameShell
                     continue;
                 }
 
-                JobOutcome r = _ws.Deliver(job);
+                JobOutcome? r = _s.Deliver(job, out CommandResult res);
+                if (r == null)
+                {
+                    _ui.Info(res.Message);
+                    return;
+                }
+
                 _ui.Title(r.Success ? "TRABAJO TERMINADO" : "EL CLIENTE NO QUEDA SATISFECHO");
                 foreach (string note in r.Notes)
                 {
@@ -402,7 +422,7 @@ public sealed class GameShell
                 }
 
                 _ui.Info($"Cobrado: {r.Payment:0.00} €   Reputación {r.ReputationDelta:+0.0;-0.0}");
-                if (_training)
+                if (_s.Training)
                 {
                     _ui.Info("Averías reales del coche (modo formación):");
                     foreach (FaultInstance f in job.Car.Faults.All.Where(f => f.Origin != "test"))
@@ -419,11 +439,11 @@ public sealed class GameShell
 
     private void Shop()
     {
-        var items = _ws.Content.Upgrades.ToList();
-        int n = _ui.Menu("Tienda", items.Select(u => $"{(_ws.Has(u.Id) ? "[TIENES] " : "")}{u.Name,-40} {u.Price,8:0} €  rep ≥ {u.ReputationRequired:0}  — {u.Description}").ToList());
+        var items = _s.Content.Upgrades.ToList();
+        int n = _ui.Menu("Tienda", items.Select(u => $"{(_s.Workshop.Has(u.Id) ? "[TIENES] " : "")}{u.Name,-40} {u.Price,8:0} €  rep ≥ {u.ReputationRequired:0}  — {u.Description}").ToList());
         if (n > 0)
         {
-            _ui.Info(_ws.Buy(items[n - 1].Id));
+            _ui.Info(_s.BuyUpgrade(items[n - 1].Id).Message);
         }
     }
 }
