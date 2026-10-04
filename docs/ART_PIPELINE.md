@@ -21,6 +21,9 @@ simplificadas. Se guardan en `Unity/Assets/Garage/Resources/`:
   caja y roscados) y los manguitos. Cada uno se construye en el marco del *placeholder* al que sustituye: mismo
   centro, orientación y tamaño.
 - `Workshop/TwoPostLift.fbx`, `Workbench.fbx` y `ToolCart.fbx`.
+- `CarBodies/Hatch.fbx` (`tools/blender/body.py`): carrocería genérica de compacto de 4,3 m con pasos de rueda y el
+  vano motor abierto, suavizada con subdivisión, con las ruedas incluidas. Se usa en los coches con silueta
+  *Hatch* que no tienen su propio `CarBodies/<carId>.fbx`. El material `CarPaint` toma el color del coche.
 
 Para regenerarlos:
 
@@ -30,6 +33,7 @@ blender --background --python tools/blender/models.py
 # Sin Blender, con el módulo bpy (Python 3.11)
 python -m venv .bpy && .bpy/bin/pip install bpy==4.2.0
 .bpy/bin/python tools/blender/models.py            # opcional: carpeta de salida como argumento
+.bpy/bin/python tools/blender/body.py              # carrocería de compacto
 ```
 
 En Unity:

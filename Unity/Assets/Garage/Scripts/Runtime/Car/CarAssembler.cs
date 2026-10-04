@@ -141,10 +141,29 @@ namespace Garage.Unity
             float wheelR = (float)def.WheelRadiusM;
             float bayStart;
 
+            BodyStyle style = CarBodyBuilder.StyleFor(def.MassKg, def.Engine.Cylinders);
             GameObject model = Resources.Load<GameObject>("CarBodies/" + def.Id);
+            if (model == null && style == BodyStyle.Hatch)
+            {
+                model = Resources.Load<GameObject>("CarBodies/Hatch"); // tools/blender/body.py (4.3 m compact)
+            }
+
             if (model != null)
             {
-                Instantiate(model, root).name = "Body_Model";
+                GameObject body = Instantiate(model, root);
+                body.name = "Body_Model";
+                SetLayer(body, 2);
+                foreach (Renderer r in body.GetComponentsInChildren<Renderer>())
+                {
+                    foreach (Material m in r.materials)
+                    {
+                        if (m.name.StartsWith("CarPaint") && m.HasProperty("_BaseColor"))
+                        {
+                            m.SetColor("_BaseColor", _paint.GetColor("_BaseColor"));
+                        }
+                    }
+                }
+
                 bayStart = frontZ - bayLen;
             }
             else
@@ -161,7 +180,7 @@ namespace Garage.Unity
                     TailLamp = Lamp("TailLamp", new Color(0.6f, 0.02f, 0.02f), 0.6f),
                     Disc = UnityCompat.LitMaterial("BrakeDisc", new Color(0.3f, 0.28f, 0.27f), 0.9f, 0.4f),
                 };
-                bayStart = CarBodyBuilder.Build(root, CarBodyBuilder.StyleFor(def.MassKg, def.Engine.Cylinders), _len, wheelR, bayLen, mats);
+                bayStart = CarBodyBuilder.Build(root, style, _len, wheelR, bayLen, mats);
             }
 
             // Engine bay internals (open top): firewall, floor pan, radiator.
