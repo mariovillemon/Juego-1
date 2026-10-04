@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Garage.Game;
 using Garage.Sim.Faults;
 using UnityEngine;
 
@@ -18,9 +19,61 @@ namespace Garage.Unity
 
         private readonly Dictionary<string, AudioSource> _sources = new Dictionary<string, AudioSource>();
         private float _timer;
+        private bool _subscribed;
+
+        private void OnGameEvent(GameEvent e)
+        {
+            if (e.Kind != GameEventKind.EngineFailure)
+            {
+                return;
+            }
+
+            // Visible and audible consequence of a catastrophic failure: a bang and a cloud of smoke.
+            if (exhaustSmoke != null)
+            {
+                var main = exhaustSmoke.main;
+                main.startColor = e.Subject.Contains("junta") ? new Color(0.92f, 0.92f, 0.92f, 0.8f) : new Color(0.15f, 0.15f, 0.17f, 0.85f);
+                exhaustSmoke.Emit(200);
+            }
+
+            Vector3 at = assembler != null && assembler.CarRoot != null ? assembler.CarRoot.position + Vector3.up * 0.8f : transform.position;
+            AudioSource.PlayClipAtPoint(Bang(), at, 1f);
+        }
+
+        private static AudioClip Bang()
+        {
+            const int rate = 44100;
+            var data = new float[rate / 2];
+            var rng = new System.Random(17);
+            float lp = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                float n = (float)(rng.NextDouble() * 2 - 1);
+                lp += (n - lp) * 0.2f;
+                data[i] = lp * Mathf.Exp(-i / (rate * 0.08f)) * 1.6f;
+            }
+
+            AudioClip clip = AudioClip.Create("bang", data.Length, 1, rate, false);
+            clip.SetData(data, 0);
+            return clip;
+        }
+
+        private void OnDestroy()
+        {
+            if (_subscribed && runner != null && runner.Session != null)
+            {
+                runner.Session.Events.Raised -= OnGameEvent;
+            }
+        }
 
         private void Update()
         {
+            if (!_subscribed && runner != null && runner.Session != null)
+            {
+                runner.Session.Events.Raised += OnGameEvent;
+                _subscribed = true;
+            }
+
             _timer += Time.deltaTime;
             if (_timer < 1f / refreshHz || runner == null || runner.Car == null)
             {

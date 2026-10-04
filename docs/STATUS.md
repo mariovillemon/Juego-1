@@ -1,6 +1,31 @@
 # Estado del proyecto
 
-Fecha: 2026-10-03. Rama: `claude/optimistic-fermat-k7qxj6`.
+Fecha: 2026-10-04. Rama: `claude/optimistic-fermat-k7qxj6`.
+
+## Sesión 3 — progreso (se actualiza tras cada bloque)
+
+- **Hecho — P1 jugable dentro de Unity** (ver `UNITY_SETUP.md` § Cómo se juega):
+  - Capa de aplicación `src/Garage.Game` (`GameSession`, `CarWork`, eventos, comandos con errores legibles,
+    presupuestos con contraoferta, tienda con carrito y plazos, almacén, caja de piezas viejas, editor ECU con
+    deshacer/interpolación, ranuras de guardado, tutorial por datos). La CLI está refactorizada sobre ella y su
+    demo guionizada sigue terminando un trabajo. Hay tests del ciclo completo, incluido guardar → cargar → seguir.
+  - Unity:
+    - UI uGUI generada en código: HUD, tablón, hoja de trabajo y presupuesto, entrega, tienda, almacén, mejoras,
+      pausa con 5 ranuras, escáner con gráfica, multímetro con vista de pines, esquemas, pruebas mecánicas y
+      osciloscopio, acciones del coche, pieza con secuencia de desmontaje, banco y portátil ECU.
+    - Herramientas que se cogen y se sueltan, puerto OBD en el coche, carro de herramientas, puestos usables,
+      traslado automático del coche al banco y tarjeta de tutorial con marcador 3D.
+    - Menú principal uGUI.
+  - Cambio de simulación: la ECU corta inyección ante fallos que dañan el catalizador, y el daño térmico del
+    catalizador está recalibrado (D-59).
+  - `tools/unity-typecheck`: compila los scripts de Unity sin el editor (también en CI).
+- **Siguiente**: P2 (gráficos: modelos por Blender/Poly Haven, desgaste), P3 (audio), P4 (simulación), P5 (pulido).
+- **Simplificado en P1**:
+  - Las puntas del multímetro se colocan desde la vista de pines, no arrastrando cables en 3D.
+  - La pasada de banco se calcula al instante y se reproduce en tiempo real en la gráfica.
+  - El coche pasa del elevador al banco por traslado automático.
+  - El resto de herramientas mecánicas se usan desde un panel.
+
 
 ## Hecho (compilado y verificado con tests)
 
