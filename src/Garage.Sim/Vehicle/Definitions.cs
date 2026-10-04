@@ -138,6 +138,9 @@ namespace Garage.Sim.Vehicle
         /// <summary>Displacement in m³.</summary>
         public double DisplacementM3 => DisplacementL / 1000.0;
 
+        /// <summary>Gasoline direct injection (high pressure pump, rail at tens of bar).</summary>
+        public bool DirectInjection { get; set; }
+
         /// <summary>True if the engine is turbocharged.</summary>
         public bool IsTurbo => Turbo != null;
 

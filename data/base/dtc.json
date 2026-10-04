@@ -1352,6 +1352,51 @@
       "causes": ["Válvula de ventilación"]
     },
     {
+      "code": "P0447",
+      "description": "Evaporative Emission System Vent Control Circuit Open",
+      "descriptionEs": "Sistema EVAP: circuito de ventilación abierto",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Válvula de ventilación", "Cableado"]
+    },
+    {
+      "code": "P0449",
+      "description": "Evaporative Emission System Vent Valve/Solenoid Circuit",
+      "descriptionEs": "Sistema EVAP: circuito de la electroválvula de ventilación",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Electroválvula de ventilación"]
+    },
+    {
+      "code": "P0451",
+      "description": "Evaporative Emission System Pressure Sensor/Switch Range/Performance",
+      "descriptionEs": "Sistema EVAP: sensor de presión del depósito, rango/funcionamiento",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Sensor de presión del depósito"]
+    },
+    {
+      "code": "P0452",
+      "description": "Evaporative Emission System Pressure Sensor/Switch Low",
+      "descriptionEs": "Sistema EVAP: sensor de presión del depósito, señal baja",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa", "Sensor"]
+    },
+    {
+      "code": "P0453",
+      "description": "Evaporative Emission System Pressure Sensor/Switch High",
+      "descriptionEs": "Sistema EVAP: sensor de presión del depósito, señal alta",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Masa abierta", "Sensor"]
+    },
+    {
       "code": "P0455",
       "description": "Evaporative Emission System Leak Detected (large leak)",
       "descriptionEs": "Sistema EVAP: fuga grande",
@@ -1368,6 +1413,15 @@
       "trips": 2,
       "mil": true,
       "causes": ["Juntas"]
+    },
+    {
+      "code": "P0457",
+      "description": "Evaporative Emission System Leak Detected (fuel cap loose/off)",
+      "descriptionEs": "Sistema EVAP: fuga detectada (tapón suelto o ausente)",
+      "system": "evap",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Tapón de combustible suelto o sin junta"]
     },
     {
       "code": "P0458",
@@ -1413,6 +1467,15 @@
       "trips": 2,
       "mil": true,
       "causes": ["Motor del ventilador"]
+    },
+    {
+      "code": "P0496",
+      "description": "Evaporative Emission System High Purge Flow",
+      "descriptionEs": "Sistema EVAP: caudal de purga excesivo",
+      "system": "evap",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Válvula de purga atascada abierta"]
     },
     {
       "code": "P0500",
@@ -1476,6 +1539,33 @@
       "trips": 2,
       "mil": true,
       "causes": ["Bajo nivel de aceite", "Bomba de aceite", "Cojinetes desgastados"]
+    },
+    {
+      "code": "P0544",
+      "description": "Exhaust Gas Temperature Sensor Circuit (Bank 1 Sensor 1)",
+      "descriptionEs": "Sensor de temperatura de escape: circuito (banco 1, sensor 1)",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor", "Cableado"]
+    },
+    {
+      "code": "P0545",
+      "description": "Exhaust Gas Temperature Sensor Circuit Low (Bank 1 Sensor 1)",
+      "descriptionEs": "Sensor de temperatura de escape: señal baja (B1S1)",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P0546",
+      "description": "Exhaust Gas Temperature Sensor Circuit High (Bank 1 Sensor 1)",
+      "descriptionEs": "Sensor de temperatura de escape: señal alta (B1S1)",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor abierto"]
     },
     {
       "code": "P0560",
@@ -1694,6 +1784,15 @@
       "causes": ["Leer códigos del módulo de cambio"]
     },
     {
+      "code": "P2002",
+      "description": "Diesel Particulate Filter Efficiency Below Threshold (Bank 1)",
+      "descriptionEs": "Filtro de partículas: eficiencia por debajo del umbral (banco 1)",
+      "system": "diesel",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Filtro agrietado o vaciado", "Tubos del sensor de presión diferencial"]
+    },
+    {
       "code": "P2096",
       "description": "Post Catalyst Fuel Trim System Too Lean (Bank 1)",
       "descriptionEs": "Corrección postcatalizador: demasiado pobre (banco 1)",
@@ -1881,6 +1980,60 @@
       "trips": 2,
       "mil": true,
       "causes": ["Filtro de partículas"]
+    },
+    {
+      "code": "P244A",
+      "description": "Diesel Particulate Filter Differential Pressure Too Low (Bank 1)",
+      "descriptionEs": "Filtro de partículas: presión diferencial demasiado baja (banco 1)",
+      "system": "diesel",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Filtro agrietado", "Tubo del sensor suelto"]
+    },
+    {
+      "code": "P244B",
+      "description": "Diesel Particulate Filter Differential Pressure Too High (Bank 1)",
+      "descriptionEs": "Filtro de partículas: presión diferencial demasiado alta (banco 1)",
+      "system": "diesel",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Filtro saturado", "Cenizas"]
+    },
+    {
+      "code": "P2452",
+      "description": "Diesel Particulate Filter Differential Pressure Sensor \"A\" Circuit",
+      "descriptionEs": "Sensor de presión diferencial del FAP \"A\": circuito",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Sensor", "Cableado"]
+    },
+    {
+      "code": "P2453",
+      "description": "Diesel Particulate Filter Differential Pressure Sensor \"A\" Circuit Range/Performance",
+      "descriptionEs": "Sensor de presión diferencial del FAP \"A\": rango/funcionamiento",
+      "system": "diesel",
+      "trips": 2,
+      "mil": true,
+      "causes": ["Tubos del sensor obstruidos", "Sensor"]
+    },
+    {
+      "code": "P2454",
+      "description": "Diesel Particulate Filter Differential Pressure Sensor \"A\" Circuit Low",
+      "descriptionEs": "Sensor de presión diferencial del FAP \"A\": señal baja",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Corto a masa"]
+    },
+    {
+      "code": "P2455",
+      "description": "Diesel Particulate Filter Differential Pressure Sensor \"A\" Circuit High",
+      "descriptionEs": "Sensor de presión diferencial del FAP \"A\": señal alta",
+      "system": "diesel",
+      "trips": 1,
+      "mil": true,
+      "causes": ["Masa abierta"]
     },
     {
       "code": "P2463",

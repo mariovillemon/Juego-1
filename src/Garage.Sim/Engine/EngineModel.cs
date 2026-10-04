@@ -11,7 +11,7 @@ namespace Garage.Sim.Engine
     /// torque, temperatures and damage each fixed step. Engine speed is integrated by the drivetrain.
     /// Faults never appear here as "symptoms": they only change physical parameters.
     /// </summary>
-    public sealed class EngineModel
+    public sealed partial class EngineModel
     {
         private readonly EngineDefinition _def;
         private readonly ComponentRegistry _parts;
@@ -120,6 +120,7 @@ namespace Garage.Sim.Engine
         {
             double ve = _def.VolumetricEfficiency?.Lookup(rpm, mapKpa) ?? 0.85;
             ve *= 1.0 - camLoss;
+            ve *= VvtVeFactor(rpm, mapKpa);
             return ve * Physics.AirDensity(mapKpa, chargeC) * _def.DisplacementM3 * rpm / 120.0;
         }
 
@@ -141,6 +142,7 @@ namespace Garage.Sim.Engine
             double slack = F(ComponentKind.TimingDrive, EffectKind.Slack) + F(ComponentKind.TimingDrive, EffectKind.Wear) * 8;
             s.CamOffsetDeg = slack;
             double camLoss = MathUtil.Clamp(Math.Abs(slack) * 0.012, 0, 0.35);
+            UpdateCamPhaser(dt, cmd, rpm);
 
             // ---------------- Air filter and turbo ----------------
             double airFilterRestriction = F(ComponentKind.AirFilter, EffectKind.Restriction) + F(ComponentKind.AirFilter, EffectKind.Clog);
@@ -167,7 +169,15 @@ namespace Garage.Sim.Engine
                 }
 
                 // Wastegate: solenoid duty bleeds actuator pressure → higher opening pressure.
+                // With a variable geometry turbo the vane closure plays the same role (closed vanes = more boost).
                 double duty = MathUtil.Clamp01(cmd.WastegateDuty);
+                if (UpdateVgt(dt, cmd, out double vgtDuty))
+                {
+                    duty = vgtDuty;
+                    exhaustEnergy = Math.Min(1, exhaustEnergy * (1 + 0.6 * vgtDuty * (1 - MathUtil.SmoothStep(1500, 3000, rpm))));
+                    capacity = t.MaxBoostKpa * Math.Min(1.0, exhaustEnergy * 1.25) * (1 - MathUtil.Clamp01(turboWear));
+                }
+
                 if (Has(ComponentKind.WastegateSolenoid, EffectKind.StuckOpen))
                 {
                     duty = 1;
@@ -256,7 +266,11 @@ namespace Garage.Sim.Engine
 
             // ---------------- Leaks ----------------
             double vacuumLeakMm2 = LeakAreaMm2(ComponentKind.VacuumHose, out double[] perCylA) + LeakAreaMm2(ComponentKind.IntakeGasket, out double[] perCylB);
-            if (Has(ComponentKind.PurgeValve, EffectKind.StuckOpen))
+            if (_parts.Find(ComponentKind.EvapCanister) != null)
+            {
+                vacuumLeakMm2 += cmd.PurgeAreaMm2; // modelled by EvapSystem (duty, stuck valve, vent)
+            }
+            else if (Has(ComponentKind.PurgeValve, EffectKind.StuckOpen))
             {
                 vacuumLeakMm2 += 3.0;
             }
@@ -282,8 +296,10 @@ namespace Garage.Sim.Engine
             }
 
             // ---------------- Manifold pressure (bisection on mass balance) ----------------
-            double exhaustRestriction = F(ComponentKind.Exhaust, EffectKind.Restriction) + F(ComponentKind.Catalyst, EffectKind.Restriction) + (Damage.CatalystMelted ? 0.6 : 0);
-            double exhaustKpa = baro + 4 * flowFrac * flowFrac * 100 / 100 * 10 * (1 + 10 * exhaustRestriction) + (_def.IsTurbo ? _boostState * 0.9 : 0);
+            double exhaustRestriction = F(ComponentKind.Exhaust, EffectKind.Restriction) + F(ComponentKind.Catalyst, EffectKind.Restriction) + (Damage.CatalystMelted ? 0.6 : 0)
+                + DpfRestriction();
+            double exhaustKpa = baro + 4 * flowFrac * flowFrac * 100 / 100 * 10 * (1 + 10 * exhaustRestriction) + (_def.IsTurbo ? _boostState * 0.9 : 0)
+                + s.VgtPosition * 30 * Math.Sqrt(Math.Max(0, flowFrac)); // closed VGT vanes: back pressure that drives the EGR
             s.ExhaustKpa = exhaustKpa;
             double leakArea = vacuumLeakMm2 * 1e-6 * 0.85;
 
@@ -392,6 +408,10 @@ namespace Garage.Sim.Engine
             }
 
             s.FuelRailKpa = Math.Max(0, _railState);
+            if (_def.DirectInjection)
+            {
+                UpdateHighPressureRail(dt, cmd, rpm);
+            }
 
             // ---------------- Combustion per cylinder ----------------
             double mbt = _def.MbtAdvance?.Lookup(rpm, s.RelativeLoad) ?? 25;
@@ -417,7 +437,7 @@ namespace Garage.Sim.Engine
 
             // Ignition energy
             double coilVolts = cmd.IgnitionVolts;
-            double gasQuality = _def.IsDiesel ? 1 - 0.25 * s.EgrFraction : Math.Max(0.2, 1 - s.EgrFraction * 1.6);
+            double gasQuality = _def.IsDiesel ? 1 - 0.25 * s.EgrFraction : Math.Max(0.2, 1 - (s.EgrFraction + InternalEgr(rpm, s.RelativeLoad)) * 1.6);
             double injDeadMs = 0.5 * Math.Pow(14.0 / Math.Max(8, cmd.IgnitionVolts), 1.3);
             double flowGms = _def.InjectorFlowCcMin * Physics.GasolineDensity / 60000.0;
             double fuelDensity = _def.IsDiesel ? Physics.DieselDensity : Physics.GasolineDensity;
@@ -741,6 +761,12 @@ namespace Garage.Sim.Engine
                 }
             }
 
+            if (_def.IsDiesel && cmd.PostInjectionMg > 0 && s.Running)
+            {
+                // Late post injection burns in the exhaust/oxidation catalyst: raises the temperature at the DPF inlet.
+                egtTarget += cmd.PostInjectionMg * 28;
+            }
+
             s.ExhaustGasC = MathUtil.FirstOrder(s.ExhaustGasC, egtTarget, s.Running ? 1.2 : 20, dt);
 
             // Catalyst: light-off, conversion and unburnt fuel oxidation (misfire chain)
@@ -784,6 +810,7 @@ namespace Garage.Sim.Engine
             }
 
             s.SmokeOpacity = MathUtil.Clamp01(smoke);
+            UpdateAftertreatment(dt, rpm, lambdaExh);
 
             // ---------------- Damage ----------------
             UpdateDamage(dt, rpm, maxKnock);

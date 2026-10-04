@@ -33,6 +33,7 @@
     "indicatedEfficiency": { "type": "number", "minimum": 0.2, "maximum": 0.5 },
     "ve": { "$ref": "common.schema.json#/$defs/table" },
     "mbt": { "$ref": "common.schema.json#/$defs/table" },
+    "directInjection": { "type": "boolean", "description": "Inyección directa de gasolina: bomba de alta presión y rail a decenas de bar." },
     "turbo": {
       "type": "object",
       "additionalProperties": false,

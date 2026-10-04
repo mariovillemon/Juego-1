@@ -64,7 +64,7 @@
         "O2Wideband", "KnockSensor", "FuelPressureSensor", "BoostSensor", "Injector", "IgnitionCoil", "SparkPlug", "ElectronicThrottle",
         "WastegateSolenoid", "Turbocharger", "Intercooler", "Thermostat", "CoolingFan", "FuelPump", "FuelPressureRegulator", "EgrValve",
         "PurgeValve", "Cylinder", "IntakeGasket", "VacuumHose", "BoostHose", "Exhaust", "Catalyst", "AirFilter", "FuelFilter", "TimingDrive",
-        "HeadGasket", "Battery", "Alternator", "Fuse", "Relay", "GroundStrap", "ControlModule", "CanBus", "GlowPlug", "O2Downstream"]
+        "HeadGasket", "Battery", "Alternator", "Fuse", "Relay", "GroundStrap", "ControlModule", "CanBus", "GlowPlug", "O2Downstream", "EvapCanister", "EvapVentValve", "EvapPressureSensor", "FuelCap", "VvtSolenoid", "HighPressurePump", "VgtActuator", "ParticulateFilter", "DpfPressureSensor", "ExhaustTempSensor"]
     }
   }
 }

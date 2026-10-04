@@ -72,6 +72,21 @@ namespace Garage.Sim.Ecu
 
         /// <summary>Diesel quantity mg/stroke.</summary>
         public double DieselMg { get; set; }
+
+        /// <summary>Intake cam advance target (deg).</summary>
+        public double CamTargetDeg { get; set; }
+
+        /// <summary>GDI rail pressure target (kPa).</summary>
+        public double RailTargetKpa { get; set; }
+
+        /// <summary>VGT vane closure command 0..1.</summary>
+        public double VgtCommand { get; set; }
+
+        /// <summary>Diesel post injection (mg/stroke) during DPF regeneration.</summary>
+        public double PostInjectionMg { get; set; }
+
+        /// <summary>EVAP vent valve commanded closed (leak test).</summary>
+        public bool EvapVentClosed { get; set; }
     }
 
     /// <summary>
@@ -289,6 +304,7 @@ namespace Garage.Sim.Ecu
         {
             bool warmup = !double.IsNaN(_ectAtStart) && _maxEctThisTrip >= 70 && _maxEctThisTrip - _ectAtStart >= 22;
             Dtcs.EndTrip(warmup);
+            ResetSystemsTrip();
         }
 
         /// <summary>Clears codes (mode 04) — also resets readiness and trims like a real ECU.</summary>
@@ -329,6 +345,27 @@ namespace Garage.Sim.Ecu
         }
 
         private static bool Missing(double v) => double.IsNaN(v);
+
+        /// <summary>Signal voltage of a specific component (e.g. track 2 of a dual sensor).</summary>
+        private double VoltsOf(Component c, string role = "signal")
+        {
+            Circuit? circuit = _car.CircuitOf(c.Id);
+            return circuit == null ? double.NaN : circuit.EcuPinVoltage(role);
+        }
+
+        /// <summary>Track 2 of a dual sensor (component of the kind with param track = 2), if fitted.</summary>
+        private Component? SecondTrack(ComponentKind kind)
+        {
+            foreach (Component c in _car.Parts.All)
+            {
+                if (c.Kind == kind && c.Param("track", 1) >= 2)
+                {
+                    return c;
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>One control step.</summary>
         public void Update(double dt)
@@ -448,6 +485,33 @@ namespace Garage.Sim.Ecu
                 EnterLimp("APP");
             }
 
+            // Dual pedal sensor (track E, half slope): range checks, D/E correlation and fallback to the good track.
+            Component? app2 = SecondTrack(ComponentKind.AppSensor);
+            if (app2 != null)
+            {
+                double v2 = VoltsOf(app2);
+                bool l2 = v2 < 0.12;
+                bool h2 = v2 > 2.45;
+                double p2 = MathUtil.Clamp01((v2 - 0.25) / 2.0);
+                Check("P2127", _keyOnTime > 0.3, l2, dt, 0.5, 1);
+                Check("P2128", _keyOnTime > 0.3, h2, dt, 0.5, 1);
+                bool trackOk1 = !appLow && !appHigh && !Missing(appV);
+                bool corr = trackOk1 && !l2 && !h2 && Math.Abs(pedal - p2) > 0.07;
+                Check("P2138", _keyOnTime > 0.5, corr, dt, 0.4, 1);
+                if (!trackOk1 && !l2 && !h2)
+                {
+                    pedal = p2;
+                }
+
+                if (l2 || h2 || HasActive("P2138"))
+                {
+                    pedal = trackOk1 && !l2 && !h2 ? Math.Min(pedal, p2) : (trackOk1 ? pedal : 0);
+                    EnterLimp("APP");
+                }
+
+                _live["app_e"] = p2 * 100;
+            }
+
             double tpsV = Volts(ComponentKind.TpsSensor);
             bool tpsLow = !Missing(tpsV) && tpsV < 0.25;
             bool tpsHigh = !Missing(tpsV) && tpsV > 4.7;
@@ -455,6 +519,28 @@ namespace Garage.Sim.Ecu
             Check("P0122", _keyOnTime > 0.3, tpsLow, dt, 0.5, 1);
             Check("P0123", _keyOnTime > 0.3, tpsHigh, dt, 0.5, 1);
             bool tpsFault = tpsLow || tpsHigh;
+
+            // Dual throttle sensor (track B, inverse slope): range checks and A/B correlation. Any disagreement
+            // shuts the throttle motor down (spring-loaded limp position), as a real ETC safety concept does.
+            Component? tps2 = SecondTrack(ComponentKind.TpsSensor);
+            if (tps2 != null)
+            {
+                double v2 = VoltsOf(tps2);
+                bool l2 = v2 < 0.25;
+                bool h2 = v2 > 4.7;
+                double t2 = MathUtil.Clamp01((4.5 - v2) / 4.0);
+                Check("P0222", _keyOnTime > 0.3, l2, dt, 0.5, 1);
+                Check("P0223", _keyOnTime > 0.3, h2, dt, 0.5, 1);
+                bool corr = !tpsFault && !l2 && !h2 && Math.Abs(tps - t2) > 0.08;
+                Check("P2135", _keyOnTime > 0.5, corr, dt, 0.4, 1);
+                if (tpsFault && !l2 && !h2)
+                {
+                    tps = t2;
+                }
+
+                tpsFault = tpsFault || l2 || h2 || HasActive("P2135");
+                _live["tps_b"] = t2 * 100;
+            }
 
             // ---------------- Pressures ----------------
             double baro = _live.TryGetValue("baro", out double b) ? b : 101.3;
@@ -544,6 +630,14 @@ namespace Garage.Sim.Ecu
                     railTarget = eng.RailPressureKpa * MathUtil.Remap(rpm, 800, 3500, 0.35, 1.0);
                 }
 
+                if (eng.DirectInjection)
+                {
+                    railTarget = running || rpm > 50 ? cal.Lookup(EcuCalibration.RailTarget, rpm, load, eng.RailPressureKpa) : eng.RailPressureKpa * 0.5;
+                    Outputs.RailTargetKpa = railTarget;
+                    Check("P0089", railValid && running && _runTime > 5, Math.Abs(rail - railTarget) > railTarget * 0.15, dt, 6, 8);
+                    _live["rail_target_kpa"] = railTarget;
+                }
+
                 Check("P0087", railValid && running && _runTime > 3, rail < railTarget * 0.75, dt, 3, 5);
                 Check("P0088", railValid && running && _runTime > 3, rail > railTarget * 1.25, dt, 3, 5);
             }
@@ -600,6 +694,7 @@ namespace Garage.Sim.Ecu
             }
 
             // ---------------- Limp mode handling ----------------
+            Check("P2106", keyOn && _keyOnTime > 0.5, LimpMode && (LimpReason == "ETC" || LimpReason == "APP"), dt, 0.2, 1);
             if (LimpMode)
             {
                 _limpTimer += dt;
@@ -963,7 +1058,8 @@ namespace Garage.Sim.Ecu
 
             bool purgeOk = FuelStatus == FuelSystemStatus.ClosedLoop && ect > 70 && _closedLoopTime > 20;
             Outputs.PurgeDuty = purgeOk ? 0.25 : 0;
-            if (purgeOk)
+            bool fullEvap = _car.Parts.Find(ComponentKind.EvapCanister) != null;
+            if (purgeOk && !fullEvap)
             {
                 _evapTime += dt;
                 if (_evapTime > 60)
@@ -976,7 +1072,10 @@ namespace Garage.Sim.Ecu
                 }
             }
 
-            Outputs.EgrCommand = eng.IsDiesel && running && load < 0.6 && rpm < 3000 && ect > 60 ? 0.35 : 0;
+            // Diesel EGR: the engine is unthrottled, so the strategy follows injected quantity (part load), not air load.
+            bool euro6 = _car.Parts.Find(ComponentKind.ParticulateFilter) != null;
+            bool egrZone = euro6 ? Outputs.DieselMg < 25 && rpm > 700 && rpm < 3200 : load < 0.6 && rpm < 3000;
+            Outputs.EgrCommand = eng.IsDiesel && running && egrZone && ect > 60 ? 0.35 : 0;
             if (eng.IsDiesel && running && _runTime > 30)
             {
                 Readiness.SetComplete(ReadinessMonitor.Egr);
@@ -989,7 +1088,9 @@ namespace Garage.Sim.Ecu
             Check("P0116", running && ectValid && _runTime > 1200, ect < 30, dt, 30, 60);
 
             // ---------------- Misfire monitor ----------------
-            UpdateMisfire(dt, running && CrankSync && !decelCut && !revCut, rpm);
+            // No misfire counting while no fuel is injected (overrun cut; a diesel at zero quantity).
+            bool dieselFuelCut = eng.IsDiesel && Outputs.DieselMg < 2;
+            UpdateMisfire(dt, running && CrankSync && !decelCut && !revCut && !dieselFuelCut, rpm);
 
             // ---------------- Catalyst monitor ----------------
             if (FuelStatus == FuelSystemStatus.ClosedLoop && ect > 75 && rpm > 1300 && rpm < 3500 && _closedLoopTime > 30 && _car.Engine.State.CatalystC > 400 && down != null)
@@ -1047,6 +1148,13 @@ namespace Garage.Sim.Ecu
             {
                 Dtcs.DistanceWithMilKm += speed / 3600.0 * dt;
             }
+
+            // ---------------- Optional systems (VVT, GDI, VGT, DPF, EGR, EVAP) ----------------
+            UpdateSystems(dt, new SystemInputs
+            {
+                Rpm = rpm, Load = load, Ect = ect, Baro = baro, Maf = maf, SdAir = sdAir, Speed = speed,
+                Running = running, KeyOn = keyOn, MafValid = mafValid,
+            });
 
             // ---------------- Live data ----------------
             _live["rpm"] = rpm;

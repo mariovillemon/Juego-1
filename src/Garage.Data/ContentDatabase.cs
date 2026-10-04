@@ -235,6 +235,7 @@ namespace Garage.Data
                 RadiatorKwK = e.Num("radiatorKwK", 0.55),
                 FrictionFactor = e.Num("frictionFactor", 1.0),
                 IndicatedEfficiency = e.Num("indicatedEfficiency", 0.385),
+                DirectInjection = e.Bool("directInjection"),
             };
             if (e["firingOrder"].IsArray)
             {

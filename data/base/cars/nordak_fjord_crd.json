@@ -1,0 +1,25 @@
+{
+  "id": "nordak_fjord_crd",
+  "brand": "Nordak",
+  "model": "Fjord 1.6 CRD",
+  "year": 2018,
+  "segment": "SUV compacto diésel",
+  "engine": "d16_crd",
+  "template": "diesel_euro6",
+  "calibration": "d16_stock",
+  "massKg": 1480,
+  "wheelRadiusM": 0.335,
+  "gearRatios": [3.73, 2.05, 1.3, 0.93, 0.74, 0.62],
+  "finalDrive": 3.94,
+  "drivetrainEfficiency": 0.88,
+  "dragAreaM2": 0.78,
+  "vin": "NDK3FJD6J00016180",
+  "appearance": {
+    "ageYears": 6,
+    "kilometers": 152000,
+    "maintenance": 0.6,
+    "paintColor": "#7A2E2E",
+    "humidity": 0.4
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

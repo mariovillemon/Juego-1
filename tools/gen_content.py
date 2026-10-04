@@ -135,6 +135,44 @@ ENGINES = {
         ve=(ve_fn(4800, 1.0, redline=7000), MAP_AXIS_T), mbt=mbt_fn(40, 27, 1.0), loads=LOAD_T,
         turbo=dict(maxBoostKpa=150, fullSpoolRpm=2100, spoolStartRpm=1200, wastegateSpringKpa=45,
                    maxSafeBoostKpa=165, compressorEfficiency=0.74, intercoolerEffectiveness=0.75, spoolTimeConstant=0.35, maxFlowGps=330)),
+    "g15_gdi": dict(
+        name="G15 1.5 Turbo GDI 16V con distribución variable", kind="GasolineTurbo", cylinders=4,
+        displacementL=1.498, boreMm=74.5, strokeMm=85.9, compressionRatio=10.5, firingOrder=[1, 3, 4, 2],
+        redlineRpm=6300, mechanicalLimitRpm=6900, throttleDiameterMm=52, inertiaKgM2=0.12,
+        knockMarginDeg=-1.5, fuelRon=95, injectorFlowCcMin=900, injectorRefPressureKpa=10000,
+        railPressureKpa=10000, pumpMaxPressureKpa=600, thermalCapacityKjK=38, thermostatOpenC=95,
+        radiatorKwK=0.7, frictionFactor=0.9, indicatedEfficiency=0.41, directInjection=True,
+        ve=(ve_fn(3800, 0.98, redline=6300), MAP_AXIS_T), mbt=mbt_fn(40, 26, 1.0), loads=LOAD_T,
+        turbo=dict(maxBoostKpa=140, fullSpoolRpm=1800, spoolStartRpm=1100, wastegateSpringKpa=35,
+                   maxSafeBoostKpa=160, compressorEfficiency=0.73, intercoolerEffectiveness=0.7, spoolTimeConstant=0.35, maxFlowGps=160)),
+    "k16_vvt": dict(
+        name="K16 1.6 16V con distribución variable (atmosférico)", kind="GasolineNA", cylinders=4,
+        displacementL=1.598, boreMm=78.0, strokeMm=83.6, compressionRatio=11.0, firingOrder=[1, 3, 4, 2],
+        redlineRpm=6500, mechanicalLimitRpm=7000, throttleDiameterMm=52, inertiaKgM2=0.12,
+        knockMarginDeg=-1.0, fuelRon=95, injectorFlowCcMin=190, injectorRefPressureKpa=350,
+        railPressureKpa=350, pumpMaxPressureKpa=600, thermalCapacityKjK=36, thermostatOpenC=88,
+        radiatorKwK=0.5, frictionFactor=0.88, indicatedEfficiency=0.405,
+        ve=(ve_fn(4800, 0.99, low_map_loss=0.2, redline=6500), MAP_AXIS_NA), mbt=mbt_fn(42, 28, 1.1), loads=LOAD_NA),
+    "d16_crd": dict(
+        name="D16 1.6 CRD common rail con turbo de geometría variable, EGR y FAP", kind="DieselTurbo", cylinders=4,
+        displacementL=1.598, boreMm=79.5, strokeMm=80.5, compressionRatio=16.0, firingOrder=[1, 3, 4, 2],
+        redlineRpm=4700, mechanicalLimitRpm=5200, throttleDiameterMm=55, inertiaKgM2=0.19,
+        knockMarginDeg=0, fuelRon=95, injectorFlowCcMin=780, injectorRefPressureKpa=180000,
+        railPressureKpa=180000, pumpMaxPressureKpa=650, thermalCapacityKjK=44, thermostatOpenC=87,
+        radiatorKwK=0.7, frictionFactor=1.1, indicatedEfficiency=0.44,
+        ve=(ve_fn(2400, 0.93, low_map_loss=0.05, redline=4700), MAP_AXIS_T), mbt=mbt_fn(12, 8, 0.6), loads=LOAD_T,
+        turbo=dict(maxBoostKpa=170, fullSpoolRpm=1700, spoolStartRpm=1000, wastegateSpringKpa=20,
+                   maxSafeBoostKpa=190, compressorEfficiency=0.74, intercoolerEffectiveness=0.74, spoolTimeConstant=0.4, maxFlowGps=160)),
+    "g20_gdi": dict(
+        name="G20 2.0 Turbo GDI 16V con distribución variable", kind="GasolineTurbo", cylinders=4,
+        displacementL=1.998, boreMm=83.0, strokeMm=92.3, compressionRatio=9.8, firingOrder=[1, 3, 4, 2],
+        redlineRpm=6600, mechanicalLimitRpm=7200, throttleDiameterMm=62, inertiaKgM2=0.15,
+        knockMarginDeg=-2.5, fuelRon=98, injectorFlowCcMin=1250, injectorRefPressureKpa=10000,
+        railPressureKpa=10000, pumpMaxPressureKpa=650, thermalCapacityKjK=46, thermostatOpenC=95,
+        radiatorKwK=1.0, frictionFactor=1.0, indicatedEfficiency=0.405, directInjection=True,
+        ve=(ve_fn(4400, 0.99, redline=6600), MAP_AXIS_T), mbt=mbt_fn(40, 27, 1.0), loads=LOAD_T,
+        turbo=dict(maxBoostKpa=165, fullSpoolRpm=2000, spoolStartRpm=1200, wastegateSpringKpa=40,
+                   maxSafeBoostKpa=180, compressorEfficiency=0.74, intercoolerEffectiveness=0.72, spoolTimeConstant=0.4, maxFlowGps=250)),
 }
 
 
@@ -225,6 +263,25 @@ def diesel_quantity_fn(maxq):
     return f
 
 
+def cam_target_fn(turbo):
+    """Intake cam advance (deg crank): ~0 at idle (stable), advanced at low-mid rpm under load (overlap, torque),
+    back towards retard at high rpm (late closing for breathing)."""
+    def f(rpm, load):
+        if rpm < 1100 or load < 0.25:
+            return 0.0
+        mid = 30.0 * smooth(0.25, 0.7, load) * smooth(1100, 2200, rpm)
+        return max(0.0, mid * (1 - 0.6 * smooth(4200, 6200, rpm)))
+    return f
+
+
+def rail_target_fn(e):
+    """GDI rail pressure target (kPa): 5 MPa at idle up to the nominal pressure at high load."""
+    nominal = e["railPressureKpa"] * 2.0
+    def f(rpm, load):
+        return 5000 + (nominal - 5000) * smooth(0.2, 1.2, load) * (0.6 + 0.4 * smooth(1000, 4500, rpm))
+    return f
+
+
 CALIBRATIONS = {
     "t20_stock": dict(engine="t20_turbo", desc="Mapa de serie T20 2.0T 245 CV", peak_boost=100, taper_from=5200, taper_to=0.82,
                       safety=3.0, scalars=dict(rev_limit_rpm=6600, speed_limit_kmh=250, torque_limit_nm=370, idle_rpm=780,
@@ -248,6 +305,25 @@ CALIBRATIONS = {
                                                maf_max_gps=300, fan_on_c=104, fan_off_c=98, knock_retard_step_deg=1.5,
                                                knock_retard_max_deg=10, overboost_limit_kpa=140, rail_pressure_target_kpa=400,
                                                map_sensor_max_kpa=250)),
+    "g15_stock": dict(engine="g15_gdi", desc="Mapa de serie G15 1.5 TGDI 150 CV", peak_boost=85, taper_from=4800, taper_to=0.8, safety=2.5,
+                      vvt=True, scalars=dict(rev_limit_rpm=6400, speed_limit_kmh=215, torque_limit_nm=255, idle_rpm=750, idle_cold_rpm=1150,
+                                              injector_flow_ccmin=900, injector_dead_time_ms=0.5, maf_max_gps=160, fan_on_c=104, fan_off_c=99,
+                                              knock_retard_step_deg=1.5, knock_retard_max_deg=10, overboost_limit_kpa=125,
+                                              rail_pressure_target_kpa=10000, map_sensor_max_kpa=250)),
+    "k16_stock": dict(engine="k16_vvt", desc="Mapa de serie K16 1.6 VVT 120 CV", safety=1.5, vvt=True,
+                      scalars=dict(rev_limit_rpm=6600, speed_limit_kmh=195, idle_rpm=750, idle_cold_rpm=1150, injector_flow_ccmin=190, maf_max_gps=110,
+                                   injector_dead_time_ms=0.5, fan_on_c=101, fan_off_c=96, knock_retard_step_deg=1.5, knock_retard_max_deg=10,
+                                   rail_pressure_target_kpa=350, map_sensor_max_kpa=105)),
+    "d16_stock": dict(engine="d16_crd", desc="Mapa de serie D16 1.6 CRD 120 CV (Euro 6, FAP)", peak_boost=120, taper_from=3400, taper_to=0.82,
+                      safety=0, maxq=48,
+                      scalars=dict(rev_limit_rpm=4800, speed_limit_kmh=195, torque_limit_nm=300, idle_rpm=800, idle_cold_rpm=950,
+                                   maf_max_gps=150, fan_on_c=102, fan_off_c=97, overboost_limit_kpa=165, rail_pressure_target_kpa=180000,
+                                   smoke_limit_lambda=1.2, dpf_regen_start_g=22, dpf_regen_stop_g=4, dpf_limit_g=45)),
+    "g20_stock": dict(engine="g20_gdi", desc="Mapa de serie G20 2.0 TGDI 265 CV", peak_boost=110, taper_from=5300, taper_to=0.82, safety=3.0,
+                      vvt=True, scalars=dict(rev_limit_rpm=6700, speed_limit_kmh=250, torque_limit_nm=400, idle_rpm=750, idle_cold_rpm=1100,
+                                              injector_flow_ccmin=1250, injector_dead_time_ms=0.5, maf_max_gps=250, fan_on_c=104, fan_off_c=99,
+                                              knock_retard_step_deg=1.5, knock_retard_max_deg=10, overboost_limit_kpa=160,
+                                              rail_pressure_target_kpa=10000, map_sensor_max_kpa=300)),
 }
 
 
@@ -270,6 +346,10 @@ def write_calibrations():
             tables.append(table("wastegate_duty", "%", "rpm", "rpm", RPM, "pedal", "%", PEDAL, wastegate_fn(e, bf)))
         if diesel:
             tables.append(table("diesel_quantity", "mg/stroke", "rpm", "rpm", RPM, "pedal", "%", PEDAL, diesel_quantity_fn(c["maxq"])))
+        if c.get("vvt"):
+            tables.append(table("cam_target", "deg", "rpm", "rpm", RPM, "load", "rel", loads, cam_target_fn(turbo)))
+        if e.get("directInjection"):
+            tables.append(table("rail_target", "kPa", "rpm", "rpm", RPM, "load", "rel", loads, rail_target_fn(e)))
         curves = [
             curve("pedal_to_throttle", "%", "pedal", "%", [0, 10, 25, 50, 75, 100], [0, 4, 14, 38, 70, 100]),
             curve("ect_fuel_correction", "factor", "ect", "°C", [-20, 0, 20, 40, 60, 80], [1.45, 1.3, 1.15, 1.07, 1.02, 1.0]),
@@ -335,7 +415,7 @@ def common_electrical():
     ]
 
 
-def gasoline_common(turbo, wideband, maf):
+def gasoline_common(turbo, wideband, maf, gdi=False, vvt=False, dual=False, evap=False):
     c = []
     if maf:
         c.append(comp("maf", "MafSensor", "Caudalímetro (MAF)", "Tubo de admisión tras el filtro", slot="maf",
@@ -356,6 +436,17 @@ def gasoline_common(turbo, wideband, maf):
              circuit=circ("Ratiometric", pins(("ref", "A50", "GR"), ("signal", "A51", "BL"), ("ground", "A52", "MA"))), minutes=45),
         comp("app", "AppSensor", "Sensor de pedal de acelerador (APP)", "Pedal del acelerador",
              circuit=circ("Ratiometric", pins(("ref", "B10", "GR/RJ"), ("signal", "B11", "VI"), ("ground", "B12", "MA/BL"))), minutes=25),
+    ]
+    if dual:
+        c += [
+            comp("tps2", "TpsSensor", "Sensor de posición de mariposa, pista B", "Cuerpo de mariposa (mismo conector)", slot="tps_b",
+                 params={"track": 2}, part="part_tpssensor",
+                 circuit=circ("Ratiometric", pins(("ref", "A53", "GR/BL"), ("signal", "A54", "BL/NE"), ("ground", "A55", "MA/VE"))), minutes=45),
+            comp("app2", "AppSensor", "Sensor de pedal de acelerador, pista E", "Pedal del acelerador (mismo conector)", slot="app_e",
+                 params={"track": 2}, part="part_appsensor",
+                 circuit=circ("Ratiometric", pins(("ref", "B13", "GR/AM"), ("signal", "B14", "VI/BL"), ("ground", "B15", "MA/AM"))), minutes=25),
+        ]
+    c += [
         comp("ckp", "CkpSensor", "Sensor de cigüeñal (CKP)", "Bloque, junto al volante motor", slot="ckp_sensor",
              params={"coil_ohms": 850, "air_gap_factor": 1.0},
              circuit=circ("Generator", pins(("signal", "A60", "NE"), ("signal_low", "A61", "BL"))), minutes=35),
@@ -379,9 +470,11 @@ def gasoline_common(turbo, wideband, maf):
              params={"heater_ohms": 4.5},
              circuit=circ("HeatedOxygen", pins(("signal", "A73", "NE"), ("signal_low", "A74", "GR"), ("heater_supply", "F09", "BL"), ("heater_control", "A75", "BL/RJ")), "fuse_o2"),
              minutes=25),
-        comp("fuel_pressure", "FuelPressureSensor", "Sensor de presión de rampa", "Rampa de inyectores", params={"range_max_kpa": 1000},
+        comp("fuel_pressure", "FuelPressureSensor", "Sensor de presión de rail de alta presión" if gdi else "Sensor de presión de rampa",
+             "Rail de alta presión" if gdi else "Rampa de inyectores", params={"range_max_kpa": 26000 if gdi else 1000},
              circuit=circ("Ratiometric", pins(("ref", "A84", "GR"), ("signal", "A85", "VE/NE"), ("ground", "A86", "MA"))), minutes=30),
-        comp("inj{n}", "Injector", "Inyector cilindro {n}", "Rampa de inyección", slot="injector_{n}", per=True, params={"ohms": 12.5},
+        comp("inj{n}", "Injector", "Inyector de inyección directa cilindro {n}" if gdi else "Inyector cilindro {n}", "Culata (directo a cámara)" if gdi else "Rampa de inyección",
+             slot="injector_{n}", per=True, params={"ohms": 1.5 if gdi else 12.5},
              circuit=circ("LowSideLoad", [{"role": "supply", "ecuPin": "F10", "pin": 1, "color": "RJ/BL"},
                                           {"role": "control", "ecuPin": INJ_PINS, "pin": 2, "color": "NE/AM"}], "fuse_injectors"),
              minutes=25),
@@ -408,6 +501,24 @@ def gasoline_common(turbo, wideband, maf):
         comp("air_filter", "AirFilter", "Filtro de aire", "Caja del filtro", minutes=5),
         comp("fuel_regulator", "FuelPressureRegulator", "Regulador de presión de combustible", "Módulo de bomba", minutes=60),
     ]
+    if gdi:
+        c.append(comp("hp_pump", "HighPressurePump", "Bomba de alta presión con válvula dosificadora", "Culata, accionada por el árbol de levas",
+                      params={"ohms": 0.6, "max_kpa": 22000},
+                      circuit=circ("LowSideLoad", pins(("supply", "F10", "RJ/BL"), ("control", "A96", "NE/VE")), "fuse_injectors"), minutes=90))
+    if vvt:
+        c.append(comp("vvt_valve", "VvtSolenoid", "Electroválvula de distribución variable (admisión)", "Tapa de culata, lado distribución",
+                      params={"ohms": 7.5}, circuit=circ("LowSideLoad", pins(("supply", "F10", "RJ/BL"), ("control", "A97", "AZ/BL")), "fuse_injectors"),
+                      minutes=40))
+    if evap:
+        c += [
+            comp("evap_canister", "EvapCanister", "Cánister de carbón activo", "Junto al depósito de combustible", minutes=60),
+            comp("evap_vent", "EvapVentValve", "Electroválvula de ventilación del cánister", "Cánister, bajo el vehículo", params={"ohms": 22},
+                 circuit=circ("LowSideLoad", pins(("supply", "F10", "RJ/BL"), ("control", "A98", "GR/RJ")), "fuse_injectors"), minutes=30),
+            comp("evap_pressure", "EvapPressureSensor", "Sensor de presión del depósito (EVAP)", "Sobre la bomba de combustible",
+                 params={"range_min_kpa": -4.0, "range_max_kpa": 2.0},
+                 circuit=circ("Ratiometric", pins(("ref", "B20", "GR"), ("signal", "B21", "VE/BL"), ("ground", "B22", "MA"))), minutes=45),
+            comp("fuel_cap", "FuelCap", "Tapón de combustible", "Boca de llenado", minutes=2),
+        ]
     if turbo:
         c += [
             comp("boost", "BoostSensor", "Sensor de presión de sobrealimentación", "Tubo tras el intercooler", params={"range_max_kpa": 300},
@@ -421,7 +532,7 @@ def gasoline_common(turbo, wideband, maf):
     return c
 
 
-def diesel_components():
+def diesel_components(full=False):
     c = [
         comp("maf", "MafSensor", "Caudalímetro (MAF)", "Tubo de admisión", params={"max_gps": 150},
              circuit=circ("Powered", pins(("supply", "F12", "RJ/NE"), ("signal", "A23", "VE"), ("ground", "A24", "MA")), "fuse_injectors"), minutes=15),
@@ -445,11 +556,26 @@ def diesel_components():
                                           {"role": "control", "ecuPin": INJ_PINS, "pin": 2, "color": "NE/AM"}], "fuse_injectors"), minutes=60),
         comp("glow{n}", "GlowPlug", "Calentador cilindro {n}", "Culata", slot="glow_plug_{n}", per=True, params={"ohms": 0.9}, minutes=40),
         comp("cyl{n}", "Cylinder", "Cilindro {n}", "Bloque/culata", slot="cylinder_{n}", per=True, minutes=600),
-        comp("egr_valve", "EgrValve", "Válvula EGR", "Colector de admisión", params={"ohms": 8, "max_area_mm2": 150},
+        comp("egr_valve", "EgrValve", "Válvula EGR con enfriador" if full else "Válvula EGR", "Colector de admisión", params={"ohms": 8, "max_area_mm2": 450 if full else 150},
              circuit=circ("LowSideLoad", pins(("supply", "F10", "RJ/BL"), ("control", "A95", "GR/AM")), "fuse_injectors"), minutes=90),
         comp("turbo", "Turbocharger", "Turbo de geometría variable", "Colector de escape", minutes=360),
-        comp("wastegate_valve", "WastegateSolenoid", "Electroválvula de control del turbo", "Vano motor", params={"ohms": 26},
-             circuit=circ("LowSideLoad", pins(("supply", "F10", "RJ/BL"), ("control", "A91", "VI/BL")), "fuse_injectors"), minutes=20),
+    ]
+    if full:
+        c += [
+            comp("vgt_actuator", "VgtActuator", "Actuador eléctrico de álabes del turbo (VGT)", "Sobre el turbo", params={"ohms": 6},
+                 circuit=circ("LowSideLoad", pins(("supply", "F10", "RJ/BL"), ("control", "A91", "VI/BL")), "fuse_injectors"), minutes=120),
+            comp("dpf", "ParticulateFilter", "Filtro de partículas (FAP)", "Tras el catalizador de oxidación", minutes=150),
+            comp("dpf_dp", "DpfPressureSensor", "Sensor de presión diferencial del FAP", "Vano motor, tubos al FAP",
+                 params={"range_min_kpa": 0, "range_max_kpa": 100},
+                 circuit=circ("Ratiometric", pins(("ref", "A87", "GR"), ("signal", "A88", "BL/RJ"), ("ground", "A89", "MA"))), minutes=30),
+            comp("egt", "ExhaustTempSensor", "Sensor de temperatura de escape antes del FAP", "Entrada del FAP",
+                 params={"range_min_c": 0, "range_max_c": 1000},
+                 circuit=circ("Ratiometric", pins(("ref", "A76", "GR"), ("signal", "A77", "BL/VE"), ("ground", "A78", "MA"))), minutes=25),
+        ]
+    else:
+        c.append(comp("wastegate_valve", "WastegateSolenoid", "Electroválvula de control del turbo", "Vano motor", params={"ohms": 26},
+                      circuit=circ("LowSideLoad", pins(("supply", "F10", "RJ/BL"), ("control", "A91", "VI/BL")), "fuse_injectors"), minutes=20))
+    c += [
         comp("intercooler", "Intercooler", "Intercooler", "Frontal", minutes=120),
         comp("charge_pipe", "BoostHose", "Manguito de presión", "Lado izquierdo", slot="boost_hose", minutes=30),
         comp("brake_booster_hose", "VacuumHose", "Tubo de vacío (bomba de vacío)", "Vano motor", slot="vacuum_hose_brake", minutes=15),
@@ -468,6 +594,12 @@ def write_templates():
     dump("templates/gasoline_turbo.json", {"id": "gasoline_turbo", "description": "Gasolina turbo, inyección indirecta, MAF + MAP, sonda de banda ancha", "components": gasoline_common(True, True, True) + common_electrical()})
     dump("templates/gasoline_na_sd.json", {"id": "gasoline_na_sd", "description": "Gasolina atmosférico speed-density (sin MAF), sonda de banda estrecha", "components": gasoline_common(False, False, False) + common_electrical()})
     dump("templates/diesel_turbo.json", {"id": "diesel_turbo", "description": "Turbodiésel common rail (experimental)", "components": diesel_components() + common_electrical()})
+    dump("templates/gasoline_gdi_turbo.json", {"id": "gasoline_gdi_turbo", "description": "Gasolina turbo de inyección directa con distribución variable, mariposa y pedal de doble pista, EVAP completo",
+                                               "components": gasoline_common(True, True, True, gdi=True, vvt=True, dual=True, evap=True) + common_electrical()})
+    dump("templates/gasoline_na_vvt.json", {"id": "gasoline_na_vvt", "description": "Gasolina atmosférico con MAF, distribución variable, mariposa y pedal de doble pista, EVAP completo",
+                                            "components": gasoline_common(False, False, True, vvt=True, dual=True, evap=True) + common_electrical()})
+    dump("templates/diesel_euro6.json", {"id": "diesel_euro6", "description": "Turbodiésel common rail Euro 6: turbo de geometría variable, EGR, catalizador de oxidación y filtro de partículas",
+                                         "components": diesel_components(full=True) + common_electrical()})
 
 
 # ---------------------------------------------------------------- cars
@@ -490,6 +622,26 @@ CARS = [
          vin="KSL3RPS0K00013579", fuelRon=98,
          componentOverrides=[{"id": "maf", "params": {"max_gps": 300}}],
          appearance=dict(ageYears=5, kilometers=42000, maintenance=0.9, paintColor="#1C3F94", humidity=0.2)),
+    dict(id="velmora_lumen", brand="Velmora", model="Lumen 1.5 TGDI", year=2020, segment="Compacto 5 puertas",
+         engine="g15_gdi", template="gasoline_gdi_turbo", calibration="g15_stock", massKg=1290, wheelRadiusM=0.31,
+         gearRatios=[3.62, 2.12, 1.37, 1.03, 0.84, 0.70], finalDrive=3.88, drivetrainEfficiency=0.89, dragAreaM2=0.64,
+         vin="VLM1LMN5L00031415", componentOverrides=[{"id": "maf", "params": {"max_gps": 160}}],
+         appearance=dict(ageYears=4, kilometers=61000, maintenance=0.8, paintColor="#3E6E5A", humidity=0.3)),
+    dict(id="aurex_civa", brand="Aurex", model="Civa 1.6", year=2017, segment="Berlina compacta",
+         engine="k16_vvt", template="gasoline_na_vvt", calibration="k16_stock", massKg=1270, wheelRadiusM=0.305,
+         gearRatios=[3.45, 1.95, 1.31, 1.03, 0.82], finalDrive=4.06, drivetrainEfficiency=0.9, dragAreaM2=0.63,
+         vin="AUX2CVA6H00027182", componentOverrides=[{"id": "maf", "params": {"max_gps": 110}}],
+         appearance=dict(ageYears=7, kilometers=134000, maintenance=0.5, paintColor="#5B6670", humidity=0.5)),
+    dict(id="nordak_fjord_crd", brand="Nordak", model="Fjord 1.6 CRD", year=2018, segment="SUV compacto diésel",
+         engine="d16_crd", template="diesel_euro6", calibration="d16_stock", massKg=1480, wheelRadiusM=0.335,
+         gearRatios=[3.73, 2.05, 1.30, 0.93, 0.74, 0.62], finalDrive=3.94, drivetrainEfficiency=0.88, dragAreaM2=0.78,
+         vin="NDK3FJD6J00016180", appearance=dict(ageYears=6, kilometers=152000, maintenance=0.6, paintColor="#7A2E2E", humidity=0.4)),
+    dict(id="kessler_vento", brand="Kessler", model="Vento 2.0 TGDI", year=2021, segment="Berlina deportiva",
+         engine="g20_gdi", template="gasoline_gdi_turbo", calibration="g20_stock", massKg=1520, wheelRadiusM=0.33,
+         gearRatios=[3.93, 2.32, 1.52, 1.14, 0.92, 0.76, 0.63], finalDrive=3.31, drivetrainEfficiency=0.88, dragAreaM2=0.66,
+         vin="KSL4VNT0M00011235", fuelRon=98, componentOverrides=[{"id": "maf", "params": {"max_gps": 250}},
+                                                               {"id": "map", "params": {"range_max_kpa": 300}}],
+         appearance=dict(ageYears=3, kilometers=38000, maintenance=0.95, paintColor="#E5E5E0", humidity=0.2)),
 ]
 
 

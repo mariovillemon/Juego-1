@@ -1,0 +1,40 @@
+{
+  "id": "kessler_vento",
+  "brand": "Kessler",
+  "model": "Vento 2.0 TGDI",
+  "year": 2021,
+  "segment": "Berlina deportiva",
+  "engine": "g20_gdi",
+  "template": "gasoline_gdi_turbo",
+  "calibration": "g20_stock",
+  "massKg": 1520,
+  "wheelRadiusM": 0.33,
+  "gearRatios": [3.93, 2.32, 1.52, 1.14, 0.92, 0.76, 0.63],
+  "finalDrive": 3.31,
+  "drivetrainEfficiency": 0.88,
+  "dragAreaM2": 0.66,
+  "vin": "KSL4VNT0M00011235",
+  "fuelRon": 98,
+  "componentOverrides": [
+    {
+      "id": "maf",
+      "params": {
+        "max_gps": 250
+      }
+    },
+    {
+      "id": "map",
+      "params": {
+        "range_max_kpa": 300
+      }
+    }
+  ],
+  "appearance": {
+    "ageYears": 3,
+    "kilometers": 38000,
+    "maintenance": 0.95,
+    "paintColor": "#E5E5E0",
+    "humidity": 0.2
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

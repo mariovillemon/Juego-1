@@ -1,0 +1,33 @@
+{
+  "id": "aurex_civa",
+  "brand": "Aurex",
+  "model": "Civa 1.6",
+  "year": 2017,
+  "segment": "Berlina compacta",
+  "engine": "k16_vvt",
+  "template": "gasoline_na_vvt",
+  "calibration": "k16_stock",
+  "massKg": 1270,
+  "wheelRadiusM": 0.305,
+  "gearRatios": [3.45, 1.95, 1.31, 1.03, 0.82],
+  "finalDrive": 4.06,
+  "drivetrainEfficiency": 0.9,
+  "dragAreaM2": 0.63,
+  "vin": "AUX2CVA6H00027182",
+  "componentOverrides": [
+    {
+      "id": "maf",
+      "params": {
+        "max_gps": 110
+      }
+    }
+  ],
+  "appearance": {
+    "ageYears": 7,
+    "kilometers": 134000,
+    "maintenance": 0.5,
+    "paintColor": "#5B6670",
+    "humidity": 0.5
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

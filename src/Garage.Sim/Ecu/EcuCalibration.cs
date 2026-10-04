@@ -22,6 +22,12 @@ namespace Garage.Sim.Ecu
         public const string VeEstimate = "ve_estimate";
         /// <summary>Diesel fuel quantity (rpm × pedal %), mg/stroke.</summary>
         public const string DieselQuantity = "diesel_quantity";
+
+        /// <summary>Intake cam advance target (deg) vs rpm and load.</summary>
+        public const string CamTarget = "cam_target";
+
+        /// <summary>GDI rail pressure target (kPa) vs rpm and load.</summary>
+        public const string RailTarget = "rail_target";
         /// <summary>Pedal to throttle curve (pedal % → throttle %).</summary>
         public const string PedalToThrottle = "pedal_to_throttle";
         /// <summary>Warm-up enrichment multiplier vs coolant °C.</summary>

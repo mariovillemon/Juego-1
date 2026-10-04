@@ -114,6 +114,7 @@ namespace Garage.Sim.Vehicle
             ApplyWear();
             Engine = new EngineModel(definition.Engine, Parts, Faults, Rng.Fork(11));
             Electrical = new ElectricalSystem(this);
+            Evap = new EvapSystem(this);
             Can = new CanNetwork(this);
             foreach (string m in definition.Modules)
             {
@@ -173,6 +174,9 @@ namespace Garage.Sim.Vehicle
 
         /// <summary>Environment.</summary>
         public EnvironmentState Environment { get; } = new EnvironmentState();
+
+        /// <summary>Evaporative emission system (tank pressure, purge, vent, leaks).</summary>
+        public EvapSystem Evap { get; }
 
         /// <summary>Accelerator pedal 0..1 (driver input).</summary>
         public double Pedal { get; set; }
@@ -359,6 +363,9 @@ namespace Garage.Sim.Vehicle
             bool pumpOn = Ecu.Outputs.FuelPumpRelay;
             Electrical.Step(dt, KeyOn, Cranking, es.Running, es.Rpm, Ecu.Outputs.FanRelay, pumpOn);
 
+            // 2b. EVAP tank pressure (purge/vent as driven last step)
+            Evap.Step(dt, Ecu.Outputs.PurgeDuty, Ecu.Outputs.EvapVentClosed, es.ManifoldKpa, Environment.BaroKpa, Environment.AmbientC + 5);
+
             // 3. Sensors → circuits
             UpdateSensorCircuits(dt);
 
@@ -427,6 +434,13 @@ namespace Garage.Sim.Vehicle
                 case ComponentKind.O2Wideband:
                     min = 0.7;
                     return 0.8;
+                case ComponentKind.EvapPressureSensor:
+                    min = c.Param("range_min_kpa", -4);
+                    return c.Param("range_max_kpa", 2) - min;
+                case ComponentKind.DpfPressureSensor:
+                    return c.Param("range_max_kpa", 100);
+                case ComponentKind.ExhaustTempSensor:
+                    return c.Param("range_max_c", 1000);
                 case ComponentKind.CkpSensor:
                     return 1;
                 case ComponentKind.KnockSensor:
@@ -521,13 +535,32 @@ namespace Garage.Sim.Vehicle
                         circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(SensorCurves.LinearRatio(value, 0, c.Param("range_max_kpa", 1000)), 0.02, 0.985);
                         break;
                     case ComponentKind.TpsSensor:
-                        value = ApplySignalFaults(c, s.ThrottlePosition);
-                        circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(SensorCurves.LinearRatio(value, 0, 1), 0.02, 0.985);
-                        break;
+                        {
+                            // Track 2 of a dual sensor: inverse slope (4.5 V closed → 0.5 V open), as on real throttle bodies.
+                            value = ApplySignalFaults(c, s.ThrottlePosition);
+                            double ratio = SensorCurves.LinearRatio(value, 0, 1);
+                            if (c.Param("track", 1) >= 2)
+                            {
+                                ratio = 1 - ratio;
+                            }
+
+                            circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(ratio, 0.02, 0.985);
+                            break;
+                        }
+
                     case ComponentKind.AppSensor:
-                        value = ApplySignalFaults(c, Pedal);
-                        circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(SensorCurves.LinearRatio(value, 0, 1), 0.02, 0.985);
-                        break;
+                        {
+                            // Track 2 of a dual pedal sensor: half the slope of track 1 (0.25–2.25 V).
+                            value = ApplySignalFaults(c, Pedal);
+                            double ratio = SensorCurves.LinearRatio(value, 0, 1);
+                            if (c.Param("track", 1) >= 2)
+                            {
+                                ratio *= 0.5;
+                            }
+
+                            circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(ratio, 0.02, 0.985);
+                            break;
+                        }
                     case ComponentKind.MafSensor:
                         value = ApplySignalFaults(c, s.MafFlowGps);
                         double dirty = Faults.Max(c.Id, EffectKind.Wear);
@@ -593,6 +626,18 @@ namespace Garage.Sim.Vehicle
                     case ComponentKind.CmpSensor:
                         circuit.HallOn = false;
                         break;
+                    case ComponentKind.EvapPressureSensor:
+                        value = ApplySignalFaults(c, Evap.TankKpa);
+                        circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(SensorCurves.LinearRatio(value, c.Param("range_min_kpa", -4), c.Param("range_max_kpa", 2)), 0.02, 0.985);
+                        break;
+                    case ComponentKind.DpfPressureSensor:
+                        value = ApplySignalFaults(c, s.DpfDeltaKpa);
+                        circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(SensorCurves.LinearRatio(value, c.Param("range_min_kpa", 0), c.Param("range_max_kpa", 100)), 0.02, 0.985);
+                        break;
+                    case ComponentKind.ExhaustTempSensor:
+                        value = ApplySignalFaults(c, s.ExhaustGasC);
+                        circuit.SensorValue = dropout || dead ? 0 : MathUtil.Clamp(SensorCurves.LinearRatio(value, c.Param("range_min_c", 0), c.Param("range_max_c", 1000)), 0.02, 0.985);
+                        break;
                     case ComponentKind.Injector:
                     case ComponentKind.IgnitionCoil:
                     case ComponentKind.WastegateSolenoid:
@@ -603,6 +648,10 @@ namespace Garage.Sim.Vehicle
                     case ComponentKind.FuelPump:
                     case ComponentKind.CoolingFan:
                     case ComponentKind.GlowPlug:
+                    case ComponentKind.EvapVentValve:
+                    case ComponentKind.VvtSolenoid:
+                    case ComponentKind.HighPressurePump:
+                    case ComponentKind.VgtActuator:
                         {
                             double ohms = c.Param("ohms", 15) * (1 - 0.9 * Faults.Max(c.Id, EffectKind.InternalShort));
                             if (dead)
@@ -814,6 +863,17 @@ namespace Garage.Sim.Vehicle
             cmd.FanOn = fan;
             cmd.EgrCommand = o.EgrCommand;
             cmd.PurgeDuty = o.PurgeDuty;
+            cmd.PurgeAreaMm2 = Evap.PurgeAreaMm2;
+            cmd.CamTargetDeg = o.CamTargetDeg;
+            Component? ocv = Parts.Find(ComponentKind.VvtSolenoid);
+            cmd.VvtDriven = ocv == null || ActuatorEnergized(ocv.Id);
+            cmd.RailTargetKpa = o.RailTargetKpa;
+            Component? hp = Parts.Find(ComponentKind.HighPressurePump);
+            cmd.MeteringDriven = hp == null || ActuatorEnergized(hp.Id);
+            cmd.VgtCommand = o.VgtCommand;
+            Component? vgt = Parts.Find(ComponentKind.VgtActuator);
+            cmd.VgtDriven = vgt == null || ActuatorEnergized(vgt.Id);
+            cmd.PostInjectionMg = o.PostInjectionMg;
             cmd.GlowOn = o.GlowOn;
             cmd.IgnitionVolts = BatteryVolts;
             return cmd;

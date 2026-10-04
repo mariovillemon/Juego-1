@@ -1,0 +1,33 @@
+{
+  "id": "velmora_lumen",
+  "brand": "Velmora",
+  "model": "Lumen 1.5 TGDI",
+  "year": 2020,
+  "segment": "Compacto 5 puertas",
+  "engine": "g15_gdi",
+  "template": "gasoline_gdi_turbo",
+  "calibration": "g15_stock",
+  "massKg": 1290,
+  "wheelRadiusM": 0.31,
+  "gearRatios": [3.62, 2.12, 1.37, 1.03, 0.84, 0.7],
+  "finalDrive": 3.88,
+  "drivetrainEfficiency": 0.89,
+  "dragAreaM2": 0.64,
+  "vin": "VLM1LMN5L00031415",
+  "componentOverrides": [
+    {
+      "id": "maf",
+      "params": {
+        "max_gps": 160
+      }
+    }
+  ],
+  "appearance": {
+    "ageYears": 4,
+    "kilometers": 61000,
+    "maintenance": 0.8,
+    "paintColor": "#3E6E5A",
+    "humidity": 0.3
+  },
+  "modules": ["ecm", "abs", "ipc", "bcm"]
+}

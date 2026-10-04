@@ -1181,6 +1181,276 @@
       "fits": ["*"]
     },
     {
+      "id": "part_evapcanister_oem",
+      "kind": "EvapCanister",
+      "name": "Cánister de carbón activo (OEM)",
+      "quality": "oem",
+      "price": 160,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evapcanister_aftermarket",
+      "kind": "EvapCanister",
+      "name": "Cánister de carbón activo (Recambio)",
+      "quality": "aftermarket",
+      "price": 96,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evapcanister_used",
+      "kind": "EvapCanister",
+      "name": "Cánister de carbón activo (Usada (desguace))",
+      "quality": "used",
+      "price": 48,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evapventvalve_oem",
+      "kind": "EvapVentValve",
+      "name": "Electroválvula de ventilación EVAP (OEM)",
+      "quality": "oem",
+      "price": 65,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evapventvalve_aftermarket",
+      "kind": "EvapVentValve",
+      "name": "Electroválvula de ventilación EVAP (Recambio)",
+      "quality": "aftermarket",
+      "price": 39,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evapventvalve_used",
+      "kind": "EvapVentValve",
+      "name": "Electroválvula de ventilación EVAP (Usada (desguace))",
+      "quality": "used",
+      "price": 19.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evappressuresensor_oem",
+      "kind": "EvapPressureSensor",
+      "name": "Sensor de presión del depósito (OEM)",
+      "quality": "oem",
+      "price": 70,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evappressuresensor_aftermarket",
+      "kind": "EvapPressureSensor",
+      "name": "Sensor de presión del depósito (Recambio)",
+      "quality": "aftermarket",
+      "price": 42,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_evappressuresensor_used",
+      "kind": "EvapPressureSensor",
+      "name": "Sensor de presión del depósito (Usada (desguace))",
+      "quality": "used",
+      "price": 21,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelcap_oem",
+      "kind": "FuelCap",
+      "name": "Tapón de combustible (OEM)",
+      "quality": "oem",
+      "price": 18,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelcap_aftermarket",
+      "kind": "FuelCap",
+      "name": "Tapón de combustible (Recambio)",
+      "quality": "aftermarket",
+      "price": 10.8,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_fuelcap_used",
+      "kind": "FuelCap",
+      "name": "Tapón de combustible (Usada (desguace))",
+      "quality": "used",
+      "price": 5.4,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vvtsolenoid_oem",
+      "kind": "VvtSolenoid",
+      "name": "Electroválvula VVT (OEM)",
+      "quality": "oem",
+      "price": 95,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vvtsolenoid_aftermarket",
+      "kind": "VvtSolenoid",
+      "name": "Electroválvula VVT (Recambio)",
+      "quality": "aftermarket",
+      "price": 57,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vvtsolenoid_used",
+      "kind": "VvtSolenoid",
+      "name": "Electroválvula VVT (Usada (desguace))",
+      "quality": "used",
+      "price": 28.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_highpressurepump_oem",
+      "kind": "HighPressurePump",
+      "name": "Bomba de alta presión (OEM)",
+      "quality": "oem",
+      "price": 520,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_highpressurepump_aftermarket",
+      "kind": "HighPressurePump",
+      "name": "Bomba de alta presión (Recambio)",
+      "quality": "aftermarket",
+      "price": 312,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_highpressurepump_used",
+      "kind": "HighPressurePump",
+      "name": "Bomba de alta presión (Usada (desguace))",
+      "quality": "used",
+      "price": 156,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vgtactuator_oem",
+      "kind": "VgtActuator",
+      "name": "Actuador de turbo de geometría variable (OEM)",
+      "quality": "oem",
+      "price": 380,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vgtactuator_aftermarket",
+      "kind": "VgtActuator",
+      "name": "Actuador de turbo de geometría variable (Recambio)",
+      "quality": "aftermarket",
+      "price": 228,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_vgtactuator_used",
+      "kind": "VgtActuator",
+      "name": "Actuador de turbo de geometría variable (Usada (desguace))",
+      "quality": "used",
+      "price": 114,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_particulatefilter_oem",
+      "kind": "ParticulateFilter",
+      "name": "Filtro de partículas (FAP) (OEM)",
+      "quality": "oem",
+      "price": 1250,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_particulatefilter_aftermarket",
+      "kind": "ParticulateFilter",
+      "name": "Filtro de partículas (FAP) (Recambio)",
+      "quality": "aftermarket",
+      "price": 750,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_particulatefilter_used",
+      "kind": "ParticulateFilter",
+      "name": "Filtro de partículas (FAP) (Usada (desguace))",
+      "quality": "used",
+      "price": 375,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_dpfpressuresensor_oem",
+      "kind": "DpfPressureSensor",
+      "name": "Sensor de presión diferencial del FAP (OEM)",
+      "quality": "oem",
+      "price": 110,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_dpfpressuresensor_aftermarket",
+      "kind": "DpfPressureSensor",
+      "name": "Sensor de presión diferencial del FAP (Recambio)",
+      "quality": "aftermarket",
+      "price": 66,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_dpfpressuresensor_used",
+      "kind": "DpfPressureSensor",
+      "name": "Sensor de presión diferencial del FAP (Usada (desguace))",
+      "quality": "used",
+      "price": 33,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_exhausttempsensor_oem",
+      "kind": "ExhaustTempSensor",
+      "name": "Sensor de temperatura de escape (OEM)",
+      "quality": "oem",
+      "price": 85,
+      "reliability": 0.98,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_exhausttempsensor_aftermarket",
+      "kind": "ExhaustTempSensor",
+      "name": "Sensor de temperatura de escape (Recambio)",
+      "quality": "aftermarket",
+      "price": 51,
+      "reliability": 0.88,
+      "fits": ["*"]
+    },
+    {
+      "id": "part_exhausttempsensor_used",
+      "kind": "ExhaustTempSensor",
+      "name": "Sensor de temperatura de escape (Usada (desguace))",
+      "quality": "used",
+      "price": 25.5,
+      "reliability": 0.7,
+      "fits": ["*"]
+    },
+    {
       "id": "perf_injector_550",
       "kind": "Injector",
       "name": "Inyector alto caudal 550 cc/min",

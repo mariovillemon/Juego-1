@@ -57,6 +57,30 @@ namespace Garage.Sim.Engine
 
         /// <summary>Ignition system supply voltage.</summary>
         public double IgnitionVolts { get; set; } = 14;
+
+        /// <summary>Intake cam advance target (deg crank) when the VVT oil control valve is driven.</summary>
+        public double CamTargetDeg { get; set; }
+
+        /// <summary>VVT oil control valve electrically driven.</summary>
+        public bool VvtDriven { get; set; } = true;
+
+        /// <summary>GDI rail pressure target (kPa) set through the pump metering valve.</summary>
+        public double RailTargetKpa { get; set; }
+
+        /// <summary>GDI metering valve electrically driven (normally open: undriven = full delivery).</summary>
+        public bool MeteringDriven { get; set; } = true;
+
+        /// <summary>VGT vane closure command 0 (open, low boost) .. 1 (closed, high boost).</summary>
+        public double VgtCommand { get; set; }
+
+        /// <summary>VGT actuator electrically driven.</summary>
+        public bool VgtDriven { get; set; } = true;
+
+        /// <summary>Diesel post injection for DPF regeneration (mg/stroke, burns in the exhaust).</summary>
+        public double PostInjectionMg { get; set; }
+
+        /// <summary>Unmetered air area added by the EVAP purge (mm²; full EVAP systems only).</summary>
+        public double PurgeAreaMm2 { get; set; }
     }
 
     /// <summary>Ambient conditions.</summary>
@@ -335,5 +359,26 @@ namespace Garage.Sim.Engine
 
         /// <summary>Crank angle accumulator (deg, 0..720) for waveforms.</summary>
         public double CrankAngleDeg { get; set; }
+
+        /// <summary>Actual intake cam advance (deg crank) set by the VVT phaser.</summary>
+        public double CamPhaseDeg { get; set; }
+
+        /// <summary>Low pressure fuel supply (kPa) feeding the GDI high pressure pump.</summary>
+        public double LowFuelKpa { get; set; }
+
+        /// <summary>VGT vane closure actually reached 0..1.</summary>
+        public double VgtPosition { get; set; }
+
+        /// <summary>Soot loaded in the DPF (g).</summary>
+        public double DpfSootG { get; set; }
+
+        /// <summary>Ash in the DPF (g, only removed by replacing/cleaning it).</summary>
+        public double DpfAshG { get; set; }
+
+        /// <summary>DPF differential pressure (kPa).</summary>
+        public double DpfDeltaKpa { get; set; }
+
+        /// <summary>Engine-out NOx estimate (ppm).</summary>
+        public double NoxPpm { get; set; }
     }
 }

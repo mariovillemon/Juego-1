@@ -100,6 +100,26 @@ namespace Garage.Sim.Components
         GlowPlug,
         /// <summary>Downstream (post-cat) oxygen sensor.</summary>
         O2Downstream,
+        /// <summary>EVAP charcoal canister.</summary>
+        EvapCanister,
+        /// <summary>EVAP canister vent valve (normally open, closed for the leak test).</summary>
+        EvapVentValve,
+        /// <summary>Fuel tank pressure sensor (EVAP).</summary>
+        EvapPressureSensor,
+        /// <summary>Fuel filler cap.</summary>
+        FuelCap,
+        /// <summary>Variable valve timing oil control valve (cam phaser solenoid).</summary>
+        VvtSolenoid,
+        /// <summary>Gasoline direct injection high pressure pump (with metering valve).</summary>
+        HighPressurePump,
+        /// <summary>Variable geometry turbo vane actuator.</summary>
+        VgtActuator,
+        /// <summary>Diesel particulate filter.</summary>
+        ParticulateFilter,
+        /// <summary>DPF differential pressure sensor.</summary>
+        DpfPressureSensor,
+        /// <summary>Exhaust gas temperature sensor (before the DPF).</summary>
+        ExhaustTempSensor,
     }
 
     /// <summary>Common interface of every simulated component.</summary>
@@ -241,6 +261,9 @@ namespace Garage.Sim.Components
                 case ComponentKind.KnockSensor:
                 case ComponentKind.FuelPressureSensor:
                 case ComponentKind.BoostSensor:
+                case ComponentKind.EvapPressureSensor:
+                case ComponentKind.DpfPressureSensor:
+                case ComponentKind.ExhaustTempSensor:
                     return true;
                 default:
                     return false;
