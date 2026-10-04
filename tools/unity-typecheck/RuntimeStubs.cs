@@ -73,15 +73,15 @@ namespace UnityEngine.InputSystem
         public struct BindingSyntax { public BindingSyntax WithProcessor(string p) => this; }
         public struct CompositeSyntax { public CompositeSyntax With(string name, string binding, string groups = null, string processors = null) => this; }
     }
-    namespace Controls { public class ButtonControl { public string name; public bool isPressed; public bool wasPressedThisFrame; } public class KeyControl : ButtonControl { } }
+    namespace Controls { public class ButtonControl { public string name; public bool isPressed; public bool wasPressedThisFrame; } public class KeyControl : ButtonControl { } public class Vector2Control { public UnityEngine.Vector2 ReadValue() => default; } }
     public static class InputActionRebindingExtensions { public static void ApplyBindingOverride(this InputAction a, int bindingIndex, string path) { } }
     public class InputDevice { }
     public class Keyboard : InputDevice
     {
         public static Keyboard current; public Controls.KeyControl[] allKeys;
-        public Controls.KeyControl shiftKey, jKey, escapeKey, tabKey, leftAltKey, upArrowKey, downArrowKey, leftArrowKey, rightArrowKey, numpadPlusKey, equalsKey, numpadMinusKey, minusKey, enterKey, spaceKey;
+        public Controls.KeyControl wKey, aKey, sKey, dKey, shiftKey, jKey, escapeKey, tabKey, leftAltKey, upArrowKey, downArrowKey, leftArrowKey, rightArrowKey, numpadPlusKey, equalsKey, numpadMinusKey, minusKey, enterKey, spaceKey;
     }
-    public class Mouse : InputDevice { public static Mouse current; }
+    public class Mouse : InputDevice { public static Mouse current; public Controls.ButtonControl leftButton, rightButton; public Controls.Vector2Control delta, scroll; }
     namespace UI { public class InputSystemUIInputModule : UnityEngine.EventSystems.BaseInputModule { } }
 }
 

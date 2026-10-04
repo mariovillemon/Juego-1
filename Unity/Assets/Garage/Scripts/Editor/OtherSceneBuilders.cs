@@ -79,6 +79,7 @@ namespace Garage.Unity.EditorTools
             cam.AddComponent<AudioListener>();
             cam.transform.position = new Vector3(-2.2f, 1.7f, 3.5f);
             cam.transform.LookAt(new Vector3(0, 0.8f, 0));
+            cam.AddComponent<DynoRoomController>().runner = runner;
             if (save)
             {
                 EditorSceneManager.SaveScene(scene, DynoPath);
