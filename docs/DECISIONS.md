@@ -177,3 +177,13 @@ Fundamentals*, Bosch *Automotive Handbook*), no copia de datos propietarios.
 - **D-67 — Pista B invertida**: la pista B del TPS va invertida y la del pedal tiene media pendiente. El umbral
   de correlación es del 8 %, así que un sesgo pequeño (<0,3 V) no genera código. Es intencionado: no todo
   desajuste debe encender el testigo.
+- **D-68 — Opciones fuera de PlayerPrefs**: las opciones se guardan en un `settings.json` propio. Así se pueden
+  probar con tests en `Garage.Game`, el formato es el mismo en todas las plataformas y el jugador puede editarlo o
+  borrarlo. Unity sólo aplica los valores (`GameOptions`).
+- **D-69 — Steppers en vez de sliders**: el menú de opciones usa botones ◀ ▶ porque reutilizan `UiKit` y no hace
+  falta generar en código los sprites de `Slider` y `Toggle`, que no se pueden comprobar sin el editor.
+- **D-70 — Localización progresiva**: el español es la tabla de referencia y el `Localizer` recurre a ella. Se
+  tradujeron primero el menú, la pausa, las opciones, el HUD y la ayuda. El resto de paneles se migrará poco a
+  poco; un test exige que las dos tablas tengan las mismas claves.
+- **D-71 — Esc fija**: la pausa no se puede reasignar, para que nunca quede el jugador sin forma de salir de un
+  panel. Durante la captura de una tecla, Esc cancela y no abre la pausa.

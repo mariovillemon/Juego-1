@@ -12,8 +12,8 @@ servir: si Unity Hub avisa de que la versión es distinta, acepta.
    - Windows: `powershell -ExecutionPolicy Bypass -File tools/sync-sim-to-unity.ps1`
 
    Copia `src/Garage.Sim`, `src/Garage.Data` y **`src/Garage.Game`** (capa de aplicación compartida con la CLI) a
-   `Unity/Assets/Garage/Sim/Generated/` (ensamblado `Garage.Sim`, sin referencias a Unity) y `data/` a
-   `Unity/Assets/StreamingAssets/data/`.
+   `Unity/Assets/Garage/Sim/Generated/` (ensamblado `Garage.Sim`, sin referencias a Unity). También copia
+   `data/base`, `data/schemas` y `data/locale` (textos ES/EN) a `Unity/Assets/StreamingAssets/data/`.
 3. **Abre** la carpeta `Unity/` en Unity Hub con la versión indicada. La primera importación tarda (HDRP compila shaders).
 4. Si aparece el **HDRP Wizard**, pulsa *Fix All* y espera a que todo esté en verde.
 5. Si aparece el **TMP Importer**, pulsa **Import TMP Essentials** (las fuentes de toda la interfaz). No hace falta
@@ -36,6 +36,30 @@ servir: si Unity Hub avisa de que la versión es distinta, acepta.
       objetos sin colisión.
 7. Abre `Assets/Garage/Scenes/MainMenu.unity` (o directamente `Workshop.unity`) y pulsa **Play**.
    Si abres `Workshop.unity` directamente, empieza una partida nueva con el tutorial.
+
+## Opciones e idioma
+
+**Opciones** está en el menú principal y en la pausa (Esc). Tiene cuatro pestañas:
+
+- **Gráficos**: calidad (Baja/Media/Alta/Ultra, los presets de *Configure HDRP*), resolución, modo de pantalla,
+  sincronización vertical, campo de visión y desenfoque al inspeccionar.
+- **Controles**: sensibilidad del ratón, invertir el eje vertical e idioma (español/inglés).
+- **Audio**: volumen general y por grupo (motor, taller, herramientas, ambiente, interfaz).
+- **Teclas**: pulsa el botón de una acción y después la tecla nueva (Esc cancela). Si la tecla ya estaba en uso,
+  las dos acciones se intercambian.
+
+Los cambios se aplican y se guardan al momento en `settings.json`, dentro de `Application.persistentDataPath`
+(en Windows: `%USERPROFILE%\AppData\LocalLow\<compañía>\<producto>`). Si borras ese fichero, vuelven los valores
+por defecto. Esc (pausa) no se puede reasignar.
+
+## Ejecutable de Windows
+
+- Desde el editor: **Garage/Build/Windows x64** (o *Development*). Genera `Builds/Windows/Taller.exe` en la raíz
+  del repositorio, que git ignora. Si faltan escenas, las genera antes.
+- Sin abrir el editor: `powershell -ExecutionPolicy Bypass -File tools/build-windows.ps1` (opciones `-Unity`
+  con la ruta de `Unity.exe`, `-Development` y `-Out`). En Linux/macOS: `UNITY=/ruta/Unity
+  tools/build-windows.sh`. Los dos sincronizan los datos antes de compilar y dejan el log en
+  `Builds/build-windows.log`. Necesitas instalado el módulo *Windows Build Support (IL2CPP o Mono)* de Unity Hub.
 
 > Tras cualquier `git pull` vuelve a ejecutar el paso 2 y **Garage/Setup/Build Workshop Scene**: la escena se
 > regenera desde código y lo que hayas cambiado a mano en ella se pierde.
@@ -83,6 +107,8 @@ servir: si Unity Hub avisa de que la versión es distinta, acepta.
 | Prueba de carretera / acciones del coche | T / V |
 | Tablón / hoja de trabajo / tienda / almacén / herramientas / portátil | Tab / J / P / I / U / L |
 | Ayuda de teclas / pausa | F1 / Esc |
+
+Todas las teclas salvo Esc se pueden cambiar en *Opciones › Teclas*; la ayuda (F1) muestra siempre las actuales.
 
 ## Tests
 

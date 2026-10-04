@@ -17,25 +17,28 @@ Todas las marcas y modelos son **ficticios** (Aurex, Velmora, Nordak, Kessler).
 
 | Bloque | Estado |
 |---|---|
-| Núcleo de simulación (motor, sensores, eléctrico, ECU, OBD-II, CAN) | ✅ completo, 140+ tests |
+| Núcleo de simulación (motor, sensores, eléctrico, ECU, OBD-II, CAN) | ✅ completo, 180 tests |
+| Sistemas ampliados: EVAP completo, TPS/pedal de doble pista, VVT, GDI, diésel Euro 6 (VGT, FAP, EGR, NOx) | ✅ |
 | Modos de fallo, generador, pistas sensoriales, cadenas de daño | ✅ |
 | Herramientas de diagnóstico, banco de potencia, datalog CSV | ✅ |
 | Meta-juego (clientes, encargos, economía, devoluciones, progresión, guardado) | ✅ |
 | CLI jugable | ✅ |
-| Contenido: 4 coches, 220 DTC, 33 modos de fallo, 50 escenarios, 10 encargos | ✅ (diésel experimental) |
-| Proyecto Unity HDRP (setup, escenas, luces, assets CC0, interacción, herramientas 3D, audio) | ⚠️ escrito sin poder compilar en el editor; ver `docs/STATUS.md` |
+| Contenido: 8 coches, 237 DTC, 36 modos de fallo, 62 escenarios, 15 encargos | ✅ |
+| Capa de juego compartida (`Garage.Game`): sesión, tienda, almacén, tutorial, editor ECU, opciones, idiomas ES/EN | ✅ |
+| Proyecto Unity HDRP jugable de principio a fin (UI, herramientas, reparación, banco, opciones, build de Windows) | ⚠️ comprobado con el verificador de tipos, sin probar en el editor; ver `docs/STATUS.md` |
 
 ## Estructura
 
 ```
 src/Garage.Sim     núcleo de simulación (netstandard2.1, C# 9, sin Unity)
 src/Garage.Data    JSON propio, validador de JSON Schema, carga en capas (base + mods), guardado
+src/Garage.Game    capa de aplicación compartida por la CLI y Unity (sesión, comandos, opciones, idiomas)
 src/Garage.Cli     prototipo jugable en terminal (net8.0)
 tests/             xUnit (net8.0)
-data/base          contenido del juego (JSON)    data/schemas   JSON Schemas
+data/base          contenido del juego (JSON)    data/schemas   JSON Schemas    data/locale  textos ES/EN
 mods/              mods (un ejemplo desactivado)
 Unity/             proyecto Unity 6 LTS + HDRP
-tools/             generador de contenido, sincronización con Unity, guion de demo
+tools/             contenido, sincronización con Unity, modelos Blender, audio, build de Windows, verificador de tipos
 docs/              arquitectura, decisiones, modding, Unity, arte, estilo visual, créditos, estado
 ```
 
@@ -45,7 +48,8 @@ Requisitos: .NET SDK 8.
 
 ```bash
 dotnet build Garage.sln            # sin warnings (TreatWarningsAsErrors)
-dotnet test                        # ~140 tests (≈2–3 min)
+dotnet test                        # 180 tests (≈2 min)
+tools/unity-typecheck/check.sh     # compila los scripts de Unity sin el editor
 dotnet run --project src/Garage.Cli -- validate   # valida todos los JSON contra sus schemas
 ```
 
@@ -119,16 +123,19 @@ Potencia máx: 399 CV a 6021 rpm | Par máx: 513 N·m a 4042 rpm | En rueda: 356
 
 Resumen (detalle en [`docs/UNITY_SETUP.md`](docs/UNITY_SETUP.md)):
 
-1. `tools/sync-sim-to-unity.sh` (o `.ps1` en Windows) para copiar el núcleo y los datos al proyecto.
+1. `tools/sync-sim-to-unity.sh` (o `.ps1` en Windows) para copiar el núcleo, los datos y los textos al proyecto.
 2. Abrir `Unity/` con Unity **6000.0 LTS**.
-3. Menú **Garage/Setup/Run All Setup Steps** (o en orden: Configure HDRP → Build Main Menu → Build Dyno → Build Workshop).
-4. **Garage/Assets/Download Free Assets** (texturas y HDRI CC0 de Poly Haven).
-5. **Garage/Validate/Check Scene** y pulsar Play en `Assets/Garage/Scenes/Workshop.unity`.
+3. Menú **Garage/Setup/Run All Setup Steps**.
+4. **Garage/Assets/Download Free Assets** (opcional: texturas, HDRI y atrezo CC0 de Poly Haven).
+5. Abrir `Assets/Garage/Scenes/MainMenu.unity` y pulsar Play.
+
+Ejecutable de Windows: **Garage/Build/Windows x64**, o sin abrir el editor
+`powershell -ExecutionPolicy Bypass -File tools/build-windows.ps1` (sale en `Builds/Windows/Taller.exe`).
 
 ## Documentación
 
 - [Arquitectura](docs/ARCHITECTURE.md) · [Decisiones](docs/DECISIONS.md) · [Hoja de ruta](docs/ROADMAP.md) · [Estado](docs/STATUS.md)
-- [Modding](docs/MODDING.md) · [Unity](docs/UNITY_SETUP.md) · [Pipeline de arte](docs/ART_PIPELINE.md) · [Estilo visual](docs/VISUAL_STYLE.md) · [Créditos](docs/ASSET_CREDITS.md)
+- [Modding](docs/MODDING.md) · [Unity](docs/UNITY_SETUP.md) · [Pipeline de arte](docs/ART_PIPELINE.md) · [Estilo visual](docs/VISUAL_STYLE.md) · [Audio](docs/AUDIO.md) · [Créditos](docs/ASSET_CREDITS.md)
 
 ## Licencia
 

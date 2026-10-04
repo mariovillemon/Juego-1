@@ -28,13 +28,14 @@
 Garage.sln
 ├─ src/Garage.Sim        (netstandard2.1, C# 9)  núcleo de simulación
 ├─ src/Garage.Data       (netstandard2.1, C# 9)  JSON propio, schemas, carga en capas
+├─ src/Garage.Game       (netstandard2.1, C# 9)  capa de aplicación: sesión, comandos, opciones, idiomas
 ├─ src/Garage.Cli        (net8.0)                prototipo jugable en terminal
 ├─ tests/Garage.Sim.Tests(net8.0, xUnit)         unitarios + comportamiento emergente
-├─ data/base, data/schemas, mods/               contenido y JSON Schemas
+├─ data/base, data/schemas, data/locale, mods/  contenido, JSON Schemas y textos ES/EN
 └─ Unity/                                        proyecto Unity 6 LTS + HDRP
 ```
 
-Dependencias: `Cli → Data → Sim`, `Tests → Data, Sim`, `Unity Runtime → (fuentes de) Sim + Data`.
+Dependencias: `Cli → Game → Data → Sim`, `Tests → Game, Data, Sim`, `Unity Runtime → (fuentes de) Game + Data + Sim`.
 
 ## 3. Garage.Sim — módulos
 
@@ -207,16 +208,42 @@ Car.Step(dt):
 ```
 `dt` por defecto 0.02 s (50 Hz). Herramientas y CLI usan `Car.RunFor(seconds)`.
 
+## 5b. Sistemas ampliados
+
+Partes opcionales que sólo se activan si el coche tiene el componente:
+- `EngineModel.Systems.cs`: desfasador VVT (aceite, bloqueo en retraso, lodos), bomba de alta GDI con válvula
+  dosificadora, actuador VGT con contrapresión, FAP (hollín, cenizas, regeneración pasiva y activa, presión
+  diferencial) y estimación de NOx.
+- `EngineControlUnit.Systems.cs`: control y diagnóstico de esos sistemas. Incluye la máquina de estados de la
+  prueba EVAP (sellado → vaciado → mantenimiento → apertura), el monitor de EGR y la regeneración activa por
+  postinyección.
+- `Vehicle/EvapSystem.cs`: presión del depósito (purga, venteo, fugas por diámetro equivalente, vapor, válvula de
+  alivio del tapón).
+- La correlación de pistas TPS/pedal está en `EngineControlUnit.cs` (pista B invertida o de media pendiente).
+
+## 5c. Garage.Game (capa de aplicación)
+
+`GameSession` envuelve el `Workshop` con comandos que devuelven `CommandResult` (errores legibles) y publica
+`GameEvent` en un bus: lo usan igual la CLI y Unity. También incluye `CarWork` (el coche en el elevador y las
+herramientas), `Inventory`, `QuoteDraft`, `EcuEditor` (deshacer e interpolar), `SaveSlots`, `TutorialRunner`, el audio
+(`SoundBank`, `EngineSoundMixer`) y `Settings/` (`GameSettings`, `KeyBindings` con intercambio de teclas y
+`Localizer` con tablas `data/locale/*.json`, que recurre al español).
+
 ## 6. Unity
 
-- `Unity/Assets/Garage/Sim/Generated/` recibe las fuentes de `Garage.Sim` y `Garage.Data`
-  vía `tools/sync-sim-to-unity.(sh|ps1)`; ensamblado `Garage.Sim` (asmdef sin referencias a Unity).
-- `Garage.Unity.Runtime`: `GameBootstrap` (carga datos de `StreamingAssets/data`, crea el taller),
-  `SimulationRunner` (paso fijo en `FixedUpdate`), vistas de herramientas (render textures con
-  UI tipo software de taller), interacción, audio, desgaste visual.
-- `Garage.Unity.Editor`: menús `Garage/…` idempotentes que generan HDRP, escenas, materiales,
-  luces físicas, sondas y descargan assets CC0 de Poly Haven.
+- `Unity/Assets/Garage/Sim/Generated/` recibe las fuentes de `Garage.Sim`, `Garage.Data` y `Garage.Game` vía
+  `tools/sync-sim-to-unity.(sh|ps1)`, junto con `data/` en `StreamingAssets/data`.
+- `Garage.Unity.Runtime`:
+  - `Core`: `SimulationRunner` (dueño de la sesión, paso fijo), `GameBootstrap`, `MainMenuController` y
+    `GameOptions` (aplica opciones, crea acciones de entrada reasignables y carga los idiomas).
+  - `UI`: uGUI generada en código (`UiKit`, `UiPanel`, paneles, `OptionsView`, `LoadingScreen`).
+  - `Player`: controlador en primera persona e `InteractionSystem`.
+  - `Car`: montaje del coche con modelos y desgaste. También `Tools`, `Audio` y `World`.
+- `Garage.Unity.Editor`: menús `Garage/…` idempotentes para HDRP, escenas, materiales, luces físicas, assets CC0,
+  postprocesado de modelos y build de Windows (`BuildWindows`, también por `-executeMethod`).
 - `Garage.Unity.Tests`: EditMode.
+- `tools/unity-typecheck`: compila todos los scripts contra los ensamblados de referencia de UnityEngine y unos
+  *stand-ins* de los paquetes. Detecta errores de tipos sin el editor.
 
 ## 7. Calidad
 - `TreatWarningsAsErrors`, documentación XML en API pública, `Nullable` activado.

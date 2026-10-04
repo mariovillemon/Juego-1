@@ -37,7 +37,12 @@ Fecha: 2026-10-04. Rama: `claude/optimistic-fermat-k7qxj6`.
     presión diferencial (P2002, P2452–P2455, P2463, P244A/B), monitor de EGR (P0401/P0402/P0403) y NOx estimado.
   - Cuatro coches nuevos: Velmora Lumen (GDI turbo), Aurex Civa (VVT atmosférico), Nordak Fjord CRD (diésel
     completo) y Kessler Vento (GDI 2.0). Hay 12 escenarios y 5 encargos nuevos.
-- **Siguiente**: P5 (opciones, localización, build de Windows, pantalla de carga).
+- **Hecho — P5 pulido**:
+  - Opciones (gráficos, controles, audio, teclas) en el menú y en la pausa, guardadas en `settings.json`.
+  - Reasignación de teclas con intercambio automático.
+  - Textos ES/EN en `data/locale` para el menú, la pausa, las opciones, el HUD, la ayuda y la carga.
+  - Pantalla de carga con fundidos y consejos.
+  - Menú **Garage/Build/Windows x64** y `tools/build-windows.ps1/.sh`; `Builds/` está ignorado.
 - **Simplificado en P1**:
   - Las puntas del multímetro se colocan desde la vista de pines, no arrastrando cables en 3D.
   - La pasada de banco se calcula al instante y se reproduce en tiempo real en la gráfica.
@@ -71,34 +76,73 @@ Fecha: 2026-10-04. Rama: `claude/optimistic-fermat-k7qxj6`.
     devoluciones, reputación, días y alquiler, compra de herramientas/mejoras.
 - **`Garage.Data`**: parser/escritor JSON propio, validador de JSON Schema, carga en capas con mods
   (`$patch`, `$remove`, prioridad), mapeo a la simulación, guardado/carga versionado.
-- **Contenido**: 4 coches ficticios (compacto 2.0T, utilitario 1.4 atmosférico speed-density, berlina 2.0 TD
-  *experimental*, deportivo R6 3.0 biturbo), mapas de serie coherentes, 220 DTC genéricos reales con descripción en
-  inglés y español, 50 escenarios, 10 encargos, 12 clientes, catálogo de piezas, 12 mejoras. 15 JSON Schemas.
+- **Contenido**:
+  - 8 coches ficticios. Los 4 originales son un compacto 2.0T, un utilitario 1.4 atmosférico, una berlina 2.0 TD y
+    un deportivo R6 biturbo. Los nuevos son un GDI turbo 1.5, un VVT atmosférico 1.6, un diésel Euro 6 1.6 CRD
+    completo y un GDI 2.0.
+  - 237 DTC genéricos reales (ES/EN), 36 modos de fallo, 62 escenarios, 15 encargos, 12 clientes, catálogo de
+    piezas y 12 mejoras. 18 JSON Schemas.
 - **CLI** jugable de principio a fin (modo formación y realista, guion de demo usado en CI).
-- **Tests**: 140 (unitarios de sensores, PIDs, mapas, red, JSON; comportamiento emergente por familia de fallo;
-  daño; determinismo; datos y mods; herramientas; meta-juego; guardado).
+- **Tests**: 180 (unitarios de sensores, PIDs, mapas, red, JSON; comportamiento emergente por familia de fallo;
+  daño; determinismo; datos y mods; herramientas; meta-juego; guardado; sesión de juego; audio; sistemas
+  nuevos de P4; opciones, teclas e idiomas).
   Cobertura de líneas de `Garage.Sim`: ver "Cobertura" abajo.
 - **CI**: GitHub Actions (build Release sin warnings, validación de datos, tests con cobertura, sesión de CLI).
 
-## Escrito pero NO verificado (sin editor de Unity disponible)
-
-- Proyecto `Unity/` (Unity 6000.0 LTS + HDRP 17): manifest, asmdefs, sincronización del núcleo, menús idempotentes
-  (`Configure HDRP`, escenas de taller/menú/banco, luces físicas en lúmenes/lux y Kelvin, sondas, cielo físico,
-  decals procedurales, bake), descargador CC0 de Poly Haven, validador de escena, puente con la simulación,
-  controlador en primera persona, interacción (inspeccionar, conectores, tornillos en orden, sustituir), pantallas
-  de herramientas en RenderTexture (escáner, multímetro, osciloscopio, portátil de mapas con superficie 3D, monitor
-  del banco), desgaste visual desde datos, audio procedural por capas y pistas, tests EditMode.
-  **Puede necesitar ajustes al importarlo** (nombres de API de HDRP; las partes frágiles usan reflexión).
-  La API de Poly Haven no era accesible desde el entorno de desarrollo.
-
 ## A medias / simplificado
 
-- Diésel: funcional pero experimental (sin FAP, sin NOx, sin piloto).
-- Wideband como tensión equivalente; TPS/APP de una sola pista (sin correlación P2135).
-- EVAP sólo detecta purga atascada; sin prueba de estanqueidad.
-- Interfaz de Unity: menús de recepción/menú principal con IMGUI provisional; el desgaste usa tintado + decals en
-  lugar de un Shader Graph de capas.
-- Sin modelos 3D reales (placeholders bien escalados y nombrados); sin muestras de audio grabadas.
+- **Localización**: sólo están traducidos el menú principal, la pausa, las opciones, el HUD, la ayuda de teclas y
+  la pantalla de carga. El resto de paneles (tablón, tienda, escáner…) y los textos de la simulación (nombres de
+  piezas, DTC en la UI, mensajes de clientes) siguen en español. Las descripciones de DTC ya existen en inglés en
+  `dtc.json`.
+- **Teclas**: se reasignan las de teclado. El mando tiene asignaciones fijas solo para moverse, mirar, agacharse y la
+  linterna; la UI no se maneja con mando.
+- **Diésel**: no tiene inyección piloto, AdBlue/SCR ni calentadores con módulo, y el NOx es una estimación sin
+  sensor.
+- **Interfaz 3D**: las puntas del multímetro se colocan desde la vista de pines y el resto de herramientas
+  mecánicas se usan desde un panel. El banco calcula la pasada al instante y la reproduce en la gráfica.
+- **Desgaste**: tintado, decals y aspectos por avería, sin Shader Graph de capas.
+- **Audio**: síntesis de respaldo. Sólo habrá muestras reales si ejecutas `tools/fetch-audio` con tu clave de
+  Freesound.
+
+## Sin verificar (no hay editor de Unity en este entorno)
+
+Todo lo de `Unity/` está escrito para Unity 6000.0 y pasa el verificador de tipos (`tools/unity-typecheck`, también
+en CI), pero **nunca se ha ejecutado en el editor**. Eso incluye la UI y el ciclo de juego, las opciones (resolución,
+calidad, FOV de Cinemachine), la reasignación de teclas (`ApplyBindingOverride` en acciones ya creadas), la
+pantalla de carga, los menús de build y los scripts de build, el aspecto de los FBX importados y el audio. El
+verificador sólo detecta errores de nombres y tipos, no de comportamiento.
+
+## Qué comprobar en el editor (en este orden)
+
+1. `tools/sync-sim-to-unity.ps1` y abrir `Unity/`: la consola no debe tener errores de compilación.
+2. *Garage/Setup/Run All Setup Steps* y los tests EditMode (*Test Runner*).
+3. Play en `MainMenu.unity`:
+   - Cambiar el idioma a inglés en *Opciones* debe cambiar el menú al momento.
+   - Cambiar la calidad y el FOV debe notarse.
+   - *Volver* debe cerrar el panel.
+4. *Nueva partida*:
+   - La pantalla de carga debe hacer el fundido.
+   - El tutorial debe guiar el primer coche hasta entregarlo.
+5. Reasignar *Usar* a F en *Opciones › Teclas* (desde la pausa):
+   - E debe dejar de funcionar y F debe usar; la linterna debe pasar a E.
+   - La ayuda (F1) debe mostrar las teclas nuevas.
+6. Aceptar un encargo de los coches nuevos (Civa por el tapón, Fjord CRD por el FAP) y ver los códigos en el
+   escáner. La prueba EVAP necesita unos 2 minutos de motor en marcha y caliente.
+7. *Garage/Build/Windows x64*: debe aparecer `Builds/Windows/Taller.exe`. Ejecutarlo y comprobar que el
+   `settings.json` se crea en `LocalLow`.
+8. Si algo falla con HDRP o Cinemachine, mira primero `UnityCompat.cs` y `GameOptions.Apply`.
+
+## Siguientes pasos recomendados
+
+1. Corregir lo que salga al abrir en el editor (punto anterior) y ajustar la iluminación y el rendimiento en
+   escenas reales.
+2. Traducir el resto de paneles moviendo sus textos a `data/locale` (el `Localizer` ya cubre el mecanismo y el test
+   de claves avisará de las que falten).
+3. Shader Graph de desgaste por capas y modelos con texturas pintadas para el vano motor.
+4. Muestras de audio CC0 reales con `tools/fetch-audio`.
+5. Sistemas pendientes del roadmap: frenos/ABS, transmisión, UDS, banco 2 de sondas, AdBlue.
+6. Rendimiento del solver eléctrico para varios coches a la vez.
 
 ## Limitaciones conocidas del realismo
 
@@ -106,18 +150,11 @@ Fecha: 2026-10-04. Rama: `claude/optimistic-fermat-k7qxj6`.
   simplificadas; transmisión rígida (sin convertidor ni embrague real); combustibles sólo por RON; sin humedad del
   aire; turbo sin mapa de compresor real; los modos de fallo de señal usan una fracción del rango (no curvas de
   envejecimiento físicas); el picado es un índice continuo, no eventos por ciclo.
-- **Gráficos**: geometría primitiva; sin Shader Graph de suciedad por capas; el depth of field se activa por
-  distancia; sin LODs reales hasta tener modelos.
-
-## Siguientes pasos recomendados
-
-1. Abrir el proyecto en Unity 6, corregir lo que no compile, ejecutar los menús y los tests EditMode.
-2. Sustituir placeholders por modelos (empezar por motor T20 y vano, ver `ART_PIPELINE.md`) y grabar/obtener audio CC0.
-3. Shader Graph de desgaste con máscaras (suciedad, grasa, óxido, polvo, huellas) leído desde `WearController`.
-4. TPS/APP de doble pista, EVAP completo, GDI y VVT (fase 2 del roadmap).
-5. UI diegética de la recepción y del portátil; flujo de presupuesto con piezas desglosadas.
-6. Optimizar el solver eléctrico (sin asignaciones) para simular varios coches a la vez.
+- **Gráficos**:
+  - Modelos procedurales sencillos (sin texturas pintadas a mano).
+  - Sin Shader Graph de suciedad por capas.
 
 ## Cobertura
 
-Medida con coverlet (Release, 140 tests): **Garage.Sim 85,6 % de líneas (71,6 % ramas)**, Garage.Data 89,6 % líneas (79,2 % ramas).
+La última medición con coverlet se hizo con 140 tests: **Garage.Sim 85,6 % de líneas (71,6 % ramas)** y
+Garage.Data 89,6 % de líneas (79,2 % ramas). No se ha vuelto a medir con los 180 actuales.

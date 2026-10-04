@@ -5,13 +5,28 @@ Motor gasolina turbo/atmosférico, sensores con curvas reales, red eléctrica no
 diagnóstico OBD-II, modos de fallo genéricos, herramientas, banco, meta-juego, CLI, 4 coches, proyecto Unity base.
 
 ## Fase 2 — Más sistemas
-- **Diésel completo**: FAP con hollín/regeneraciones (P2463), inyección piloto/principal, VGT real, sensor NOx, AdBlue/SCR, bujías de incandescencia con módulo.
-- **Inyección directa (GDI)**: bomba de alta, raíl 50–350 bar, carbonilla en válvulas de admisión.
-- **Distribución variable** (VVT, P0010–P0014) con electroválvulas y presión de aceite.
-- **Frenos** (ABS con sensores de rueda, C0xxx), **suspensión** (holguras, ruidos), **transmisión** (TCM, deslizamientos, P07xx), **dirección**.
-- **CAN completo**: tramas reales con IDs, terminaciones de 120 Ω medibles, gateway, diagnóstico UDS (servicios 0x19/0x14/0x22/0x2E).
-- **Sensores dobles** (TPS/APP con dos pistas y correlación P2135/P2138), sensores de oxígeno en el banco 2 (V6/V8).
-- Rendimiento: solver eléctrico sin asignaciones, simulación multihilo de coches aparcados.
+- ✅ **Hecho**:
+  - Diésel Euro 6 con VGT, FAP (hollín, regeneraciones, P2463), monitor de EGR y NOx estimado.
+  - GDI (bomba de alta y rampa).
+  - VVT (P0010–P0012).
+  - TPS y pedal de doble pista (P2135/P2138).
+  - EVAP completo (P0440–P0457).
+  - Cuatro coches nuevos.
+- Pendiente:
+  - Diésel: inyección piloto, sensor de NOx real, AdBlue/SCR y calentadores con módulo.
+  - GDI: carbonilla en válvulas de admisión.
+  - VVT de escape (P0013/P0014).
+  - **Frenos** (ABS con sensores de rueda, C0xxx), **suspensión** (holguras, ruidos), **transmisión** (TCM,
+    deslizamientos, P07xx) y **dirección**.
+  - **CAN completo**: tramas reales con IDs, terminaciones de 120 Ω medibles, gateway y diagnóstico UDS
+    (servicios 0x19/0x14/0x22/0x2E).
+  - Sondas de oxígeno del banco 2 (V6/V8).
+  - Rendimiento: solver eléctrico sin asignaciones y simulación multihilo de coches aparcados.
+- Pulido de Unity:
+  - Shader Graph de desgaste por capas.
+  - Muestras de audio reales.
+  - Traducción completa de todos los paneles (hoy sólo menús, opciones, pausa y HUD).
+  - Soporte de mando en la UI.
 
 ## Fase 3 — Modding y Steam Workshop
 - Editor de coches en juego (plantilla + overrides) con validación en vivo contra los schemas.
