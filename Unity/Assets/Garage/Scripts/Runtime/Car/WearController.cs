@@ -34,6 +34,7 @@ namespace Garage.Unity
             float fade = (float)a.PaintFade;
             Color dirtTint = new Color(0.32f, 0.27f, 0.2f);
             Color rustTint = new Color(0.35f, 0.16f, 0.07f);
+            Transform bay = root.Find("EngineBay");
             foreach (Renderer r in root.GetComponentsInChildren<Renderer>())
             {
                 Material m = r.material; // instance per renderer
@@ -43,7 +44,7 @@ namespace Garage.Unity
                 }
 
                 Color c = m.GetColor(BaseColor);
-                bool underHood = r.transform.parent != null && r.transform.parent.name == "EngineBay";
+                bool underHood = bay != null && r.transform.IsChildOf(bay);
                 float dirtAmount = underHood ? Mathf.Clamp01(Dirt * 0.6f + grease * 0.6f) : Dirt * 0.45f;
                 c = Color.Lerp(c, Desaturate(c), fade * 0.5f);
                 c = Color.Lerp(c, dirtTint, dirtAmount * 0.55f);
