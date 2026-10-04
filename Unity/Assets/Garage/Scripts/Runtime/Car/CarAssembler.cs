@@ -221,6 +221,24 @@ namespace Garage.Unity
         {
             var e = new GameObject("Engine").transform;
             e.SetParent(bay, false);
+            GameObject model = Resources.Load<GameObject>("Engines/Engine_I" + _cyl);
+            if (model != null)
+            {
+                // Generated model (tools/blender/models.py) with the same dimensions as the placeholder below.
+                GameObject m = Instantiate(model, e);
+                m.name = "EngineModel";
+                SetLayer(m, 2);
+                foreach (Renderer r in m.GetComponentsInChildren<Renderer>())
+                {
+                    if (r.name.EndsWith("_LOD0"))
+                    {
+                        _occupied.Add(Shrink(r.bounds));
+                    }
+                }
+
+                return;
+            }
+
             Track(Static(e, "Block", PrimitiveType.Cube, new Vector3(0, 0, 0), new Vector3(_ew, BlockH, BlockD), _castIron));
             Track(Static(e, "Head", PrimitiveType.Cube, new Vector3(0, BlockTop + HeadH / 2, 0), new Vector3(_ew, HeadH, BlockD * 0.9f), _alu));
             Track(Static(e, "CamCover", PrimitiveType.Cube, new Vector3(0, HeadTop + 0.025f, 0.02f), new Vector3(_ew - 0.04f, 0.05f, BlockD * 0.55f), _dark));
@@ -383,8 +401,44 @@ namespace Garage.Unity
         private void Track(GameObject g) => _occupied.Add(Shrink(g.GetComponent<Renderer>().bounds));
 
         /// <summary>Box hitbox matching the visual, enlarged to <see cref="minHitbox"/> on each axis for tiny parts.</summary>
+        private static void SetLayer(GameObject go, int layer)
+        {
+            foreach (Transform t in go.GetComponentsInChildren<Transform>(true))
+            {
+                t.gameObject.layer = layer;
+            }
+        }
+
         private void FitHitbox(GameObject go)
         {
+            if (go.GetComponent<MeshFilter>() == null)
+            {
+                // Model with children (LODs, UCX colliders): one box around all its renderers, at least minHitbox.
+                Bounds b = new Bounds(Vector3.zero, Vector3.zero);
+                bool any = false;
+                foreach (Renderer r in go.GetComponentsInChildren<Renderer>())
+                {
+                    Bounds wb = r.bounds;
+                    Vector3 c = go.transform.InverseTransformPoint(wb.center);
+                    Vector3 e = go.transform.InverseTransformVector(wb.extents);
+                    var lb = new Bounds(c, new Vector3(Mathf.Abs(e.x), Mathf.Abs(e.y), Mathf.Abs(e.z)) * 2f);
+                    if (any)
+                    {
+                        b.Encapsulate(lb);
+                    }
+                    else
+                    {
+                        b = lb;
+                        any = true;
+                    }
+                }
+
+                BoxCollider hb = go.AddComponent<BoxCollider>();
+                hb.center = b.center;
+                hb.size = Vector3.Max(b.size, Vector3.one * minHitbox);
+                return;
+            }
+
             foreach (Collider old in go.GetComponents<Collider>())
             {
                 if (!(old is BoxCollider))

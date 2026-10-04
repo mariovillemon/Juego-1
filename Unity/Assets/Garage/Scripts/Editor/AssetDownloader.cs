@@ -154,15 +154,65 @@ namespace Garage.Unity.EditorTools
                 credits.Add($"| HDRI de referencia | `{hdri}` | Poly Haven | CC0 1.0 | https://polyhaven.com/a/{hdri} |");
             }
 
+            DownloadModels(credits, used);
             WriteCredits(credits);
             AssetDatabase.SaveAssets();
             EditorUtility.DisplayDialog("Descarga de assets", $"Descargados {credits.Count} recursos CC0 de Poly Haven.\nCréditos en docs/ASSET_CREDITS.md.", "Aceptar");
         }
 
+        /// <summary>Poly Haven model categories used to dress the workshop (props on shelves and benches).</summary>
+        private static readonly string[] ModelCategories = { "tools", "industrial", "containers", "furniture" };
+
+        /// <summary>Folder with downloaded CC0 models; Build Workshop Scene places them on the shelving.</summary>
+        public const string ModelsDir = Dest + "/Models";
+
+        /// <summary>Downloads a few CC0 models (FBX 1k with their textures) for set dressing.</summary>
+        private static void DownloadModels(List<string> credits, ISet<string> used)
+        {
+            int n = 0;
+            foreach (string category in ModelCategories)
+            {
+                JsonValue list;
+                try
+                {
+                    list = GetJson($"{Api}/assets?t=models&c={category}", "Modelos " + category);
+                }
+                catch (IOException)
+                {
+                    continue;
+                }
+
+                foreach (string id in list.Members.OrderByDescending(m => m.Value.Num("download_count")).Select(m => m.Key).Where(i => !used.Contains(i)).Take(2))
+                {
+                    JsonValue fbx = GetJson($"{Api}/files/{id}", id)["fbx"]["1k"]["fbx"];
+                    if (fbx.Kind != JsonKind.Object || fbx.Str("url").Length == 0)
+                    {
+                        continue;
+                    }
+
+                    string folder = $"{ModelsDir}/{id}";
+                    Save(folder, id + ".fbx", fbx.Str("url"));
+                    foreach (KeyValuePair<string, JsonValue> inc in fbx["include"].Members)
+                    {
+                        Save(folder, inc.Key, inc.Value.Str("url"));
+                    }
+
+                    used.Add(id);
+                    JsonValue info = GetJson($"{Api}/info/{id}", id + " info");
+                    string authors = string.Join(", ", info["authors"].Members.Select(m => m.Key));
+                    credits.Add($"| Atrezo del taller ({category}) | {info.Str("name", id)} (`{id}`) | {authors} | CC0 1.0 | https://polyhaven.com/a/{id} |");
+                    n++;
+                }
+            }
+
+            AssetDatabase.Refresh();
+            Debug.Log($"[Garage] {n} modelos CC0 descargados en {ModelsDir}. Vuelve a ejecutar Build Workshop Scene para colocarlos.");
+        }
+
         private static string Save(string folder, string file, string url)
         {
-            Directory.CreateDirectory(Path.Combine(EditorUtil.ProjectRoot, folder));
             string path = $"{folder}/{file}";
+            Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(EditorUtil.ProjectRoot, path)));
             File.WriteAllBytes(Path.Combine(EditorUtil.ProjectRoot, path), Get(url, file));
             return path;
         }

@@ -7,6 +7,42 @@
   *Apply Unit* activo y unidades de escena en metros; sin cámaras ni luces; *Smoothing: Face*; tangentes desde Unity.
 - Orígenes: en el punto de anclaje funcional (centro de la brida de un sensor, eje de una rueda, centro del conector).
 
+## Modelos procedurales con Blender (`tools/blender/`)
+
+`tools/blender/models.py` genera con Python, sin interfaz, modelos de poligonización baja-media a escala real.
+Cada modelo se exporta como FBX con LOD0, LOD1 y LOD2 (Decimate al 45 % y al 15 %) y colisiones `UCX_`
+simplificadas. Se guardan en `Unity/Assets/Garage/Resources/`:
+
+- `Engines/Engine_I4.fbx` y `Engine_I6.fbx`: bloque, culata, tapa de balancines con nervios, cárter, colector de
+  admisión con tubos, colector de escape, caja de cambios y polea. Las cotas son las mismas que en
+  `CarAssembler.BuildEngine`.
+- `CarParts/<Kind>.fbx`: bobina, bujía, inyector, turbo, intercooler, alternador, batería, cuerpo de mariposa,
+  centralita, relé, termostato, caja del filtro de aire, caudalímetro, catalizador, ventilador, los sensores (de
+  caja y roscados) y los manguitos. Cada uno se construye en el marco del *placeholder* al que sustituye: mismo
+  centro, orientación y tamaño.
+- `Workshop/TwoPostLift.fbx`, `Workbench.fbx` y `ToolCart.fbx`.
+
+Para regenerarlos:
+
+```bash
+# Con Blender instalado (4.2 o superior)
+blender --background --python tools/blender/models.py
+# Sin Blender, con el módulo bpy (Python 3.11)
+python -m venv .bpy && .bpy/bin/pip install bpy==4.2.0
+.bpy/bin/python tools/blender/models.py            # opcional: carpeta de salida como argumento
+```
+
+En Unity:
+
+- `GarageModelPostprocessor` importa estos FBX a escala 1 sin animación. Los materiales salen de la descripción del
+  FBX (HDRP/Lit), el LODGroup se crea a partir de los nombres `_LODn` y los `UCX_` se convierten en MeshCollider
+  convexos.
+- `CarAssembler` usa `Engines/Engine_I<n>` y `CarParts/<Kind>` si existen; si no, usa el *placeholder*.
+- *Build Workshop Scene* coloca el elevador, los bancos y el carro.
+- Los fusibles siguen siendo primitivas, porque su color indica el amperaje.
+
+Los FBX generados pesan unos 3 MB en total y se guardan en git sin LFS (D-62).
+
 ## Nombres de mallas
 ```
 <Slot>_<Parte>[_LOD<n>]      p. ej. injector_3_Body_LOD0, maf_Connector_LOD1

@@ -9,6 +9,11 @@ El **código** es MIT; el **contenido de datos** (`data/`) es CC BY 4.0 y de cre
 | Sonidos de motor y de averías | Síntesis procedural (`EngineAudio`, `CueAudioAndSmoke`) | MIT (propios) |
 | Geometría del taller y coches | Primitivas generadas por script (placeholders) | MIT (propias) |
 
+## Modelos 3D generados por el proyecto
+
+Todos los FBX de `Unity/Assets/Garage/Resources/` los genera `tools/blender/models.py`: son geometría procedural
+propia, sin assets de terceros, y se distribuyen con la misma licencia que el código (MIT).
+
 ## Sonidos grabados (pendiente)
 Cuando se añadan muestras de Freesound, sólo **CC0** o **CC-BY**; anotar aquí: nombre, autor, URL y licencia.
 Colocar en `Assets/Garage/Resources/Audio/<id de pista>` (p. ej. `sound.vacuum_hiss`) o asignarlas a `EngineAudio.sampleLayers`.

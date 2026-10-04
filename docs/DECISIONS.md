@@ -159,3 +159,9 @@ Fundamentals*, Bosch *Automotive Handbook*), no copia de datos propietarios.
 - **D-61 — Tutorial basado en datos** (`data/base/tutorials.json` + `tutorial.schema.json`): pasos con el evento
   que los completa y un fragmento de asunto opcional; el `TutorialRunner` observa el bus. Crea su propio encargo
   guionizado (escenario `sc_coil2_dead`).
+- **D-62 — Modelos procedurales con Blender en git**: los FBX que genera `tools/blender/models.py` pesan unos 3 MB y
+  se versionan directamente, con una excepción a la regla LFS en `.gitattributes`. Así quien descarga el zip o no
+  tiene Git LFS ve los modelos. Los modelos reales futuros (`.blend`, texturas) siguen yendo por LFS.
+- **D-63 — Atrezo CC0 de Poly Haven**: *Download Free Assets* descarga además algunos modelos (herramientas,
+  industrial, contenedores, mobiliario) en `Downloaded/Models`, y *Build Workshop Scene* los coloca en las
+  estanterías. Son decorativos: el juego no depende de ellos y no se versionan.

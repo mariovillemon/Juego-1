@@ -25,6 +25,10 @@ namespace UnityEditor
     [Flags] public enum StaticEditorFlags { ContributeGI = 1, OccluderStatic = 2, BatchingStatic = 4, NavigationStatic = 8, OccludeeStatic = 16, OffMeshLinkGeneration = 32, ReflectionProbeStatic = 64 }
     public static class GameObjectUtility { public static void SetStaticEditorFlags(GameObject g, StaticEditorFlags f) { } public static bool AreStaticEditorFlagsSet(GameObject g, StaticEditorFlags f) => false; }
     public class AssetImporter : UnityEngine.Object { public static AssetImporter GetAtPath(string p) => null; public void SaveAndReimport() { } }
+    public class AssetPostprocessor { public string assetPath; public AssetImporter assetImporter; }
+    public enum ModelImporterMaterialImportMode { None, ImportStandard, ImportViaMaterialDescription }
+    public class ModelImporter : AssetImporter { public float globalScale; public bool useFileScale, importAnimation, importCameras, importLights, addCollider; public ModelImporterMaterialImportMode materialImportMode; }
+    public static class PrefabUtility { public static UnityEngine.Object InstantiatePrefab(UnityEngine.Object o, Transform parent) => null; }
     public enum TextureImporterType { Default, NormalMap }
     public enum TextureImporterShape { Texture2D = 1, TextureCube = 2 }
     public class TextureImporter : AssetImporter { public TextureImporterType textureType; public TextureImporterShape textureShape; public bool sRGBTexture, alphaIsTransparency, mipmapEnabled; public int maxTextureSize, anisoLevel; }

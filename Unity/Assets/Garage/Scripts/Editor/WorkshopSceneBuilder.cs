@@ -47,6 +47,7 @@ namespace Garage.Unity.EditorTools
             LightingBuilder.BuildWorkshopLights(lighting, Width, Depth, Height);
             LightingBuilder.AddProbes(lighting, Width, Depth, Height);
             BuildDecals(world);
+            DressWithDownloadedModels(world);
             Transform sim = BuildSimulation(world, lighting);
             BuildPlayer(sim);
 
@@ -195,6 +196,8 @@ namespace Garage.Unity.EditorTools
                 }
             }
 
+            UseModel(lift, "Workshop/TwoPostLift", Vector3.zero, "Post_L", "Post_R", "Crossbeam", "Arm", "Pad");
+
             Transform carAnchor = new GameObject("CarAnchor").transform;
             carAnchor.SetParent(lift, false);
             carAnchor.localPosition = new Vector3(0, 0.2f, 0);
@@ -207,6 +210,7 @@ namespace Garage.Unity.EditorTools
                 float x = -4.5f + b * 2.1f;
                 Box(benches, $"Bench_{b}_Top", new Vector3(x, 0.9f, -Depth / 2 + 0.4f), new Vector3(2f, 0.05f, 0.75f), wood);
                 Box(benches, $"Bench_{b}_Cabinet", new Vector3(x, 0.44f, -Depth / 2 + 0.4f), new Vector3(1.96f, 0.86f, 0.7f), grey);
+                UseModel(benches, "Workshop/Workbench", new Vector3(x, 0, -Depth / 2 + 0.4f), $"Bench_{b}_Top", $"Bench_{b}_Cabinet");
             }
 
             // Shelving on the left wall.
@@ -291,6 +295,7 @@ namespace Garage.Unity.EditorTools
             Material cartRed = Mat("ToolCart_Red", new Color(0.5f, 0.06f, 0.05f), 0.3f, 0.5f);
             Box(cart, "Cart_Body", new Vector3(0, 0.45f, 0), new Vector3(0.7f, 0.8f, 0.45f), cartRed);
             Box(cart, "Cart_Top", new Vector3(0, 0.87f, 0), new Vector3(0.72f, 0.04f, 0.47f), steel);
+            UseModel(cart, "Workshop/ToolCart", Vector3.zero, "Cart_Body", "Cart_Top");
             MakeTool(Box(cart, "FuelGauge", new Vector3(-0.22f, 0.93f, 0), new Vector3(0.1f, 0.08f, 0.1f), grey, false), CarWork.FuelGauge, "manómetro de combustible");
             MakeTool(Box(cart, "CompressionTester", new Vector3(-0.05f, 0.93f, 0.1f), new Vector3(0.08f, 0.08f, 0.16f), Mat("Gauge_Blue", new Color(0.1f, 0.2f, 0.45f), 0.2f, 0.5f), false), CarWork.Compression, "compresímetro");
             MakeTool(Box(cart, "LeakDownTester", new Vector3(0.1f, 0.93f, -0.1f), new Vector3(0.12f, 0.08f, 0.08f), grey, false), CarWork.LeakDown, "comprobador de fugas");
@@ -307,6 +312,52 @@ namespace Garage.Unity.EditorTools
             var dynoAnchor = new GameObject("DynoCarAnchor").transform;
             dynoAnchor.SetParent(dyno, false);
             dynoAnchor.localPosition = new Vector3(0, 0.02f, -1.3f);
+        }
+
+        /// <summary>
+        /// If a generated model exists (Assets/Garage/Resources/&lt;path&gt;.fbx), places it under the parent at the
+        /// given local position and removes the placeholder children with the given names (prefix match).
+        /// </summary>
+        private static void UseModel(Transform parent, string resourcePath, Vector3 localPos, params string[] placeholders)
+        {
+            GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Garage/Resources/{resourcePath}.fbx");
+            if (asset == null)
+            {
+                return;
+            }
+
+            var remove = new List<GameObject>();
+            foreach (Transform c in parent)
+            {
+                foreach (string p in placeholders)
+                {
+                    if (c.name.StartsWith(p))
+                    {
+                        remove.Add(c.gameObject);
+                    }
+                }
+            }
+
+            foreach (GameObject g in remove)
+            {
+                Object.DestroyImmediate(g);
+            }
+
+            var go = (GameObject)PrefabUtility.InstantiatePrefab(asset, parent);
+            go.transform.localPosition = localPos;
+            go.transform.localRotation = Quaternion.identity;
+            // LOD0 contributes to GI and gets an exact static collider; lower LODs are only drawn.
+            foreach (MeshRenderer r in go.GetComponentsInChildren<MeshRenderer>())
+            {
+                if (r.name.EndsWith("_LOD0"))
+                {
+                    GameObjectUtility.SetStaticEditorFlags(r.gameObject, StaticEditorFlags.ContributeGI | StaticEditorFlags.BatchingStatic | StaticEditorFlags.ReflectionProbeStatic);
+                    if (r.GetComponent<Collider>() == null)
+                    {
+                        r.gameObject.AddComponent<MeshCollider>().sharedMesh = r.GetComponent<MeshFilter>().sharedMesh;
+                    }
+                }
+            }
         }
 
         private static void MakeTool(GameObject go, string toolId, string name)
@@ -330,6 +381,44 @@ namespace Garage.Unity.EditorTools
             T view = screen.AddComponent<T>();
             view.screenRenderer = screen.GetComponent<Renderer>();
             return device;
+        }
+
+        /// <summary>Places the CC0 models downloaded by Garage/Assets/Download Free Assets on the shelving.</summary>
+        private static void DressWithDownloadedModels(Transform world)
+        {
+            string dir = Path.Combine(EditorUtil.ProjectRoot, AssetDownloader.ModelsDir);
+            if (!Directory.Exists(dir))
+            {
+                return;
+            }
+
+            Transform dressing = new GameObject("Dressing_CC0").transform;
+            dressing.SetParent(world, false);
+            int i = 0;
+            foreach (string file in Directory.GetFiles(dir, "*.fbx", SearchOption.AllDirectories))
+            {
+                string assetPath = "Assets" + file.Substring(Path.Combine(EditorUtil.ProjectRoot, "Assets").Length).Replace('\\', '/');
+                GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                if (asset == null)
+                {
+                    continue;
+                }
+
+                // Shelving on the left wall: two units × 5 levels (see BuildEquipment).
+                int unit = i % 2, level = 1 + (i / 2) % 4;
+                var go = (GameObject)PrefabUtility.InstantiatePrefab(asset, dressing);
+                go.transform.localPosition = new Vector3(-Width / 2 + 0.35f, 0.17f + level * 0.5f, -1.5f + unit * 2.2f + ((i / 8) - 0.5f) * 0.8f);
+                go.transform.localRotation = Quaternion.Euler(0, 90, 0);
+                foreach (MeshRenderer r in go.GetComponentsInChildren<MeshRenderer>())
+                {
+                    if (r.GetComponent<Collider>() == null)
+                    {
+                        r.gameObject.AddComponent<MeshCollider>().sharedMesh = r.GetComponent<MeshFilter>().sharedMesh;
+                    }
+                }
+
+                i++;
+            }
         }
 
         private static void BuildDecals(Transform world)

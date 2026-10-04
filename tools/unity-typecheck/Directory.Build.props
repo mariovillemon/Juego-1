@@ -1,0 +1,8 @@
+<Project>
+  <!-- Several projects live in this folder: give each its own obj/ so restores do not overwrite each other. -->
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+    <Nullable>disable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>
