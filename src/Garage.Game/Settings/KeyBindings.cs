@@ -55,7 +55,6 @@ namespace Garage.Game.Settings
             new BindableAction("upgrades", "<Keyboard>/u", "key.upgrades"),
             new BindableAction("laptop", "<Keyboard>/l", "key.laptop"),
             new BindableAction("help", "<Keyboard>/f1", "key.help"),
-            new BindableAction("fast", "<Keyboard>/leftShift", "key.fast"),
         };
 
         /// <summary>Paths that cannot be assigned (reserved for pause).</summary>

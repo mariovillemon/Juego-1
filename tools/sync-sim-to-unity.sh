@@ -11,5 +11,5 @@ for p in Garage.Sim Garage.Data Garage.Game; do
 done
 DATA="$ROOT/Unity/Assets/StreamingAssets/data"
 rm -rf "$DATA"; mkdir -p "$DATA"
-cp -r "$ROOT/data/base" "$ROOT/data/schemas" "$DATA/"
+cp -r "$ROOT/data/base" "$ROOT/data/schemas" "$ROOT/data/locale" "$DATA/"
 echo "Sincronizado: $(find "$DEST" -name '*.cs' | wc -l) ficheros .cs y datos en StreamingAssets/data"

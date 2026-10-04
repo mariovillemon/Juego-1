@@ -61,10 +61,3 @@ namespace UnityEngine.Rendering.HighDefinition
     public class HDRenderPipelineAsset : UnityEngine.Rendering.RenderPipelineAsset { public override UnityEngine.Rendering.RenderPipeline CreatePipeline() => null; }
     public class HDAdditionalReflectionData : MonoBehaviour { }
 }
-
-namespace Unity.Cinemachine
-{
-    public struct LensSettings { public float FieldOfView, NearClipPlane, FarClipPlane; }
-    public class CinemachineCamera : MonoBehaviour { public LensSettings Lens; }
-    public class CinemachineBrain : MonoBehaviour { }
-}

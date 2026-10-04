@@ -512,21 +512,22 @@ namespace Garage.Unity.UI
         private bool _saving = true;
         private Button _mode;
 
-        protected override string Title => "Pausa";
+        protected override string Title => GameOptions.T("pause.title");
 
         protected override Vector2 SizeFraction => new Vector2(0.5f, 0.75f);
 
         protected override void Build()
         {
-            UiKit.Button(Body, "Continuar", Close, UiTheme.ButtonPrimary);
-            UiKit.Button(Body, "Cerrar el taller por hoy (pasar al día siguiente)", () => { Runner.Session.EndDay(); Close(); });
+            UiKit.Button(Body, GameOptions.T("pause.continue"), Close, UiTheme.ButtonPrimary);
+            UiKit.Button(Body, GameOptions.T("pause.endday"), () => { Runner.Session.EndDay(); Close(); });
             _mode = UiKit.Button(Body, "", () => { _saving = !_saving; Refresh(); });
             _slots = UiKit.Scroll(Body, "Slots");
-            UiKit.Button(Body, "Ayuda de teclas", () => Ui.Toast(GameUI.HelpText, true, 12f));
-            UiKit.Button(Body, "Salir al menú principal", () =>
+            UiKit.Button(Body, GameOptions.T("pause.help"), () => Ui.Toast(GameUI.HelpText, true, 12f));
+            UiKit.Button(Body, GameOptions.T("pause.options"), () => Ui.Options.Open());
+            UiKit.Button(Body, GameOptions.T("pause.quit"), () =>
             {
                 UiState.Reset();
-                UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+                LoadingScreen.Load("MainMenu");
             }, UiTheme.ButtonDanger);
         }
 
@@ -544,12 +545,12 @@ namespace Garage.Unity.UI
 
         public override void Refresh()
         {
-            UiKit.SetText(_mode, _saving ? "Modo: GUARDAR (pulsa para cambiar a cargar)" : "Modo: CARGAR (pulsa para cambiar a guardar)");
+            UiKit.SetText(_mode, GameOptions.T(_saving ? "pause.mode_save" : "pause.mode_load"));
             UiKit.Clear(_slots);
             foreach (SaveSlotInfo info in Runner.Slots.List())
             {
                 SaveSlotInfo slot = info;
-                string label = $"Ranura {info.Slot}: {info.Summary}" + (info.Used ? $"  <color=#999>({info.SavedAt:dd/MM HH:mm})</color>" : "");
+                string label = GameOptions.T("menu.slot", info.Slot, info.Summary) + (info.Used ? $"  <color=#999>({info.SavedAt:dd/MM HH:mm})</color>" : "");
                 UiKit.Button(_slots, label, () =>
                 {
                     if (_saving)

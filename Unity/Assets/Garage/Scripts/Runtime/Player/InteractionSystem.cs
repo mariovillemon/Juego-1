@@ -29,15 +29,15 @@ namespace Garage.Unity
 
         private void Awake()
         {
-            _use = Make("<Keyboard>/e");
-            _drop = Make("<Keyboard>/g");
-            _repair = Make("<Keyboard>/r");
-            _connector = Make("<Keyboard>/c");
-            _key = Make("<Keyboard>/k");
-            _carPanel = Make("<Keyboard>/v");
+            _use = GameOptions.Button("use");
+            _drop = GameOptions.Button("drop");
+            _repair = GameOptions.Button("repair");
+            _connector = GameOptions.Button("connector");
+            _key = GameOptions.Button("key");
+            _carPanel = GameOptions.Button("car");
             _click = Make("<Mouse>/leftButton");
-            _unplug = Make("<Keyboard>/q");
-            _road = Make("<Keyboard>/t");
+            _unplug = GameOptions.Button("unplug");
+            _road = GameOptions.Button("road");
             _lastPos = transform.position;
         }
 
@@ -52,6 +52,7 @@ namespace Garage.Unity
         {
             foreach (InputAction a in new[] { _use, _drop, _repair, _connector, _key, _carPanel, _click, _unplug, _road })
             {
+                GameOptions.Untrack(a);
                 a?.Dispose();
             }
         }

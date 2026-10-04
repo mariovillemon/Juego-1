@@ -37,7 +37,10 @@ namespace Garage.Unity.UI
         public ShopPanel Shop { get; private set; }
         public InventoryPanel Inventory { get; private set; }
         public UpgradesPanel Upgrades { get; private set; }
+        public OptionsPanel Options { get; private set; }
+
         public PausePanel Pause { get; private set; }
+
         public DeliveryPanel Delivery { get; private set; }
         public ScannerPanel Scanner { get; private set; }
         public MultimeterPanel Meter { get; private set; }
@@ -80,15 +83,16 @@ namespace Garage.Unity.UI
             Wiring = Add(new WiringPanel());
             Mechanical = Add(new MechanicalPanel());
             Pause = Add(new PausePanel());
+            Options = Add(new OptionsPanel());
 
-            _board = Key("<Keyboard>/tab");
-            _sheet = Key("<Keyboard>/j");
-            _shop = Key("<Keyboard>/p");
-            _inventory = Key("<Keyboard>/i");
-            _upgrades = Key("<Keyboard>/u");
+            _board = GameOptions.Button("board");
+            _sheet = GameOptions.Button("sheet");
+            _shop = GameOptions.Button("shop");
+            _inventory = GameOptions.Button("inventory");
+            _upgrades = GameOptions.Button("upgrades");
             _pause = Key("<Keyboard>/escape");
-            _laptop = Key("<Keyboard>/l");
-            _help = Key("<Keyboard>/f1");
+            _laptop = GameOptions.Button("laptop");
+            _help = GameOptions.Button("help");
         }
 
         private static InputAction Key(string binding)
@@ -112,6 +116,7 @@ namespace Garage.Unity.UI
                 Session.Events.Raised += OnEvent;
             }
 
+            GameOptions.Apply(); // FOV, blur and bindings for this scene's objects
             RefreshHud();
             RefreshTutorial();
         }
@@ -125,6 +130,7 @@ namespace Garage.Unity.UI
 
             foreach (InputAction a in new[] { _board, _sheet, _shop, _inventory, _upgrades, _pause, _laptop, _help })
             {
+                GameOptions.Untrack(a);
                 a?.Dispose();
             }
 
@@ -172,7 +178,7 @@ namespace Garage.Unity.UI
 
         private void Update()
         {
-            if (_pause.WasPressedThisFrame())
+            if (_pause.WasPressedThisFrame() && !OptionsView.Capturing)
             {
                 if (!UiState.CloseTop())
                 {
@@ -220,14 +226,14 @@ namespace Garage.Unity.UI
             }
 
             _prompt.text = UiState.AnyOpen ? "" : Prompt;
-            _tool.text = string.IsNullOrEmpty(HeldTool) ? "Manos libres" : "En la mano: " + HeldTool;
+            _tool.text = string.IsNullOrEmpty(HeldTool) ? GameOptions.T("hud.free_hands") : GameOptions.T("hud.holding", HeldTool);
             if (runner != null && runner.Work != null)
             {
                 _status.text = runner.Work.StatusLine;
             }
             else
             {
-                _status.text = "Elevador libre — acepta un encargo en el tablón (Tab).";
+                _status.text = GameOptions.T("hud.lift_free", K("board"));
             }
 
             for (int i = _feed.Count - 1; i >= 0; i--)
@@ -251,8 +257,10 @@ namespace Garage.Unity.UI
         }
 
         /// <summary>Key reference.</summary>
-        public const string HelpText = "WASD andar · ratón mirar · Ctrl agacharse · F linterna · E usar/coger · G soltar · R desmontar/sustituir · C conector · " +
-            "K contacto/arranque · V acciones del coche · Tab encargos · J hoja de trabajo · P tienda · I almacén · U herramientas · L portátil ECU · Esc pausa";
+        public static string HelpText => GameOptions.T("hud.help", K("forward"), K("left"), K("back"), K("right"), K("crouch"), K("lamp"), K("use"), K("drop"),
+            K("repair"), K("connector"), K("key"), K("car"), K("board"), K("sheet"), K("shop"), K("inventory"), K("upgrades"), K("laptop"));
+
+        private static string K(string id) => GameOptions.KeyName(id);
 
         // ------------------------------------------------------------------ HUD
 

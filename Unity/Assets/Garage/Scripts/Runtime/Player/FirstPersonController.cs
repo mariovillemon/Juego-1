@@ -40,13 +40,20 @@ namespace Garage.Unity
             _cc.center = new Vector3(0, standHeight / 2, 0);
             _eyeBase = head != null ? head.localPosition.y : 1.65f;
             _move = new InputAction("Move", InputActionType.Value);
-            _move.AddCompositeBinding("2DVector").With("Up", "<Keyboard>/w").With("Down", "<Keyboard>/s").With("Left", "<Keyboard>/a").With("Right", "<Keyboard>/d");
+            var keys = GameOptions.Current.Bindings;
+            _move.AddCompositeBinding("2DVector").With("Up", keys.PathOf("forward")).With("Down", keys.PathOf("back")).With("Left", keys.PathOf("left")).With("Right", keys.PathOf("right"));
+            GameOptions.Track(_move, 1, "forward");
+            GameOptions.Track(_move, 2, "back");
+            GameOptions.Track(_move, 3, "left");
+            GameOptions.Track(_move, 4, "right");
             _move.AddBinding("<Gamepad>/leftStick");
             _look = new InputAction("Look", InputActionType.Value, "<Mouse>/delta");
             _look.AddBinding("<Gamepad>/rightStick").WithProcessor("scaleVector2(x=8,y=8)");
-            _crouch = new InputAction("Crouch", InputActionType.Button, "<Keyboard>/leftCtrl");
+            _crouch = new InputAction("Crouch", InputActionType.Button, keys.PathOf("crouch"));
+            GameOptions.Track(_crouch, 0, "crouch");
             _crouch.AddBinding("<Gamepad>/buttonEast");
-            _lamp = new InputAction("Lamp", InputActionType.Button, "<Keyboard>/f");
+            _lamp = new InputAction("Lamp", InputActionType.Button, keys.PathOf("lamp"));
+            GameOptions.Track(_lamp, 0, "lamp");
             _lamp.AddBinding("<Gamepad>/dpad/up");
         }
 
@@ -58,6 +65,15 @@ namespace Garage.Unity
             _lamp.Enable();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+
+        private void OnDestroy()
+        {
+            foreach (InputAction a in new[] { _move, _look, _crouch, _lamp })
+            {
+                GameOptions.Untrack(a);
+                a.Dispose();
+            }
         }
 
         private void OnDisable()
@@ -83,7 +99,13 @@ namespace Garage.Unity
                 return;
             }
 
-            Vector2 look = _look.ReadValue<Vector2>() * lookSensitivity;
+            var options = GameOptions.Current;
+            Vector2 look = _look.ReadValue<Vector2>() * lookSensitivity * (float)options.MouseSensitivity;
+            if (options.InvertY)
+            {
+                look.y = -look.y;
+            }
+
             transform.Rotate(0, look.x, 0);
             _pitch = Mathf.Clamp(_pitch - look.y, -85f, 85f);
 

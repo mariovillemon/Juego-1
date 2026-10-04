@@ -17,4 +17,5 @@ if (Test-Path $Data) { Remove-Item $Data -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $Data | Out-Null
 Copy-Item (Join-Path $Root "data/base") $Data -Recurse
 Copy-Item (Join-Path $Root "data/schemas") $Data -Recurse
+Copy-Item (Join-Path $Root "data/locale") $Data -Recurse
 Write-Host "Sincronizado en $Dest y $Data"

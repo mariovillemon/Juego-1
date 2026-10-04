@@ -73,11 +73,12 @@ namespace UnityEngine.InputSystem
         public struct BindingSyntax { public BindingSyntax WithProcessor(string p) => this; }
         public struct CompositeSyntax { public CompositeSyntax With(string name, string binding, string groups = null, string processors = null) => this; }
     }
-    namespace Controls { public class ButtonControl { public bool isPressed; public bool wasPressedThisFrame; } public class KeyControl : ButtonControl { } }
+    namespace Controls { public class ButtonControl { public string name; public bool isPressed; public bool wasPressedThisFrame; } public class KeyControl : ButtonControl { } }
+    public static class InputActionRebindingExtensions { public static void ApplyBindingOverride(this InputAction a, int bindingIndex, string path) { } }
     public class InputDevice { }
     public class Keyboard : InputDevice
     {
-        public static Keyboard current;
+        public static Keyboard current; public Controls.KeyControl[] allKeys;
         public Controls.KeyControl shiftKey, jKey, escapeKey, tabKey, leftAltKey, upArrowKey, downArrowKey, leftArrowKey, rightArrowKey, numpadPlusKey, equalsKey, numpadMinusKey, minusKey, enterKey, spaceKey;
     }
     public class Mouse : InputDevice { public static Mouse current; }
@@ -105,4 +106,11 @@ namespace UnityEngine.Rendering.HighDefinition
     public class HDAdditionalLightData : MonoBehaviour { }
     public class HDAdditionalCameraData : MonoBehaviour { }
     public class DecalProjector : MonoBehaviour { public Material material; public Vector3 size; public Vector3 pivot; public float fadeFactor; public float drawDistance; }
+}
+
+namespace Unity.Cinemachine
+{
+    public struct LensSettings { public float FieldOfView, NearClipPlane, FarClipPlane; }
+    public class CinemachineCamera : MonoBehaviour { public LensSettings Lens; }
+    public class CinemachineBrain : MonoBehaviour { }
 }

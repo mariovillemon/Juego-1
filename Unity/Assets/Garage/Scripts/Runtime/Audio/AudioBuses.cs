@@ -55,7 +55,7 @@ namespace Garage.Unity
         /// <summary>Current gain of a bus, for sources whose volume is driven every frame (not registered).</summary>
         public static float GainOf(AudioBus b) => _instance == null ? 1f : _instance.Gain(b);
 
-        private float Gain(AudioBus b) => b switch
+        private float Gain(AudioBus b) => GameOptions.BusGain(b) * b switch
         {
             AudioBus.Engine => engine,
             AudioBus.Workshop => workshop,
