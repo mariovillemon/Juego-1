@@ -28,8 +28,16 @@ Fecha: 2026-10-04. Rama: `claude/optimistic-fermat-k7qxj6`.
   - Desgaste: más aspectos de avería, polvo y charco de aceite.
 - **Hecho — P3 audio**: banco de sonidos por datos, mezclador de capas de motor con tests, sonidos de eventos y
   ambiente con síntesis de respaldo, y `tools/fetch-audio` (Freesound, sólo CC0). Ver `docs/AUDIO.md`.
-- **Siguiente**: P4 (diésel completo, EVAP, TPS/APP dobles, GDI y VVT, 4 coches nuevos) y P5 (opciones,
-  localización, build de Windows).
+- **Hecho — P4 simulación ampliada** (tests en `NewSystemsTests`, 174 tests en verde):
+  - TPS y pedal de doble pista con correlación (P2135/P2138, P0222/P0223), modo emergencia y P2106.
+  - EVAP completo: canister, válvula de venteo, sensor de presión del depósito, tapón, prueba de estanqueidad por
+    fases (P0440–P0457, incluidas P0442/P0455/P0456/P0457, P0441, P0446, P0451–P0453 y P0496).
+  - VVT de admisión (P0010/P0011/P0012) y GDI con bomba de alta y rampa (P0087/P0088/P0089/P0090).
+  - Diésel Euro 6: geometría variable (P0234/P0299), FAP con hollín, cenizas, regeneración pasiva y activa,
+    presión diferencial (P2002, P2452–P2455, P2463, P244A/B), monitor de EGR (P0401/P0402/P0403) y NOx estimado.
+  - Cuatro coches nuevos: Velmora Lumen (GDI turbo), Aurex Civa (VVT atmosférico), Nordak Fjord CRD (diésel
+    completo) y Kessler Vento (GDI 2.0). Hay 12 escenarios y 5 encargos nuevos.
+- **Siguiente**: P5 (opciones, localización, build de Windows, pantalla de carga).
 - **Simplificado en P1**:
   - Las puntas del multímetro se colocan desde la vista de pines, no arrastrando cables en 3D.
   - La pasada de banco se calcula al instante y se reproduce en tiempo real en la gráfica.

@@ -165,3 +165,15 @@ Fundamentals*, Bosch *Automotive Handbook*), no copia de datos propietarios.
 - **D-63 — Atrezo CC0 de Poly Haven**: *Download Free Assets* descarga además algunos modelos (herramientas,
   industrial, contenedores, mobiliario) en `Downloaded/Models`, y *Build Workshop Scene* los coloca en las
   estanterías. Son decorativos: el juego no depende de ellos y no se versionan.
+- **D-64 — La prueba EVAP necesita vacío en el colector**: sólo arranca con MAP 25 kPa por debajo de la presión
+  atmosférica, en lazo cerrado y caliente. Los turbo la hacen a carga ligera. Las fases son sellado, vaciado,
+  mantenimiento y apertura. El tapón tiene una válvula de alivio (−3,5/+5 kPa) que limita el vacío del depósito.
+- **D-65 — Tamaño de fuga por pendiente**: más de 0,118 kPa/s se considera fuga pequeña (P0442) y entre 0,035 y
+  0,118 kPa/s, muy pequeña (P0456). Si no se llega a vacío y la purga mueve las correcciones, la fuga es grande
+  (P0455, o P0457 si se ha repostado en ese viaje).
+- **D-66 — Contrapresión de la geometría variable**: cerrar los álabes sube la presión de escape en proporción
+  al caudal. Es lo que permite diagnosticar «VGT agarrotada cerrada» por el humo y la EGT, no sólo por la
+  sobrepresión.
+- **D-67 — Pista B invertida**: la pista B del TPS va invertida y la del pedal tiene media pendiente. El umbral
+  de correlación es del 8 %, así que un sesgo pequeño (<0,3 V) no genera código. Es intencionado: no todo
+  desajuste debe encender el testigo.
