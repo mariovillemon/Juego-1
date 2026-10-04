@@ -10,6 +10,8 @@ namespace Garage.Unity
     /// </summary>
     public sealed class FocusDepthOfField : MonoBehaviour
     {
+        [Tooltip("Desenfoque del fondo al inspeccionar de cerca (desactivado por defecto)")] public bool blurWhenInspecting = false;
+
         public Camera viewCamera;
         public Volume volume;
         [Tooltip("Distancia por debajo de la cual se activa el enfoque de inspección (m)")] public float inspectDistance = 1.2f;
@@ -30,6 +32,12 @@ namespace Garage.Unity
         {
             if (_dof == null || viewCamera == null)
             {
+                return;
+            }
+
+            if (!blurWhenInspecting)
+            {
+                _dof.focusMode.Override(DepthOfFieldMode.Off);
                 return;
             }
 
