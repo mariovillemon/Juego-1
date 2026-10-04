@@ -102,6 +102,56 @@
       "generate": {
         "difficulty": 3
       }
+    },
+    {
+      "id": "job_11",
+      "customer": "cust_marta",
+      "car": "aurex_civa",
+      "goal": "repair",
+      "complaint": "Reposté ayer y hoy tengo la luz del motor encendida.",
+      "budget": 150,
+      "deadlineDays": 2,
+      "scenario": "sc_evap_cap"
+    },
+    {
+      "id": "job_12",
+      "customer": "cust_sara",
+      "car": "nordak_fjord_crd",
+      "goal": "repair",
+      "complaint": "Hago todo en ciudad y ahora el coche no tira.",
+      "budget": 900,
+      "deadlineDays": 4,
+      "scenario": "sc_dpf_blocked"
+    },
+    {
+      "id": "job_13",
+      "customer": "cust_pablo",
+      "car": "velmora_lumen",
+      "goal": "repair",
+      "complaint": "En una rotonda se quedó sin fuerza y el testigo encendido.",
+      "budget": 500,
+      "deadlineDays": 2,
+      "scenario": "sc_tps_track_b"
+    },
+    {
+      "id": "job_14",
+      "customer": "cust_elena",
+      "car": "kessler_vento",
+      "goal": "repair",
+      "complaint": "Cuando piso a fondo da tirones.",
+      "budget": 1100,
+      "deadlineDays": 4,
+      "scenario": "sc_gdi_hp_pump_weak"
+    },
+    {
+      "id": "job_15",
+      "customer": "cust_anton",
+      "car": "aurex_civa",
+      "goal": "repair",
+      "complaint": "Antes subía las cuestas en cuarta y ahora no.",
+      "budget": 500,
+      "deadlineDays": 3,
+      "scenario": "sc_vvt_stuck"
     }
   ]
 }

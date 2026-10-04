@@ -51,3 +51,4 @@ Unity/Assets/Garage/Downloaded.meta
 .DS_Store
 Thumbs.db
 Unity/Assets/StreamingAssets/data/
+__pycache__/

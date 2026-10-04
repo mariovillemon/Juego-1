@@ -374,6 +374,18 @@ SCENARIOS = [
     ("sc_combo_coil_plug", "Bobina en corto interno + bujía gastada", "kessler_rapace", 4, [f("internal_short", "coil3", 0.6), f("wear", "plug3", 0.6)], "Petardea al acelerar."),
     ("sc_diesel_egr_open", "EGR atascada abierta (diésel)", "nordak_atlas_td", 3, [f("stuck_open", "egr_valve", 0.8)], "Humo negro y falta de fuerza."),
     ("sc_diesel_boost_leak", "Fuga de presión en diésel", "nordak_atlas_td", 2, [f("leak_boost", "intercooler", 0.6)], "Pierde fuerza y echa humo negro al acelerar."),
+    ("sc_evap_canister_leak", "Fuga pequeña en el canister", "aurex_civa", 3, [f("leak_evap", "evap_canister", 0.45)], "Testigo de motor encendido; anda perfecto."),
+    ("sc_evap_cap", "Tapón de gasolina flojo", "aurex_civa", 1, [f("cap_loose", "fuel_cap", 0.8)], "Se me encendió la luz justo después de repostar."),
+    ("sc_evap_vent_stuck", "Válvula de venteo EVAP atascada cerrada", "velmora_lumen", 3, [f("stuck_closed", "evap_vent", 1)], "Al abrir el tapón hace un ruido de succión."),
+    ("sc_evap_purge_leak", "Purga del canister que no cierra", "velmora_lumen", 3, [f("stuck_open", "purge_valve", 1)], "Arranca mal después de repostar."),
+    ("sc_tps_track_b", "Pista B del sensor de mariposa desajustada", "velmora_lumen", 3, [f("signal_bias_high", "tps2", 0.4)], "De repente se queda sin fuerza (modo emergencia)."),
+    ("sc_app2_open", "Pedal: pista 2 sin señal", "aurex_civa", 2, [f("wire_open", "app2", 1, pin="signal")], "El acelerador responde a medias."),
+    ("sc_vvt_stuck", "Electroválvula VVT bloqueada", "aurex_civa", 3, [f("stuck_closed", "vvt_valve", 1)], "Le falta fuerza en medios y testigo encendido."),
+    ("sc_gdi_hp_pump_weak", "Bomba de alta presión gastada", "kessler_vento", 4, [f("weak", "hp_pump", 0.7)], "Tirones al acelerar fuerte y testigo."),
+    ("sc_vgt_sticking", "Geometría variable agarrotada", "nordak_fjord_crd", 4, [f("stuck_open", "vgt_actuator", 1)], "No tira nada abajo; parece que no tenga turbo."),
+    ("sc_dpf_blocked", "Filtro de partículas colmatado", "nordak_fjord_crd", 3, [f("restriction", "dpf", 0.8)], "Va sin fuerza y el testigo del filtro no se apaga."),
+    ("sc_dpf_cracked", "Filtro de partículas roto", "nordak_fjord_crd", 4, [f("dpf_cracked", "dpf", 0.8)], "Testigo de motor; echa algo de humo."),
+    ("sc_dpf_sensor", "Sensor de presión diferencial averiado", "nordak_fjord_crd", 3, [f("wire_open", "dpf_dp", 1, pin="signal")], "Hace regeneraciones continuamente."),
 ]
 
 
@@ -392,6 +404,11 @@ JOBS = [
     ("job_08", "cust_anton", "velmora_pico", "repair", "sc_thermostat_open", None, "La calefacción no calienta nada y gasta más que antes.", 250, 7),
     ("job_09", "cust_nuria", "aurex_strada_gt", "repair", "sc_timing_stretch", None, "Hace un ruido metálico al arrancar en frío y ahora tengo un código.", 1200, 5),
     ("job_10", "cust_flota", "kessler_rapace", "repair", None, None, "Revisión completa: testigo encendido tras el último cliente de alquiler.", 1500, 3),
+    ("job_11", "cust_marta", "aurex_civa", "repair", "sc_evap_cap", None, "Reposté ayer y hoy tengo la luz del motor encendida.", 150, 2),
+    ("job_12", "cust_sara", "nordak_fjord_crd", "repair", "sc_dpf_blocked", None, "Hago todo en ciudad y ahora el coche no tira.", 900, 4),
+    ("job_13", "cust_pablo", "velmora_lumen", "repair", "sc_tps_track_b", None, "En una rotonda se quedó sin fuerza y el testigo encendido.", 500, 2),
+    ("job_14", "cust_elena", "kessler_vento", "repair", "sc_gdi_hp_pump_weak", None, "Cuando piso a fondo da tirones.", 1100, 4),
+    ("job_15", "cust_anton", "aurex_civa", "repair", "sc_vvt_stuck", None, "Antes subía las cuestas en cuarta y ahora no.", 500, 3),
 ]
 
 

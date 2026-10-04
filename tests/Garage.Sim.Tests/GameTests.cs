@@ -168,8 +168,8 @@ public class GameTests
     {
         Workshop a = NewGame(99);
         Workshop b = NewGame(99);
-        var ja = a.Offers(13).Last();
-        var jb = b.Offers(13).Last();
+        var ja = a.Offers(18).Last();
+        var jb = b.Offers(18).Last();
         Assert.StartsWith("gen_", ja.Definition.Id);
         Assert.Equal(ja.Definition.CarId, jb.Definition.CarId);
         Assert.Equal(ja.OriginalFaults.Select(f => f.ToString()), jb.OriginalFaults.Select(f => f.ToString()));

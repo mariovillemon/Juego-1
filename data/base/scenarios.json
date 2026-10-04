@@ -740,6 +740,176 @@
         }
       ],
       "complaint": "Pierde fuerza y echa humo negro al acelerar."
+    },
+    {
+      "id": "sc_evap_canister_leak",
+      "name": "Fuga pequeña en el canister",
+      "car": "aurex_civa",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "leak_evap",
+          "component": "evap_canister",
+          "severity": 0.45
+        }
+      ],
+      "complaint": "Testigo de motor encendido; anda perfecto."
+    },
+    {
+      "id": "sc_evap_cap",
+      "name": "Tapón de gasolina flojo",
+      "car": "aurex_civa",
+      "difficulty": 1,
+      "faults": [
+        {
+          "mode": "cap_loose",
+          "component": "fuel_cap",
+          "severity": 0.8
+        }
+      ],
+      "complaint": "Se me encendió la luz justo después de repostar."
+    },
+    {
+      "id": "sc_evap_vent_stuck",
+      "name": "Válvula de venteo EVAP atascada cerrada",
+      "car": "velmora_lumen",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "stuck_closed",
+          "component": "evap_vent",
+          "severity": 1
+        }
+      ],
+      "complaint": "Al abrir el tapón hace un ruido de succión."
+    },
+    {
+      "id": "sc_evap_purge_leak",
+      "name": "Purga del canister que no cierra",
+      "car": "velmora_lumen",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "stuck_open",
+          "component": "purge_valve",
+          "severity": 1
+        }
+      ],
+      "complaint": "Arranca mal después de repostar."
+    },
+    {
+      "id": "sc_tps_track_b",
+      "name": "Pista B del sensor de mariposa desajustada",
+      "car": "velmora_lumen",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "signal_bias_high",
+          "component": "tps2",
+          "severity": 0.4
+        }
+      ],
+      "complaint": "De repente se queda sin fuerza (modo emergencia)."
+    },
+    {
+      "id": "sc_app2_open",
+      "name": "Pedal: pista 2 sin señal",
+      "car": "aurex_civa",
+      "difficulty": 2,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "app2",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "El acelerador responde a medias."
+    },
+    {
+      "id": "sc_vvt_stuck",
+      "name": "Electroválvula VVT bloqueada",
+      "car": "aurex_civa",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "stuck_closed",
+          "component": "vvt_valve",
+          "severity": 1
+        }
+      ],
+      "complaint": "Le falta fuerza en medios y testigo encendido."
+    },
+    {
+      "id": "sc_gdi_hp_pump_weak",
+      "name": "Bomba de alta presión gastada",
+      "car": "kessler_vento",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "weak",
+          "component": "hp_pump",
+          "severity": 0.7
+        }
+      ],
+      "complaint": "Tirones al acelerar fuerte y testigo."
+    },
+    {
+      "id": "sc_vgt_sticking",
+      "name": "Geometría variable agarrotada",
+      "car": "nordak_fjord_crd",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "stuck_open",
+          "component": "vgt_actuator",
+          "severity": 1
+        }
+      ],
+      "complaint": "No tira nada abajo; parece que no tenga turbo."
+    },
+    {
+      "id": "sc_dpf_blocked",
+      "name": "Filtro de partículas colmatado",
+      "car": "nordak_fjord_crd",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "restriction",
+          "component": "dpf",
+          "severity": 0.8
+        }
+      ],
+      "complaint": "Va sin fuerza y el testigo del filtro no se apaga."
+    },
+    {
+      "id": "sc_dpf_cracked",
+      "name": "Filtro de partículas roto",
+      "car": "nordak_fjord_crd",
+      "difficulty": 4,
+      "faults": [
+        {
+          "mode": "dpf_cracked",
+          "component": "dpf",
+          "severity": 0.8
+        }
+      ],
+      "complaint": "Testigo de motor; echa algo de humo."
+    },
+    {
+      "id": "sc_dpf_sensor",
+      "name": "Sensor de presión diferencial averiado",
+      "car": "nordak_fjord_crd",
+      "difficulty": 3,
+      "faults": [
+        {
+          "mode": "wire_open",
+          "component": "dpf_dp",
+          "severity": 1,
+          "pin": "signal"
+        }
+      ],
+      "complaint": "Hace regeneraciones continuamente."
     }
   ]
 }
