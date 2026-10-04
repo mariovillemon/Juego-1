@@ -19,7 +19,17 @@ Fecha: 2026-10-04. Rama: `claude/optimistic-fermat-k7qxj6`.
   - Cambio de simulación: la ECU corta inyección ante fallos que dañan el catalizador, y el daño térmico del
     catalizador está recalibrado (D-59).
   - `tools/unity-typecheck`: compila los scripts de Unity sin el editor (también en CI).
-- **Siguiente**: P2 (gráficos: modelos por Blender/Poly Haven, desgaste), P3 (audio), P4 (simulación), P5 (pulido).
+- **Hecho — P2 gráficos**:
+  - `tools/blender/` (ejecutado aquí con `bpy` 4.2) genera los FBX a escala real con LOD0/1/2 y colisiones
+    `UCX_`: motores I4 e I6, 30 piezas, elevador, banco de trabajo, carro y carrocería de compacto. Ya están
+    versionados en `Resources/`.
+  - Postprocesador de importación y sustitución automática en `CarAssembler` y en la escena.
+  - Poly Haven: texturas, HDRI y ahora también modelos CC0 de atrezo.
+  - Desgaste: más aspectos de avería, polvo y charco de aceite.
+- **Hecho — P3 audio**: banco de sonidos por datos, mezclador de capas de motor con tests, sonidos de eventos y
+  ambiente con síntesis de respaldo, y `tools/fetch-audio` (Freesound, sólo CC0). Ver `docs/AUDIO.md`.
+- **Siguiente**: P4 (diésel completo, EVAP, TPS/APP dobles, GDI y VVT, 4 coches nuevos) y P5 (opciones,
+  localización, build de Windows).
 - **Simplificado en P1**:
   - Las puntas del multímetro se colocan desde la vista de pines, no arrastrando cables en 3D.
   - La pasada de banco se calcula al instante y se reproduce en tiempo real en la gráfica.
