@@ -90,7 +90,7 @@ namespace Garage.Unity
                 {
                     active.Add(cue.Id);
                     AudioSource s = SourceFor(cue);
-                    s.volume = (float)cue.Intensity;
+                    s.volume = (float)cue.Intensity * AudioBuses.GainOf(cue.Id == "sound.fan" ? AudioBus.Workshop : AudioBus.Engine);
                 }
                 else if (cue.Channel == CueChannel.Smoke)
                 {
@@ -137,7 +137,6 @@ namespace Garage.Unity
             s.loop = true;
             s.clip = Resources.Load<AudioClip>("Audio/" + cue.Id) ?? ProceduralClip(cue.Id);
             s.Play();
-            AudioBuses.Register(s, cue.Id == "sound.fan" ? AudioBus.Workshop : AudioBus.Engine);
             _sources[cue.Id] = s;
             return s;
         }

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "audio.schema.json",
+  "title": "Banco de sonidos: capas de motor, sonidos de eventos y bucles",
+  "type": "object",
+  "required": ["sounds"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "sounds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "bus"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9_.]+$", "description": "También nombre del clip en Resources/Audio/." },
+          "kind": { "enum": ["engine_layer", "event", "loop"] },
+          "bus": { "enum": ["engine", "workshop", "tools", "ambience", "ui"] },
+          "rpm": { "type": "number", "minimum": 0 },
+          "load": { "type": "number", "minimum": 0, "maximum": 1 },
+          "perspective": { "enum": ["exterior", "interior"] },
+          "triggers": { "type": "array", "items": { "type": "string" } },
+          "volume": { "type": "number", "minimum": 0, "maximum": 1 },
+          "query": { "type": "string", "description": "Búsqueda en Freesound (sólo CC0) para tools/fetch-audio." },
+          "duration": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2, "description": "Duración aceptada en segundos [mín, máx]." }
+        }
+      }
+    }
+  }
+}

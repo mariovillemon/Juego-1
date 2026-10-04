@@ -481,6 +481,9 @@ namespace Garage.Unity.EditorTools
             em.rateOverTime = 0;
             cues.exhaustSmoke = ps;
             sim.AddComponent<AudioBuses>();
+            GameAudio gameAudio = sim.AddComponent<GameAudio>();
+            gameAudio.runner = runner;
+            gameAudio.assembler = assembler;
             AudioReverbZone reverb = sim.AddComponent<AudioReverbZone>();
             reverb.reverbPreset = AudioReverbPreset.Hangar;
             reverb.minDistance = 6f;

@@ -1,18 +1,20 @@
+using System.Collections.Generic;
+using Garage.Game.Audio;
 using UnityEngine;
 
 namespace Garage.Unity
 {
     /// <summary>
     /// Engine sound in layers driven by the simulation: firing pulses at the real firing frequency (rpm/120 × cylinders),
-    /// intake/load noise, turbo whine, and per-cylinder dropouts when it misfires. Procedural until recorded CC0/CC-BY
-    /// samples are assigned to <see cref="sampleLayers"/> (crossfaded by rpm and pitched).
+    /// intake/load noise, turbo whine, and per-cylinder dropouts when it misfires. When the recorded layers of the sound
+    /// bank exist (data/base/audio.json → Resources/Audio/engine.*), they are mixed instead by EngineSoundMixer:
+    /// equal-power crossfade by rpm and load, pitched by rpm, exterior/interior by the listener's position.
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
     public sealed class EngineAudio : MonoBehaviour
     {
         public SimulationRunner runner;
-        [Tooltip("Muestras grabadas a rpm conocidas (opcional). Se mezclan por rpm.")] public AudioClip[] sampleLayers;
-        public float[] sampleRpm = { 900, 2500, 4500, 6500 };
+        [Tooltip("Distancia (m) del oyente al asiento del conductor por debajo de la cual se oye la capa interior")] public float interiorDistance = 0.9f;
 
         private volatile float _rpm;
         private volatile float _load;
@@ -24,7 +26,9 @@ namespace Garage.Unity
         private double _turboPhase;
         private uint _noise = 2463534242;
         private int _sampleRate;
-        private AudioSource[] _layers;
+        private readonly List<(SoundDefinition Def, AudioSource Source, bool Interior)> _layers = new List<(SoundDefinition, AudioSource, bool)>();
+        private List<SoundDefinition> _ext, _int;
+        private bool _useSamples;
 
         private void Start()
         {
@@ -39,18 +43,36 @@ namespace Garage.Unity
             }
 
             AudioBuses.Register(src, AudioBus.Engine);
-            if (sampleLayers != null && sampleLayers.Length > 0)
+            if (runner != null && runner.Content != null)
             {
-                _layers = new AudioSource[sampleLayers.Length];
-                for (int i = 0; i < sampleLayers.Length; i++)
+                // Recorded layers (Resources/Audio/<id>, fetched by tools/fetch-audio) replace the synthesis when
+                // the full exterior set exists; interior layers are optional.
+                SoundBank bank = SoundBank.Load(runner.Content);
+                _ext = bank.EngineLayers("exterior");
+                _int = bank.EngineLayers("interior");
+                _useSamples = _ext.Count > 0 && _ext.TrueForAll(l => Resources.Load<AudioClip>("Audio/" + l.Id) != null);
+                if (_useSamples)
                 {
-                    _layers[i] = gameObject.AddComponent<AudioSource>();
-                    _layers[i].clip = sampleLayers[i];
-                    _layers[i].loop = true;
-                    _layers[i].spatialBlend = 1f;
-                    _layers[i].Play();
-                    AudioBuses.Register(_layers[i], AudioBus.Engine);
+                    AddLayers(_ext, false);
+                    if (_int.TrueForAll(l => Resources.Load<AudioClip>("Audio/" + l.Id) != null))
+                    {
+                        AddLayers(_int, true);
+                    }
                 }
+            }
+        }
+
+        private void AddLayers(List<SoundDefinition> defs, bool interior)
+        {
+            foreach (SoundDefinition d in defs)
+            {
+                AudioSource a = gameObject.AddComponent<AudioSource>();
+                a.clip = Resources.Load<AudioClip>("Audio/" + d.Id);
+                a.loop = true;
+                a.spatialBlend = interior ? 0f : 1f;
+                a.volume = 0;
+                a.Play();
+                _layers.Add((d, a, interior));
             }
         }
 
@@ -80,13 +102,23 @@ namespace Garage.Unity
             }
 
             _knock = k;
-            if (_layers != null)
+            if (_useSamples)
             {
-                for (int i = 0; i < _layers.Length && i < sampleRpm.Length; i++)
+                bool hasInterior = _layers.Exists(l => l.Interior);
+                float interior = 0f;
+                Camera cam = Camera.main;
+                if (hasInterior && cam != null)
                 {
-                    float d = Mathf.Abs(_rpm - sampleRpm[i]);
-                    _layers[i].volume = Mathf.Clamp01(1f - d / 1800f) * (0.4f + 0.6f * _load);
-                    _layers[i].pitch = Mathf.Max(0.3f, _rpm / sampleRpm[i]);
+                    interior = Mathf.Clamp01(1f - (Vector3.Distance(cam.transform.position, transform.position) - interiorDistance) / 0.5f);
+                }
+
+                var ext = EngineSoundMixer.Mix(_ext, _rpm, _load, 1 - interior);
+                var inn = hasInterior ? EngineSoundMixer.Mix(_int, _rpm, _load, interior) : new List<LayerMix>();
+                foreach (var (def, source, isInterior) in _layers)
+                {
+                    LayerMix m = (isInterior ? inn : ext).Find(x => x.Id == def.Id);
+                    source.volume = (float)m.Volume * AudioBuses.GainOf(AudioBus.Engine);
+                    source.pitch = (float)m.Pitch;
                 }
             }
         }
@@ -101,7 +133,7 @@ namespace Garage.Unity
 
         private void OnAudioFilterRead(float[] data, int channels)
         {
-            if (_layers != null || _sampleRate == 0)
+            if (_useSamples || _sampleRate == 0)
             {
                 return;
             }

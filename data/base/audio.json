@@ -1,0 +1,505 @@
+{
+  "$schema": "../schemas/audio.schema.json",
+  "sounds": [
+    {
+      "id": "engine.idle_ext",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 850,
+      "load": 0,
+      "perspective": "exterior",
+      "query": "car engine idle loop exterior",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.low_on_ext",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 2000,
+      "load": 1,
+      "perspective": "exterior",
+      "query": "car engine 2000 rpm acceleration loop exterior",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.low_off_ext",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 2000,
+      "load": 0,
+      "perspective": "exterior",
+      "query": "car engine 2000 rpm deceleration loop exterior",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.mid_on_ext",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 3800,
+      "load": 1,
+      "perspective": "exterior",
+      "query": "car engine 3800 rpm acceleration loop exterior",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.mid_off_ext",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 3800,
+      "load": 0,
+      "perspective": "exterior",
+      "query": "car engine 3800 rpm deceleration loop exterior",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.high_on_ext",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 6000,
+      "load": 1,
+      "perspective": "exterior",
+      "query": "car engine 6000 rpm acceleration loop exterior",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.high_off_ext",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 6000,
+      "load": 0,
+      "perspective": "exterior",
+      "query": "car engine 6000 rpm deceleration loop exterior",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.idle_int",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 850,
+      "load": 0,
+      "perspective": "interior",
+      "query": "car engine idle loop interior cabin",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.low_on_int",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 2000,
+      "load": 1,
+      "perspective": "interior",
+      "query": "car engine 2000 rpm acceleration loop interior cabin",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.low_off_int",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 2000,
+      "load": 0,
+      "perspective": "interior",
+      "query": "car engine 2000 rpm deceleration loop interior cabin",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.mid_on_int",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 3800,
+      "load": 1,
+      "perspective": "interior",
+      "query": "car engine 3800 rpm acceleration loop interior cabin",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.mid_off_int",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 3800,
+      "load": 0,
+      "perspective": "interior",
+      "query": "car engine 3800 rpm deceleration loop interior cabin",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.high_on_int",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 6000,
+      "load": 1,
+      "perspective": "interior",
+      "query": "car engine 6000 rpm acceleration loop interior cabin",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "engine.high_off_int",
+      "kind": "engine_layer",
+      "bus": "engine",
+      "rpm": 6000,
+      "load": 0,
+      "perspective": "interior",
+      "query": "car engine 6000 rpm deceleration loop interior cabin",
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "tool.connector_click",
+      "kind": "event",
+      "bus": "tools",
+      "triggers": [
+        "ConnectorChanged",
+        "ScannerPlugged",
+        "ScannerUnplugged"
+      ],
+      "query": "plastic connector click",
+      "volume": 1.0,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "tool.scanner_beep",
+      "kind": "event",
+      "bus": "tools",
+      "triggers": [
+        "ScannerConnected",
+        "DtcRead",
+        "DtcCleared"
+      ],
+      "query": "electronic device beep short",
+      "volume": 0.6,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "tool.meter_beep",
+      "kind": "event",
+      "bus": "tools",
+      "triggers": [
+        "MeterMeasured"
+      ],
+      "query": "multimeter beep",
+      "volume": 0.5,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "tool.ratchet",
+      "kind": "event",
+      "bus": "tools",
+      "triggers": [
+        "PartRemoved"
+      ],
+      "query": "socket ratchet wrench",
+      "volume": 1.0,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "tool.impact_gun",
+      "kind": "event",
+      "bus": "tools",
+      "triggers": [
+        "PartInstalled"
+      ],
+      "query": "pneumatic impact wrench",
+      "volume": 1.0,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "tool.pickup",
+      "kind": "event",
+      "bus": "tools",
+      "triggers": [
+        "ToolPickedUp",
+        "ToolPlaced"
+      ],
+      "query": "tool pick up metal",
+      "volume": 0.6,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "ui.click",
+      "kind": "event",
+      "bus": "ui",
+      "triggers": [
+        "UiOpened",
+        "QuoteCountered"
+      ],
+      "query": "ui click soft",
+      "volume": 0.4,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "ui.cash",
+      "kind": "event",
+      "bus": "ui",
+      "triggers": [
+        "JobDelivered",
+        "JobAccepted"
+      ],
+      "query": "cash register",
+      "volume": 0.6,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "ui.error",
+      "kind": "event",
+      "bus": "ui",
+      "triggers": [
+        "CommandFailed"
+      ],
+      "query": "ui error buzz soft",
+      "volume": 0.4,
+      "duration": [
+        0.05,
+        4
+      ]
+    },
+    {
+      "id": "engine.starter",
+      "kind": "event",
+      "bus": "engine",
+      "triggers": [
+        "EngineStarted"
+      ],
+      "query": "car engine starter crank",
+      "volume": 0.9,
+      "duration": [
+        0.5,
+        5
+      ]
+    },
+    {
+      "id": "engine.key_on",
+      "kind": "event",
+      "bus": "engine",
+      "triggers": [
+        "IgnitionOn"
+      ],
+      "query": "car fuel pump prime whine",
+      "volume": 0.6,
+      "duration": [
+        0.5,
+        4
+      ]
+    },
+    {
+      "id": "engine.failure_bang",
+      "kind": "event",
+      "bus": "engine",
+      "triggers": [
+        "EngineFailure"
+      ],
+      "query": "engine explosion bang",
+      "volume": 1.0,
+      "duration": [
+        0.3,
+        5
+      ]
+    },
+    {
+      "id": "ambience.workshop",
+      "kind": "loop",
+      "bus": "ambience",
+      "query": "garage workshop ambience",
+      "volume": 0.5,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "ambience.workshop_reverb_tail",
+      "kind": "loop",
+      "bus": "ambience",
+      "query": "large hall room tone",
+      "volume": 0.3,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "sound.fan",
+      "kind": "loop",
+      "bus": "workshop",
+      "query": "radiator cooling fan car",
+      "volume": 0.7,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "sound.turbo_spool",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "turbo spool whistle",
+      "volume": 0.6,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "sound.vacuum_hiss",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "air leak hiss",
+      "volume": 0.6,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "sound.rod_knock",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "engine rod knock",
+      "volume": 0.8,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "sound.exhaust_tick",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "exhaust leak ticking",
+      "volume": 0.7,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "sound.knock",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "engine detonation pinging",
+      "volume": 0.7,
+      "duration": [
+        3,
+        60
+      ]
+    },
+    {
+      "id": "sound.boost_leak",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "turbo boost leak whistle hiss",
+      "volume": 0.7,
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "sound.chain_rattle",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "timing chain rattle",
+      "volume": 0.7,
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "sound.cranking",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "car engine cranking no start",
+      "volume": 0.7,
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "sound.misfire_exhaust",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "engine misfire exhaust popping",
+      "volume": 0.7,
+      "duration": [
+        2,
+        30
+      ]
+    },
+    {
+      "id": "sound.seized",
+      "kind": "loop",
+      "bus": "engine",
+      "query": "engine seized grinding",
+      "volume": 0.7,
+      "duration": [
+        2,
+        30
+      ]
+    }
+  ]
+}
