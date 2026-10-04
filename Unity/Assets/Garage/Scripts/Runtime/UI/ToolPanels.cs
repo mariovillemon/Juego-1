@@ -206,10 +206,11 @@ namespace Garage.Unity.UI
 
         protected override void Build()
         {
-            _reading = UiKit.Label(Body, "----", 64, new Color(0.08f, 0.1f, 0.08f), TextAlignmentOptions.Center);
-            Image lcd = _reading.gameObject.AddComponent<Image>();
-            lcd.color = new Color(0.58f, 0.63f, 0.53f);
-            UiKit.Size(_reading, 96);
+            // LCD: a background panel with the reading as a child (one Graphic per GameObject).
+            Image lcd = UiKit.Panel(Body, "Lcd", new Color(0.58f, 0.63f, 0.53f));
+            UiKit.Size(lcd, 96);
+            _reading = UiKit.Label(lcd.transform, "----", 64, new Color(0.08f, 0.1f, 0.08f), TextAlignmentOptions.Center);
+            UiKit.Fill(_reading.rectTransform);
             RectTransform dial = UiKit.Row(Body, "Dial");
             UiKit.Button(dial, "V DC", () => { Work?.SetMeterMode(MeterMode.DcVolts); Refresh(); });
             UiKit.Button(dial, "Ω", () => { Work?.SetMeterMode(MeterMode.Ohms); Refresh(); });
