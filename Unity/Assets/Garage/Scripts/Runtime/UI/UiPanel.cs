@@ -112,7 +112,16 @@ namespace Garage.Unity.UI
             UiKit.Anchor(Body, Vector2.zero, Vector2.one);
             Body.offsetMin = new Vector2(UiTheme.Padding, UiTheme.Padding);
             Body.offsetMax = new Vector2(-UiTheme.Padding, -48 - UiTheme.Padding);
-            Build();
+            try
+            {
+                Build();
+            }
+            catch (System.Exception e)
+            {
+                // A broken panel must not stay on screen half built over the game.
+                Debug.LogException(e);
+            }
+
             Root.SetActive(false);
         }
 
