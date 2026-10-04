@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Type-checks Unity/Assets/Garage/Scripts/Editor (UnityEditor stand-ins in EditorStubs.cs). -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>CS1591;CS0618</NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
+    <AssemblyName>Garage.Unity.Editor.Check</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" IncludeAssets="compile" PrivateAssets="all" />
+    <Compile Include="EditorStubs.cs" />
+    <Compile Include="../../Unity/Assets/Garage/Scripts/Editor/**/*.cs" />
+    <ProjectReference Include="Runtime.csproj" />
+    <ProjectReference Include="../../src/Garage.Game/Garage.Game.csproj" />
+  </ItemGroup>
+</Project>

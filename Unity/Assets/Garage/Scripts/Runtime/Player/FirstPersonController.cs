@@ -78,7 +78,7 @@ namespace Garage.Unity
                 inspectionLamp.enabled = !inspectionLamp.enabled;
             }
 
-            if (Frozen)
+            if (Frozen || Garage.Unity.UI.UiState.AnyOpen)
             {
                 return;
             }

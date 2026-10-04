@@ -16,6 +16,7 @@ namespace Garage.Unity
 
         protected override void Refresh()
         {
+            // Own display-only session: the live trace on the bench scope must not charge workshop time.
             if (_session == null || _session.Car != Runner.Car)
             {
                 _session = new DiagnosticSession(Runner.Car);

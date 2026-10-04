@@ -24,6 +24,8 @@ jobs:
         run: dotnet test tests/Garage.Sim.Tests -c Release --no-build --collect:"XPlat Code Coverage" --results-directory TestResults
       - name: Scripted CLI session (smoke test)
         run: dotnet run --project src/Garage.Cli -c Release --no-build -- --formacion --script tools/demo_session.txt > cli_demo.txt && grep -q "TRABAJO TERMINADO" cli_demo.txt
+      - name: Type-check Unity scripts (no editor)
+        run: ./tools/unity-typecheck/check.sh
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4

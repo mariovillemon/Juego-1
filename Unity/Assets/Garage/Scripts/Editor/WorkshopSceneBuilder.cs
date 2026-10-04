@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using Garage.Game;
+using Garage.Unity.UI;
 using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -250,21 +252,68 @@ namespace Garage.Unity.EditorTools
             Box(office, "Glass_Partition", new Vector3(-1.75f, 1.25f, 0), new Vector3(0.04f, 2.5f, 3f), glass);
             Box(office, "Desk", new Vector3(0, 0.75f, 0), new Vector3(1.4f, 0.04f, 0.7f), wood);
             Box(office, "Desk_Leg", new Vector3(0, 0.37f, 0), new Vector3(1.3f, 0.74f, 0.05f), grey);
-            office.gameObject.AddComponent<CustomerController>();
+            GameObject pc = Box(office, "Office_Computer", new Vector3(-0.3f, 0.98f, -0.15f), new Vector3(0.5f, 0.32f, 0.04f), grey, false);
+            Usable board = pc.AddComponent<Usable>();
+            board.kind = Usable.Kind.Board;
+            board.label = "ordenador de recepción: tablón de encargos";
+            GameObject tablet = Box(office, "Parts_Catalogue", new Vector3(0.35f, 0.78f, 0.05f), new Vector3(0.25f, 0.015f, 0.18f), grey, false);
+            Usable shop = tablet.AddComponent<Usable>();
+            shop.kind = Usable.Kind.Shop;
+            shop.label = "catálogo de recambios (tienda)";
+            GameObject cork = Box(office, "Tools_Catalogue", new Vector3(0.9f, 1.5f, -0.3f), new Vector3(0.04f, 0.6f, 0.9f), wood, false);
+            Usable upg = cork.AddComponent<Usable>();
+            upg.kind = Usable.Kind.Upgrades;
+            upg.label = "catálogo de herramientas y mejoras";
 
-            // Tool stations on the benches.
+            // Hand tools on the first bench (pick up with E) and a tool cart near the lift.
             Transform tools = new GameObject("ToolStations").transform;
             tools.SetParent(eq, false);
-            Device<ScannerToolView>(tools, "Scanner", new Vector3(-4.8f, 0.95f, -Depth / 2 + 0.35f), new Vector3(0.12f, 0.03f, 0.2f), grey);
-            Device<MultimeterToolView>(tools, "Multimeter", new Vector3(-4.4f, 0.95f, -Depth / 2 + 0.35f), new Vector3(0.09f, 0.04f, 0.18f), Mat("Meter_Yellow", new Color(0.8f, 0.6f, 0.05f), 0f, 0.4f));
-            Device<OscilloscopeView>(tools, "Oscilloscope", new Vector3(-2.4f, 1.05f, -Depth / 2 + 0.35f), new Vector3(0.35f, 0.2f, 0.25f), grey);
+            GameObject scanner = Device<ScannerToolView>(tools, "Scanner", new Vector3(-4.8f, 0.95f, -Depth / 2 + 0.35f), new Vector3(0.12f, 0.03f, 0.2f), grey);
+            MakeTool(scanner, CarWork.Scanner, "escáner OBD");
+            GameObject meter = Device<MultimeterToolView>(tools, "Multimeter", new Vector3(-4.4f, 0.95f, -Depth / 2 + 0.35f), new Vector3(0.09f, 0.04f, 0.18f), Mat("Meter_Yellow", new Color(0.8f, 0.6f, 0.05f), 0f, 0.4f));
+            MakeTool(meter, CarWork.Meter, "multímetro");
+            GameObject scope = Device<OscilloscopeView>(tools, "Oscilloscope", new Vector3(-2.4f, 1.05f, -Depth / 2 + 0.35f), new Vector3(0.35f, 0.2f, 0.25f), grey);
+            MakeTool(scope, CarWork.Scope, "osciloscopio");
             GameObject laptop = Device<EcuMapEditorView>(tools, "Laptop_ECU", new Vector3(-0.3f, 0.95f, -Depth / 2 + 0.4f), new Vector3(0.36f, 0.02f, 0.25f), grey);
+            Usable lu = laptop.AddComponent<Usable>();
+            lu.kind = Usable.Kind.Laptop;
+            lu.label = "portátil: editor de mapas ECU y esquemas";
             var surface = new GameObject("MapSurface3D");
             surface.transform.SetParent(tools, false);
             surface.transform.localPosition = new Vector3(0.3f, 1.05f, -Depth / 2 + 0.35f);
             surface.transform.localScale = Vector3.one * 0.4f;
             laptop.GetComponentInChildren<EcuMapEditorView>().surface = surface.AddComponent<MeshFilter>();
             surface.AddComponent<MeshRenderer>().sharedMaterial = Mat("MapSurface", Color.white, 0f, 0.5f);
+
+            Transform cart = new GameObject("ToolCart").transform;
+            cart.SetParent(eq, false);
+            cart.localPosition = new Vector3(-0.4f, 0, -1.2f);
+            Material cartRed = Mat("ToolCart_Red", new Color(0.5f, 0.06f, 0.05f), 0.3f, 0.5f);
+            Box(cart, "Cart_Body", new Vector3(0, 0.45f, 0), new Vector3(0.7f, 0.8f, 0.45f), cartRed);
+            Box(cart, "Cart_Top", new Vector3(0, 0.87f, 0), new Vector3(0.72f, 0.04f, 0.47f), steel);
+            MakeTool(Box(cart, "FuelGauge", new Vector3(-0.22f, 0.93f, 0), new Vector3(0.1f, 0.08f, 0.1f), grey, false), CarWork.FuelGauge, "manómetro de combustible");
+            MakeTool(Box(cart, "CompressionTester", new Vector3(-0.05f, 0.93f, 0.1f), new Vector3(0.08f, 0.08f, 0.16f), Mat("Gauge_Blue", new Color(0.1f, 0.2f, 0.45f), 0.2f, 0.5f), false), CarWork.Compression, "compresímetro");
+            MakeTool(Box(cart, "LeakDownTester", new Vector3(0.1f, 0.93f, -0.1f), new Vector3(0.12f, 0.08f, 0.08f), grey, false), CarWork.LeakDown, "comprobador de fugas");
+            MakeTool(Box(cart, "SmokeMachine", new Vector3(0.25f, 0.99f, 0.05f), new Vector3(0.18f, 0.2f, 0.28f), Mat("Smoke_Orange", new Color(0.8f, 0.35f, 0.05f), 0.1f, 0.4f), false), CarWork.Smoke, "máquina de humo");
+
+            GameObject bin = Box(eq, "OldPartsBox", new Vector3(-3.3f, 0.2f, -Depth / 2 + 1.1f), new Vector3(0.6f, 0.4f, 0.4f), Mat("Box_Blue", new Color(0.1f, 0.18f, 0.35f), 0f, 0.4f), false);
+            Usable binU = bin.AddComponent<Usable>();
+            binU.kind = Usable.Kind.OldPartsBox;
+            binU.label = "caja de piezas viejas y almacén";
+
+            Usable dynoUse = monitor.AddComponent<Usable>();
+            dynoUse.kind = Usable.Kind.DynoConsole;
+            dynoUse.label = "consola del banco de potencia";
+            var dynoAnchor = new GameObject("DynoCarAnchor").transform;
+            dynoAnchor.SetParent(dyno, false);
+            dynoAnchor.localPosition = new Vector3(0, 0.02f, -1.3f);
+        }
+
+        private static void MakeTool(GameObject go, string toolId, string name)
+        {
+            ToolItem t = go.AddComponent<ToolItem>();
+            t.toolId = toolId;
+            t.displayName = name;
         }
 
         private static GameObject Device<T>(Transform parent, string name, Vector3 pos, Vector3 size, Material body)
@@ -352,7 +401,15 @@ namespace Garage.Unity.EditorTools
             boot.runner = runner;
             boot.assembler = assembler;
             boot.workshop = wc;
-            Object.FindFirstObjectByType<CustomerController>().runner = runner;
+            DynoBay bay = sim.AddComponent<DynoBay>();
+            bay.runner = runner;
+            bay.assembler = assembler;
+            bay.liftAnchor = anchor;
+            bay.dynoAnchor = world.Find("Equipment/RollerDyno/DynoCarAnchor");
+
+            var uiGo = new GameObject("__UI");
+            GameUI gameUi = uiGo.AddComponent<GameUI>();
+            gameUi.runner = runner;
             return sim.transform;
         }
 
@@ -400,6 +457,7 @@ namespace Garage.Unity.EditorTools
             InteractionSystem interaction = player.AddComponent<InteractionSystem>();
             interaction.viewCamera = cam;
             interaction.runner = sim.GetComponent<SimulationRunner>();
+            interaction.ui = Object.FindFirstObjectByType<GameUI>();
 
             Volume volume = Object.FindFirstObjectByType<Volume>();
             FocusDepthOfField dof = player.AddComponent<FocusDepthOfField>();

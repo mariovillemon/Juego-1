@@ -33,6 +33,18 @@ namespace Garage.Unity
         private float _len, _ew; // car length, engine width
         private int _cyl;
 
+        /// <summary>Removes the car (empty lift).</summary>
+        public void Clear()
+        {
+            if (CarRoot != null)
+            {
+                Destroy(CarRoot.gameObject);
+                CarRoot = null;
+            }
+
+            _slots.Clear();
+        }
+
         /// <summary>Destroys the previous car and builds a new one.</summary>
         public void Build(Car car)
         {
@@ -68,6 +80,7 @@ namespace Garage.Unity
             _ew = 0.11f * _cyl + 0.16f;
 
             BuildBody(root.transform, def);
+            BuildObdPort(root.transform);
 
             Transform bay = new GameObject("EngineBay").transform;
             bay.SetParent(root.transform, false);
@@ -162,6 +175,26 @@ namespace Garage.Unity
             hinge.localPosition = new Vector3(0, 0.97f, bayStart);
             hinge.localRotation = Quaternion.Euler(-70, 0, 0);
             Static(hinge, "Hood", PrimitiveType.Cube, new Vector3(0, 0, bayLen / 2 - 0.05f), new Vector3(1.6f, 0.025f, bayLen - 0.1f), _paint);
+        }
+
+        /// <summary>OBD-II socket under the dashboard, driver side (left-hand drive), facing down/back.</summary>
+        private void BuildObdPort(Transform root)
+        {
+            float firewall = _len * 0.5f - 1.2f;
+            GameObject port = Part(root, "OBD_Port", PrimitiveType.Cube, new Vector3(-0.42f, 0.62f, firewall - 0.32f), new Vector3(0.05f, 0.025f, 0.04f), _dark);
+            port.transform.localRotation = Quaternion.Euler(30, 180, 0);
+            BoxCollider col = port.GetComponent<BoxCollider>();
+            if (col != null)
+            {
+                col.size = new Vector3(2.4f, 3f, 2.4f); // generous hitbox, the socket is small and hidden
+            }
+
+            port.AddComponent<ObdPort>();
+            DynoBay bay = FindFirstObjectByType<DynoBay>();
+            if (bay != null)
+            {
+                bay.OnCarRebuilt();
+            }
         }
 
         private static Material Lamp(string name, Color c, float smooth)

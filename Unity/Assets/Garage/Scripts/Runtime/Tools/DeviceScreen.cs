@@ -75,7 +75,7 @@ namespace Garage.Unity
             Text = textGo.AddComponent<TextMeshProUGUI>();
             Text.fontSize = 18;
             Text.color = foreground;
-            Text.enableWordWrapping = false;
+            Text.textWrappingMode = TextWrappingModes.NoWrap;
             var tr = Text.rectTransform;
             tr.anchorMin = new Vector2(0.02f, 0.02f);
             tr.anchorMax = new Vector2(0.98f, 0.98f);

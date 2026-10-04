@@ -1,20 +1,17 @@
-using Garage.Sim.Tools;
+using Garage.Game;
 using UnityEngine;
 
 namespace Garage.Unity
 {
     /// <summary>
-    /// Digital multimeter: big LCD digits of the measurement between the two probes configured
-    /// (component:side:pin) with the selected function and range, as a real 3½ digit DMM.
+    /// LCD of the physical multimeter: shows the function/range selected in the dial (CarWork's meter) and the last
+    /// reading taken with the probes (MeterMeasured events), like a real 3½ digit DMM.
     /// </summary>
     public sealed class MultimeterToolView : DeviceScreen
     {
-        public MeterMode mode = MeterMode.DcVolts;
-        public MeterRange range = MeterRange.Auto;
-        public string redProbe = "map:harness:ref";
-        public string blackProbe = "gnd";
-
-        private DiagnosticSession _session;
+        private string _last = "----";
+        private string _where = "";
+        private bool _subscribed;
 
         protected override void Start()
         {
@@ -25,21 +22,40 @@ namespace Garage.Unity
             Text.fontSize = 22;
         }
 
-        protected override void Refresh()
+        private void OnEvent(GameEvent e)
         {
-            if (_session == null || _session.Car != Runner.Car)
+            if (e.Kind != GameEventKind.MeterMeasured)
             {
-                _session = new DiagnosticSession(Runner.Car);
+                return;
             }
 
-            _session.Multimeter.Mode = mode;
-            _session.Multimeter.Range = range;
-            ToolResult r = _session.Multimeter.Measure(redProbe, blackProbe);
-            string display = r.Display;
-            int b = display.IndexOf(']');
-            int e = display.IndexOf("   (");
-            string digits = b >= 0 && e > b ? display.Substring(b + 1, e - b - 1).Trim() : display;
-            Text.text = $"<size=90><mspace=0.6em>{digits}</mspace></size>\n{mode}  {range}\nROJA {redProbe}\nNEGRA {blackProbe}";
+            string d = e.Text;
+            int b = d.IndexOf(']');
+            int end = d.IndexOf("   (", System.StringComparison.Ordinal);
+            _last = b >= 0 && end > b ? d.Substring(b + 1, end - b - 1).Trim() : (double.IsNaN(e.Value) ? "Err" : e.Value.ToString("0.00"));
+            _where = e.Subject;
+        }
+
+        protected override void Refresh()
+        {
+            if (!_subscribed && Runner.Session != null)
+            {
+                Runner.Session.Events.Raised += OnEvent;
+                _subscribed = true;
+            }
+
+            var m = Runner.Work?.Session.Multimeter;
+            Text.text = $"<size=90><mspace=0.6em>{_last}</mspace></size>\n{m?.Mode}  {m?.Range}\n{_where}";
+        }
+
+        protected override void OnDestroy()
+        {
+            if (_subscribed && Runner != null && Runner.Session != null)
+            {
+                Runner.Session.Events.Raised -= OnEvent;
+            }
+
+            base.OnDestroy();
         }
     }
 }

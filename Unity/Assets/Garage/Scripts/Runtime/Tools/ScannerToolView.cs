@@ -11,6 +11,12 @@ namespace Garage.Unity
         {
             var car = Runner.Car;
             var sb = new StringBuilder();
+            if (Runner.Work == null || !Runner.Work.ScannerPlugged || !car.KeyOn)
+            {
+                Text.text = "<b>ELM-SIM v2.1</b>\n\nSin conexión con el vehículo.\nEnchufe el conector OBD y ponga el contacto.";
+                return;
+            }
+
             sb.AppendLine($"<b>OBD-II  {car.Definition.Vin}</b>   MIL: {(car.Ecu.Dtcs.MilOn ? "<color=#FFB000>ON</color>" : "OFF")}");
             foreach (string c in car.Ecu.Dtcs.ConfirmedCodes())
             {
