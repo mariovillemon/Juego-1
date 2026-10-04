@@ -15,6 +15,8 @@ Connector_<pin…>             malla del conector para la interacción de enchuf
 Bolt_<n>                     tornillos en el orden de apriete especificado
 ```
 El `Slot` coincide con `visualSlot` del componente en los JSON (ver `data/base/templates`). Coloca el prefab en
+Carrocería completa: `Assets/Garage/Resources/CarBodies/<carId>.prefab` (origen en el suelo, centro del coche, +Z hacia delante, 1 u = 1 m, vano motor de 1,2 m abierto). Si no existe, `CarBodyBuilder` genera una procedural.
+
 `Assets/Garage/Resources/CarParts/<slot>.prefab` (o `<Kind>.prefab` para uno genérico): `CarAssembler` lo usa en
 lugar del placeholder.
 

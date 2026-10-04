@@ -67,11 +67,11 @@ namespace Garage.Unity
             _cyl = Mathf.Max(1, def.Engine.Cylinders);
             _ew = 0.11f * _cyl + 0.16f;
 
-            BuildBody(root.transform, (float)def.WheelRadiusM);
+            BuildBody(root.transform, def);
 
             Transform bay = new GameObject("EngineBay").transform;
             bay.SetParent(root.transform, false);
-            bay.localPosition = new Vector3(0, 0.78f, _len * 0.5f - 0.75f);
+            bay.localPosition = new Vector3(0, 0.68f, _len * 0.5f - 0.75f);
             BuildEngine(bay);
 
             foreach (SimComponent c in car.Parts.All)
@@ -121,37 +121,58 @@ namespace Garage.Unity
 
         // ---------------------------------------------------------------- body
 
-        private void BuildBody(Transform root, float wheelR)
+        private void BuildBody(Transform root, CarDefinition def)
         {
-            float bayLen = 1.2f;
+            const float bayLen = 1.2f;
             float frontZ = _len * 0.5f;
-            float bayStart = frontZ - bayLen; // firewall
+            float wheelR = (float)def.WheelRadiusM;
+            float bayStart;
 
-            // Cabin + rear: closed body behind the firewall.
-            float rearLen = _len - bayLen;
-            Static(root, "Body_Rear", PrimitiveType.Cube, new Vector3(0, 0.55f, bayStart - rearLen / 2), new Vector3(1.8f, 0.6f, rearLen), _paint);
-            Static(root, "Body_Cabin", PrimitiveType.Cube, new Vector3(0, 1.12f, bayStart - rearLen * 0.45f), new Vector3(1.62f, 0.55f, rearLen * 0.55f), _glass);
+            GameObject model = Resources.Load<GameObject>("CarBodies/" + def.Id);
+            if (model != null)
+            {
+                Instantiate(model, root).name = "Body_Model";
+                bayStart = frontZ - bayLen;
+            }
+            else
+            {
+                var mats = new CarBodyBuilder.Mats
+                {
+                    Paint = _paint,
+                    Glass = _glass,
+                    Dark = _dark,
+                    Rubber = _rubber,
+                    Rim = UnityCompat.LitMaterial("Rim", new Color(0.62f, 0.63f, 0.65f), 1f, 0.7f),
+                    Chrome = UnityCompat.LitMaterial("Chrome", new Color(0.8f, 0.8f, 0.82f), 1f, 0.9f),
+                    HeadLamp = Lamp("HeadLamp", new Color(0.9f, 0.92f, 0.95f), 0.4f),
+                    TailLamp = Lamp("TailLamp", new Color(0.6f, 0.02f, 0.02f), 0.6f),
+                    Disc = UnityCompat.LitMaterial("BrakeDisc", new Color(0.3f, 0.28f, 0.27f), 0.9f, 0.4f),
+                };
+                bayStart = CarBodyBuilder.Build(root, CarBodyBuilder.StyleFor(def.MassKg, def.Engine.Cylinders), _len, wheelR, bayLen, mats);
+            }
 
-            // Engine bay walls (open top): fenders, front panel, firewall, floor pan.
-            Static(root, "Fender_L", PrimitiveType.Cube, new Vector3(-0.85f, 0.6f, frontZ - bayLen / 2), new Vector3(0.1f, 0.7f, bayLen), _paint);
-            Static(root, "Fender_R", PrimitiveType.Cube, new Vector3(0.85f, 0.6f, frontZ - bayLen / 2), new Vector3(0.1f, 0.7f, bayLen), _paint);
-            Static(root, "Bumper_Front", PrimitiveType.Cube, new Vector3(0, 0.42f, frontZ - 0.05f), new Vector3(1.8f, 0.36f, 0.1f), _paint);
-            Static(root, "Firewall", PrimitiveType.Cube, new Vector3(0, 0.75f, bayStart + 0.02f), new Vector3(1.6f, 0.75f, 0.04f), _dark);
-            Static(root, "Bay_Floor", PrimitiveType.Cube, new Vector3(0, 0.27f, frontZ - bayLen / 2), new Vector3(1.6f, 0.03f, bayLen), _dark);
-            Static(root, "Radiator", PrimitiveType.Cube, new Vector3(0, 0.62f, frontZ - 0.16f), new Vector3(1.2f, 0.42f, 0.04f), _alu);
+            // Engine bay internals (open top): firewall, floor pan, radiator.
+            Static(root, "Firewall", PrimitiveType.Cube, new Vector3(0, 0.62f, bayStart + 0.02f), new Vector3(1.5f, 0.7f, 0.04f), _dark);
+            Static(root, "Bay_Floor", PrimitiveType.Cube, new Vector3(0, 0.27f, frontZ - bayLen / 2), new Vector3(1.3f, 0.03f, bayLen - 0.2f), _dark);
+            Static(root, "Radiator", PrimitiveType.Cube, new Vector3(0, 0.6f, frontZ - 0.24f), new Vector3(1.15f, 0.4f, 0.04f), _alu);
 
             // Hood hinged at the windshield, propped open.
             var hinge = new GameObject("Hood_Hinge").transform;
             hinge.SetParent(root, false);
-            hinge.localPosition = new Vector3(0, 0.95f, bayStart);
+            hinge.localPosition = new Vector3(0, 0.97f, bayStart);
             hinge.localRotation = Quaternion.Euler(-70, 0, 0);
-            Static(hinge, "Hood", PrimitiveType.Cube, new Vector3(0, 0, bayLen / 2), new Vector3(1.7f, 0.03f, bayLen), _paint);
+            Static(hinge, "Hood", PrimitiveType.Cube, new Vector3(0, 0, bayLen / 2 - 0.05f), new Vector3(1.6f, 0.025f, bayLen - 0.1f), _paint);
+        }
 
-            foreach (var w in new[] { new Vector3(-0.8f, wheelR, _len * 0.32f), new Vector3(0.8f, wheelR, _len * 0.32f), new Vector3(-0.8f, wheelR, -_len * 0.32f), new Vector3(0.8f, wheelR, -_len * 0.32f) })
+        private static Material Lamp(string name, Color c, float smooth)
+        {
+            Material m = UnityCompat.LitMaterial(name, c, 0f, 0.95f);
+            if (m.HasProperty("_EmissiveColor"))
             {
-                GameObject wheel = Static(root, "Wheel", PrimitiveType.Cylinder, w, new Vector3(2 * wheelR, 0.11f, 2 * wheelR), _rubber);
-                wheel.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                m.SetColor("_EmissiveColor", c * smooth * 2f);
             }
+
+            return m;
         }
 
         // -------------------------------------------------------------- engine
