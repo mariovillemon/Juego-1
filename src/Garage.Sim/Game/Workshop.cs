@@ -394,7 +394,7 @@ namespace Garage.Sim.Game
             }
 
             comp.PartId = part.Id;
-            if (part.Quality == PartQuality.Used || part.Reliability < 0.95)
+            if (!job.Definition.Guided && (part.Quality == PartQuality.Used || part.Reliability < 0.95))
             {
                 // Unreliable parts may fail again later: schedule a latent fault.
                 var rng = new DeterministicRandom(job.Seed ^ StableHash.Of(componentId + part.Id));

@@ -27,7 +27,8 @@
           "powerTargetPs": { "type": "number", "minimum": 0 },
           "complaint": { "type": "string" },
           "budget": { "type": "number", "minimum": 0 },
-          "deadlineDays": { "type": "integer", "minimum": 1 }
+          "deadlineDays": { "type": "integer", "minimum": 1 },
+          "guided": { "type": "boolean", "description": "Encargo de tutorial: las piezas compradas no salen defectuosas." }
         }
       }
     }

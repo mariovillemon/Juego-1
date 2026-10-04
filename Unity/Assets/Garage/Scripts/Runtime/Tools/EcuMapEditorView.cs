@@ -3,19 +3,17 @@ using System.Text;
 using Garage.Sim.Ecu;
 using Garage.Sim.Maps;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Garage.Unity
 {
     /// <summary>
-    /// Laptop with calibration software: colour-coded table (blue→red by value), cursor editing with arrows and +/-,
+    /// Laptop screen in the world (display only; editing happens in the ECU panel through CarWork): colour-coded table,
     /// a 3D surface of the selected map built as a mesh next to the laptop, and the live operating point.
     /// </summary>
     public sealed class EcuMapEditorView : DeviceScreen
     {
         public string tableId = EcuCalibration.IgnitionAdvance;
         [Tooltip("Objeto donde se dibuja la superficie 3D del mapa")] public MeshFilter surface;
-        public float step = 0.5f;
 
         private int _row;
         private int _col;
@@ -25,29 +23,6 @@ namespace Garage.Unity
             resolution = new Vector2Int(1280, 720);
             base.Start();
             Text.fontSize = 14;
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-            Keyboard k = Keyboard.current;
-            Map3D map = Runner?.Car?.Ecu.Calibration.Table(tableId);
-            if (k == null || map == null || !k.leftAltKey.isPressed)
-            {
-                return; // Alt held = editing focus
-            }
-
-            if (k.upArrowKey.wasPressedThisFrame) _row = Mathf.Max(0, _row - 1);
-            if (k.downArrowKey.wasPressedThisFrame) _row = Mathf.Min(map.Y.Count - 1, _row + 1);
-            if (k.leftArrowKey.wasPressedThisFrame) _col = Mathf.Max(0, _col - 1);
-            if (k.rightArrowKey.wasPressedThisFrame) _col = Mathf.Min(map.X.Count - 1, _col + 1);
-            if (k.numpadPlusKey.wasPressedThisFrame || k.equalsKey.wasPressedThisFrame) map[_row, _col] += step;
-            if (k.numpadMinusKey.wasPressedThisFrame || k.minusKey.wasPressedThisFrame) map[_row, _col] -= step;
-            if (k.tabKey.wasPressedThisFrame)
-            {
-                var ids = Runner.Car.Ecu.Calibration.Tables.Keys.OrderBy(x => x).ToList();
-                tableId = ids[(ids.IndexOf(tableId) + 1) % ids.Count];
-            }
         }
 
         protected override void Refresh()

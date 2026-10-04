@@ -117,6 +117,7 @@ namespace Garage.Data
             Complaint = j.Str("complaint"),
             Budget = j.Num("budget"),
             DeadlineDays = j.Int("deadlineDays", 3),
+            Guided = j.Bool("guided"),
         };
 
         /// <summary>Serialises a job definition.</summary>
@@ -137,6 +138,11 @@ namespace Garage.Data
             if (d.PowerTargetPs > 0)
             {
                 o.Set("powerTargetPs", d.PowerTargetPs);
+            }
+
+            if (d.Guided)
+            {
+                o.Set("guided", true);
             }
 
             return o;

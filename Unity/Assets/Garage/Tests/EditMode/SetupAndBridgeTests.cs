@@ -1,5 +1,9 @@
 using System.IO;
+using System.Linq;
 using Garage.Data;
+using Garage.Game;
+using Garage.Sim.Game;
+using Garage.Unity.UI;
 using Garage.Sim.Vehicle;
 using Garage.Unity;
 using Garage.Unity.EditorTools;
@@ -69,6 +73,47 @@ namespace Garage.Unity.Tests
             asm.Build(car);
             Assert.AreEqual(car.Parts.All.Count, asm.Slots.Count);
             Object.DestroyImmediate(go);
+        }
+
+        [Test]
+        public void WorkshopScene_HasPlayerUi_HandTools_AndStations()
+        {
+            WorkshopSceneBuilder.Build(false);
+            Assert.IsNotNull(Object.FindFirstObjectByType<GameUI>());
+            Assert.IsNotNull(Object.FindFirstObjectByType<DynoBay>());
+            var tools = Object.FindObjectsByType<ToolItem>(FindObjectsSortMode.None).Select(t => t.toolId).ToList();
+            CollectionAssert.IsSubsetOf(new[] { CarWork.Scanner, CarWork.Meter, CarWork.Scope }, tools);
+            var usables = Object.FindObjectsByType<Usable>(FindObjectsSortMode.None).Select(u => u.kind).ToList();
+            CollectionAssert.IsSubsetOf(new[] { Usable.Kind.Board, Usable.Kind.Laptop, Usable.Kind.DynoConsole, Usable.Kind.OldPartsBox }, usables);
+        }
+
+        [Test]
+        public void CarAssembler_AddsObdPort()
+        {
+            ContentDatabase db = ContentDatabase.Load(SimulationRunner.DataRoot);
+            var go = new GameObject("Assembler");
+            go.AddComponent<CarAssembler>().Build(db.CreateCar("aurex_strada_gt", 1));
+            Assert.IsNotNull(go.GetComponentInChildren<ObdPort>());
+            Object.DestroyImmediate(go);
+        }
+
+        [Test]
+        public void GameSession_FullLoopWithStreamingAssetsData()
+        {
+            ContentDatabase db = ContentDatabase.Load(SimulationRunner.DataRoot);
+            var s = new GameSession(db, 5, true);
+            Assert.IsTrue(s.StartTutorial("tut_first_car").Ok);
+            Job job = s.Offers().First(j => j.Definition.Id == "tut_first_car_job");
+            Assert.AreEqual(QuoteAnswer.Accepted, s.SendQuote(job, s.SuggestQuote(job)).Answer);
+            s.Notify(GameEventKind.ScannerPlugged);
+            s.Work.IgnitionOn();
+            Assert.IsTrue(s.Work.ReadCodes().Ok);
+            PartDefinition coil = s.PartsFor(job.Car, "coil2").First(p => p.Quality == PartQuality.Aftermarket);
+            Assert.IsTrue(s.InstallPart("coil2", coil.Id, buyIfMissing: true).Ok);
+            Assert.IsTrue(s.Work.ClearCodes().Ok);
+            JobOutcome o = s.Deliver(job, out CommandResult r);
+            Assert.IsTrue(r.Ok);
+            Assert.IsTrue(o.Success, string.Join(" | ", o.Notes));
         }
     }
 }

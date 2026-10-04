@@ -108,6 +108,24 @@ public class GameSessionTests
     }
 
     [Fact]
+    public void MinimalLoop_AsInUnityEditModeTest()
+    {
+        var s = new GameSession(TestContent.Db, 5, true);
+        Assert.True(s.StartTutorial("tut_first_car").Ok);
+        Job job = s.Offers().First(j => j.Definition.Id == "tut_first_car_job");
+        Assert.Equal(QuoteAnswer.Accepted, s.SendQuote(job, s.SuggestQuote(job)).Answer);
+        s.Notify(GameEventKind.ScannerPlugged);
+        s.Work!.IgnitionOn();
+        Assert.True(s.Work.ReadCodes().Ok);
+        PartDefinition coil = s.PartsFor(job.Car, "coil2").First(p => p.Quality == PartQuality.Aftermarket);
+        Assert.True(s.InstallPart("coil2", coil.Id, buyIfMissing: true).Ok);
+        Assert.True(s.Work.ClearCodes().Ok);
+        JobOutcome? o = s.Deliver(job, out CommandResult r);
+        Assert.True(r.Ok);
+        Assert.True(o!.Success, string.Join(" | ", o.Notes) + " :: " + string.Join(",", job.Car.Faults.Unrepaired().Select(f => f.Mode.Id + "@" + f.ComponentId + "/" + f.Origin)));
+    }
+
+    [Fact]
     public void Commands_FailWithReadableReasons()
     {
         GameSession s = NewSession(false);

@@ -101,7 +101,9 @@ namespace Garage.Unity.EditorTools
                 }
             }
 
+#if !GARAGE_TYPECHECK // the setter only exists in the editor build of UnityEngine (tools/unity-typecheck)
             group.probePositions = positions.ToArray();
+#endif
 
             Vector3[] centers = { new Vector3(-2.5f, 1.6f, 0f), new Vector3(2.5f, 1.6f, 0f), new Vector3(width / 2 - 1.75f, 1.4f, -depth / 2 + 1.5f) };
             Vector3[] sizes = { new Vector3(6f, height, depth), new Vector3(6f, height, depth), new Vector3(3.5f, 3f, 3f) };

@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Type-checks Unity/Assets/Garage/Scripts/Runtime outside the editor: real UnityEngine module reference
-       assemblies (NuGet UnityEngine.Modules 2021.3) + stand-ins for package APIs (RuntimeStubs.cs). -->
+  <!-- Type-checks Unity/Assets/Garage/Tests (NUnit as in Unity's test framework). -->
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9.0</LangVersion>
@@ -10,13 +9,14 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <NoWarn>CS1591;CS0618</NoWarn>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
-    <AssemblyName>Garage.Unity.Runtime.Check</AssemblyName>
+    <AssemblyName>Garage.Unity.Tests.Check</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" IncludeAssets="compile" PrivateAssets="all" />
-    <Compile Include="RuntimeStubs.cs" />
-    <Compile Include="../../Unity/Assets/Garage/Scripts/Runtime/**/*.cs" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <Compile Include="../../Unity/Assets/Garage/Tests/**/*.cs" />
+    <ProjectReference Include="Editor.csproj" />
+    <ProjectReference Include="Runtime.csproj" />
     <ProjectReference Include="../../src/Garage.Game/Garage.Game.csproj" />
   </ItemGroup>
 </Project>

@@ -597,6 +597,7 @@ namespace Garage.Game
                     Budget = def.Budget,
                     DeadlineDays = def.DeadlineDays,
                     Goal = JobGoal.Repair,
+                    Guided = true,
                 };
                 Workshop.RestoreJob(Workshop.BuildJob(jd, StableSeed(jobId)));
                 Workshop.MarkJobUsed(jobId);

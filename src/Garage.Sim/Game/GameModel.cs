@@ -165,6 +165,9 @@ namespace Garage.Sim.Game
 
         /// <summary>Days to deliver.</summary>
         public int DeadlineDays { get; set; } = 3;
+
+        /// <summary>Guided (tutorial) job: parts fitted never turn out defective, so the lesson stays deterministic.</summary>
+        public bool Guided { get; set; }
     }
 
     /// <summary>Job status.</summary>
