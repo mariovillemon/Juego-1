@@ -42,8 +42,12 @@ namespace Garage.Unity
             }
 
             _focus = Mathf.Lerp(_focus, target, Time.deltaTime * smoothing);
-            _dof.focusMode.Override(close ? DepthOfFieldMode.UsePhysicalCamera : DepthOfFieldMode.Off);
-            _dof.focusDistance.Override(Mathf.Max(0.1f, _focus));
+            // Manual ranges: physical-camera DoF at arm's length blurred/blew out the whole view and was costly.
+            _dof.focusMode.Override(close ? DepthOfFieldMode.Manual : DepthOfFieldMode.Off);
+            _dof.nearFocusStart.Override(0f);
+            _dof.nearFocusEnd.Override(0f);
+            _dof.farFocusStart.Override(_focus + 0.6f);
+            _dof.farFocusEnd.Override(_focus + 6f);
         }
     }
 }
