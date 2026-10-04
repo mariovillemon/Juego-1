@@ -96,12 +96,14 @@ namespace Garage.Unity
 
         protected virtual void Update()
         {
+            // Camera.Render() is not safe under HDRP: enable the camera for a single frame instead.
+            _cam.enabled = false;
             _timer += Time.deltaTime;
             if (_timer >= 1f / refreshHz && Runner != null && Runner.Car != null)
             {
                 _timer = 0;
                 Refresh();
-                _cam.Render();
+                _cam.enabled = true;
             }
         }
 
