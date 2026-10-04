@@ -295,7 +295,13 @@ namespace Garage.Sim.Ecu
                 case EvapTestPhase.SealCheck:
                     Outputs.EvapVentClosed = true;
                     Outputs.PurgeDuty = 0;
-                    if (!conditions)
+                    if (valid && _evapPhaseTime > 2 && p < _evapP0 - 1.0)
+                    {
+                        // Vacuum builds with the purge commanded shut: the purge valve leaks.
+                        Check("P0496", true, true, 6, 1, 1);
+                        Finish();
+                    }
+                    else if (!conditions)
                     {
                         Abort();
                     }
@@ -350,8 +356,8 @@ namespace Garage.Sim.Ecu
                     {
                         double rate = (p - _evapP0) / _evapPhaseTime;
                         _live["evap_decay_kpa_s"] = rate;
-                        Check("P0442", true, rate > 0.09, 12, 1, 1);
-                        Check("P0456", true, rate > 0.035 && rate <= 0.09, 12, 1, 1);
+                        Check("P0442", true, rate > 0.118, 12, 1, 1);
+                        Check("P0456", true, rate > 0.035 && rate <= 0.118, 12, 1, 1);
                         Check("P0455", true, false, 12, 1, 1);
                         Check("P0441", true, false, 12, 1, 1);
                         Enter(EvapTestPhase.Release);

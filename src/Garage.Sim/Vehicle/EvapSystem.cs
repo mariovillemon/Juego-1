@@ -119,7 +119,8 @@ namespace Garage.Sim.Vehicle
             double vapour = 1.5e-7 * Math.Exp((t - 20) / 15.0);
             double dm = (massIn - massOut + vapour) * dt;
             TankKpa += dm * R * Physics.ToKelvin(t) / VapourVolumeM3 / 1000.0;
-            TankKpa = MathUtil.Clamp(TankKpa, -12, 6);
+            // The cap's vacuum/pressure relief valve limits the tank to about -3.5 / +5 kPa.
+            TankKpa = MathUtil.Clamp(TankKpa, -3.5, 5);
 
             PurgeFlowGps = massOut * 1000;
             // With the vent open the purge mostly pulls fresh air through the canister: an unmetered air leak.
