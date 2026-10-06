@@ -153,16 +153,7 @@ namespace Garage.Unity
                 GameObject body = ModelFix.Spawn(model, root);
                 body.name = "Body_Model";
                 SetLayer(body, 2);
-                foreach (Renderer r in body.GetComponentsInChildren<Renderer>())
-                {
-                    foreach (Material m in r.materials)
-                    {
-                        if (m.name.StartsWith("CarPaint") && m.HasProperty("_BaseColor"))
-                        {
-                            m.SetColor("_BaseColor", _paint.GetColor("_BaseColor"));
-                        }
-                    }
-                }
+                Repaint(body);
 
                 bayStart = frontZ - bayLen;
             }
@@ -188,12 +179,41 @@ namespace Garage.Unity
             Static(root, "Bay_Floor", PrimitiveType.Cube, new Vector3(0, 0.27f, frontZ - bayLen / 2), new Vector3(1.3f, 0.03f, bayLen - 0.2f), _dark);
             Static(root, "Radiator", PrimitiveType.Cube, new Vector3(0, 0.6f, frontZ - 0.24f), new Vector3(1.15f, 0.4f, 0.04f), _alu);
 
-            // Hood hinged at the windshield, propped open.
+            // Hood hinged at the windshield, propped open. The generated body has its own hood panel
+            // (tools/blender/body.py, pivot on the hinge line); otherwise a flat panel.
             var hinge = new GameObject("Hood_Hinge").transform;
             hinge.SetParent(root, false);
-            hinge.localPosition = new Vector3(0, 0.97f, bayStart);
-            hinge.localRotation = Quaternion.Euler(-70, 0, 0);
-            Static(hinge, "Hood", PrimitiveType.Cube, new Vector3(0, 0, bayLen / 2 - 0.05f), new Vector3(1.6f, 0.025f, bayLen - 0.1f), _paint);
+            GameObject hoodModel = model != null ? Resources.Load<GameObject>("CarBodies/Hatch_Hood") : null;
+            if (hoodModel != null)
+            {
+                hinge.localPosition = new Vector3(0, 0.985f, bayStart + 0.012f);
+                hinge.localRotation = Quaternion.Euler(-70, 0, 0);
+                GameObject hood = ModelFix.Spawn(hoodModel, hinge);
+                hood.name = "Hood";
+                SetLayer(hood, 2);
+                Repaint(hood);
+            }
+            else
+            {
+                hinge.localPosition = new Vector3(0, 0.97f, bayStart);
+                hinge.localRotation = Quaternion.Euler(-70, 0, 0);
+                Static(hinge, "Hood", PrimitiveType.Cube, new Vector3(0, 0, bayLen / 2 - 0.05f), new Vector3(1.6f, 0.025f, bayLen - 0.1f), _paint);
+            }
+        }
+
+        /// <summary>Applies this car's paint colour to every CarPaint material of a generated model.</summary>
+        private void Repaint(GameObject model)
+        {
+            foreach (Renderer r in model.GetComponentsInChildren<Renderer>())
+            {
+                foreach (Material m in r.materials)
+                {
+                    if (m.name.StartsWith("CarPaint") && m.HasProperty("_BaseColor"))
+                    {
+                        m.SetColor("_BaseColor", _paint.GetColor("_BaseColor"));
+                    }
+                }
+            }
         }
 
         /// <summary>OBD-II socket under the dashboard, driver side (left-hand drive), facing down/back.</summary>
