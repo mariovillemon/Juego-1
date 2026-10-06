@@ -76,6 +76,11 @@ namespace Garage.Unity
             _battery = UnityCompat.LitMaterial("BatteryCase", new Color(0.1f, 0.12f, 0.16f), 0f, 0.5f);
 
             _len = def.MassKg > 1500 ? 4.6f : (def.MassKg < 1150 ? 3.9f : 4.3f);
+            if (CarBodyBuilder.StyleFor(def.MassKg, def.Engine.Cylinders) == BodyStyle.Hatch
+                && (Resources.Load<GameObject>("CarBodies/" + def.Id) != null || Resources.Load<GameObject>("CarBodies/Hatch") != null))
+            {
+                _len = 4.3f; // the generated hatchback body is 4.3 m long (tools/blender/body.py)
+            }
             _cyl = Mathf.Max(1, def.Engine.Cylinders);
             _ew = 0.11f * _cyl + 0.16f;
 
@@ -84,7 +89,7 @@ namespace Garage.Unity
 
             Transform bay = new GameObject("EngineBay").transform;
             bay.SetParent(root.transform, false);
-            bay.localPosition = new Vector3(0, 0.68f, _len * 0.5f - 0.75f);
+            bay.localPosition = new Vector3(0, 0.60f, _len * 0.5f - 0.75f); // cam cover just under the hood line
             BuildEngine(bay);
 
             foreach (SimComponent c in car.Parts.All)
@@ -273,14 +278,12 @@ namespace Garage.Unity
                 GameObject m = ModelFix.Spawn(model, e);
                 m.name = "EngineModel";
                 SetLayer(m, 2);
-                foreach (Renderer r in m.GetComponentsInChildren<Renderer>())
-                {
-                    if (r.name.EndsWith("_LOD0"))
-                    {
-                        _occupied.Add(Shrink(r.bounds));
-                    }
-                }
-
+                // Occupied volume = the solid core (block, head, cam cover, sump), not the whole model's box: the
+                // slots are laid out on the engine's bosses and would all be pushed away by its overall bounds.
+                Occupy(e, new Vector3(0, 0, 0), new Vector3(_ew, BlockH, BlockD));
+                Occupy(e, new Vector3(0, BlockTop + HeadH / 2, 0), new Vector3(_ew, HeadH, BlockD * 0.9f));
+                Occupy(e, new Vector3(0, HeadTop + 0.025f, 0.02f), new Vector3(_ew - 0.04f, 0.05f, BlockD * 0.55f));
+                Occupy(e, new Vector3(0, -BlockH / 2 - 0.06f, 0), new Vector3(_ew - 0.04f, 0.12f, BlockD * 0.85f));
                 return;
             }
 
@@ -441,6 +444,14 @@ namespace Garage.Unity
         {
             b.Expand(-0.004f); // touching surfaces are fine, interpenetration is not
             return b;
+        }
+
+        private void Occupy(Transform parent, Vector3 localCenter, Vector3 size)
+        {
+            var b = new Bounds(parent.TransformPoint(localCenter), Vector3.zero);
+            b.Encapsulate(parent.TransformPoint(localCenter + size / 2));
+            b.Encapsulate(parent.TransformPoint(localCenter - size / 2));
+            _occupied.Add(Shrink(b));
         }
 
         private void Track(GameObject g) => _occupied.Add(Shrink(g.GetComponent<Renderer>().bounds));
