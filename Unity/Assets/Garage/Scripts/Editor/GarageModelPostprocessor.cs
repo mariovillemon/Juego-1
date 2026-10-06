@@ -29,6 +29,14 @@ namespace Garage.Unity.EditorTools
             importer.materialImportMode = ModelImporterMaterialImportMode.ImportViaMaterialDescription;
         }
 
+        private void OnPostprocessMaterial(Material material)
+        {
+            if (IsGarageModel)
+            {
+                MaterialTuning.Tune(material);
+            }
+        }
+
         private void OnPostprocessModel(GameObject root)
         {
             if (!IsGarageModel)

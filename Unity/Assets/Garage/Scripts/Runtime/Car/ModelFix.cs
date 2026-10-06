@@ -22,6 +22,7 @@ namespace Garage.Unity
         /// <summary>Fixes an already instantiated model.</summary>
         public static void Apply(GameObject go)
         {
+            MaterialTuning.Apply(go);
             foreach (MeshFilter mf in go.GetComponentsInChildren<MeshFilter>(true))
             {
                 if (!mf.name.StartsWith("UCX_"))
