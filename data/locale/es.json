@@ -82,12 +82,14 @@
     "hud.free_hands": "Manos libres",
     "hud.holding": "En la mano: {0}",
     "hud.lift_free": "Elevador libre — acepta un encargo en el tablón ({0}).",
-    "hud.help": "{0}{1}{2}{3} andar · ratón mirar · {4} agacharse · {5} linterna · {6} usar/coger · {7} soltar · {8} desmontar/sustituir · {9} conector · {10} contacto/arranque · {11} acciones del coche · {12} encargos · {13} hoja de trabajo · {14} tienda · {15} almacén · {16} herramientas · {17} portátil ECU · Esc pausa",
+    "hud.help": "{0}{1}{2}{3} andar · ratón mirar · Mayús correr · Espacio saltar · {4} agacharse · {5} linterna · {6} usar/coger · {7} soltar · {8} desmontar/sustituir · {9} conector · {10} contacto/arranque · {11} acciones del coche · {12} encargos · {13} hoja de trabajo · {14} tienda · {15} almacén · {16} herramientas · {17} portátil ECU · Esc pausa",
     "load.loading": "Cargando…",
     "load.tip.1": "Consejo: mide antes de cambiar piezas. Un código dice qué ve la ECU, no qué está roto.",
     "load.tip.2": "Consejo: el freeze frame te dice en qué condiciones apareció la avería.",
     "load.tip.3": "Consejo: una caída de tensión se mide con el circuito cargado, no en vacío.",
     "load.tip.4": "Consejo: la prueba EVAP sólo corre en caliente, con poca carga y en lazo cerrado.",
-    "load.tip.5": "Consejo: un diésel que sólo hace ciudad acaba con el filtro de partículas lleno."
+    "load.tip.5": "Consejo: un diésel que sólo hace ciudad acaba con el filtro de partículas lleno.",
+    "key.sprint": "Correr",
+    "key.jump": "Saltar"
   }
 }

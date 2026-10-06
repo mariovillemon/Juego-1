@@ -190,26 +190,75 @@ namespace Garage.Unity
             Static(root, "Bay_Floor", PrimitiveType.Cube, new Vector3(0, 0.27f, frontZ - bayLen / 2), new Vector3(1.3f, 0.03f, bayLen - 0.2f), _dark);
             Static(root, "Radiator", PrimitiveType.Cube, new Vector3(0, 0.6f, frontZ - 0.24f), new Vector3(1.15f, 0.4f, 0.04f), _alu);
 
-            // Hood hinged at the windshield, propped open. The generated body has its own hood panel
-            // (tools/blender/body.py, pivot on the hinge line); otherwise a flat panel.
-            var hinge = new GameObject("Hood_Hinge").transform;
-            hinge.SetParent(root, false);
-            GameObject hoodModel = model != null ? Resources.Load<GameObject>("CarBodies/Hatch_Hood") : null;
-            if (hoodModel != null)
+            // Opening panels. The generated body ships each one as its own model with the origin on the hinge
+            // (tools/blender/body.py); without it the hood is a flat panel propped open.
+            if (model != null && Resources.Load<GameObject>("CarBodies/Hatch_Hood") != null)
             {
-                hinge.localPosition = new Vector3(0, 0.985f, bayStart + 0.012f);
-                hinge.localRotation = Quaternion.Euler(-70, 0, 0);
-                GameObject hood = ModelFix.Spawn(hoodModel, hinge);
-                hood.name = "Hood";
-                SetLayer(hood, 2);
-                Repaint(hood);
+                const float doorX = 0.89f, frontHingeZ = 0.914f - 2.15f, rearHingeZ = -0.546f - 2.15f;
+                float z0 = frontZ; // body origin is the car centre; hinge z values above are relative to the front
+                Panel(root, "Hood", new Vector3(0, 0.982f, z0 - 2.15f + 0.962f), Vector3.right, -70f, "el capó", true);
+                Panel(root, "Door_FL", new Vector3(-doorX, 0.62f, z0 + frontHingeZ), Vector3.up, 65f, "la puerta del conductor", true);
+                Panel(root, "Door_FR", new Vector3(doorX, 0.62f, z0 + frontHingeZ), Vector3.up, -65f, "la puerta del acompañante", false);
+                Panel(root, "Door_RL", new Vector3(-doorX, 0.62f, z0 + rearHingeZ), Vector3.up, 65f, "la puerta trasera izquierda", false);
+                Panel(root, "Door_RR", new Vector3(doorX, 0.62f, z0 + rearHingeZ), Vector3.up, -65f, "la puerta trasera derecha", false);
+                Panel(root, "Tailgate", new Vector3(0, 1.415f, z0 - 2.15f - 1.62f), Vector3.right, 80f, "el portón", false);
             }
             else
             {
+                var hinge = new GameObject("Hood_Hinge").transform;
+                hinge.SetParent(root, false);
                 hinge.localPosition = new Vector3(0, 0.97f, bayStart);
                 hinge.localRotation = Quaternion.Euler(-70, 0, 0);
                 Static(hinge, "Hood", PrimitiveType.Cube, new Vector3(0, 0, bayLen / 2 - 0.05f), new Vector3(1.6f, 0.025f, bayLen - 0.1f), _paint);
             }
+        }
+
+        /// <summary>Hinged panel (Hatch_&lt;name&gt; model) on its hinge, with a click collider and the Openable animation.</summary>
+        private void Panel(Transform root, string name, Vector3 hingePos, Vector3 axis, float angle, string label, bool startOpen)
+        {
+            GameObject prefab = Resources.Load<GameObject>("CarBodies/Hatch_" + name);
+            if (prefab == null)
+            {
+                return;
+            }
+
+            var hinge = new GameObject(name + "_Hinge").transform;
+            hinge.SetParent(root, false);
+            hinge.localPosition = hingePos;
+            GameObject panel = ModelFix.Spawn(prefab, hinge);
+            panel.name = name;
+            Repaint(panel);
+            Bounds b = default;
+            bool any = false;
+            foreach (Renderer r in panel.GetComponentsInChildren<Renderer>())
+            {
+                if (!r.enabled)
+                {
+                    continue;
+                }
+
+                Bounds lb = new Bounds(hinge.InverseTransformPoint(r.bounds.center), hinge.InverseTransformVector(r.bounds.size));
+                lb.size = new Vector3(Mathf.Abs(lb.size.x), Mathf.Abs(lb.size.y), Mathf.Abs(lb.size.z));
+                if (any)
+                {
+                    b.Encapsulate(lb);
+                }
+                else
+                {
+                    b = lb;
+                    any = true;
+                }
+            }
+
+            BoxCollider col = hinge.gameObject.AddComponent<BoxCollider>();
+            col.center = b.center;
+            col.size = b.size;
+            Openable o = hinge.gameObject.AddComponent<Openable>();
+            o.axis = axis;
+            o.openAngle = angle;
+            o.displayName = label;
+            o.duration = name == "Hood" || name == "Tailgate" ? 1.3f : 0.8f;
+            o.SetImmediate(startOpen);
         }
 
         /// <summary>Applies this car's paint colour to every CarPaint material of a generated model.</summary>

@@ -21,6 +21,19 @@ namespace Garage.Unity
         private AudioSource _ui;
         private bool _subscribed;
 
+        private static GameAudio _instance;
+
+        /// <summary>One-shot 3D sound by id (recorded clip in Resources/Audio, or the synthetic stand-in).</summary>
+        public static void PlayAt(string id, Vector3 position, float volume = 0.8f)
+        {
+            if (_instance != null)
+            {
+                AudioSource.PlayClipAtPoint(_instance.Clip(id), position, volume * AudioBuses.GainOf(AudioBus.Tools));
+            }
+        }
+
+        private void Awake() => _instance = this;
+
         private void Start()
         {
             if (runner == null)

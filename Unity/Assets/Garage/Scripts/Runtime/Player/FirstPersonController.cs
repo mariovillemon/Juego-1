@@ -14,6 +14,8 @@ namespace Garage.Unity
         public Light inspectionLamp;
         [Header("Movimiento")] public float walkSpeed = 1.4f;
         public float crouchSpeed = 0.7f;
+        public float runSpeed = 3.6f;
+        [Tooltip("Altura del salto (m)")] public float jumpHeight = 0.45f;
         public float standHeight = 1.75f;
         public float crouchHeight = 1.05f;
         public float lookSensitivity = 0.08f;
@@ -25,6 +27,9 @@ namespace Garage.Unity
         private InputAction _look;
         private InputAction _crouch;
         private InputAction _lamp;
+        private InputAction _sprint;
+        private InputAction _jump;
+        private float _speed;
         private float _pitch;
         private float _bobPhase;
         private float _eyeBase;
@@ -55,6 +60,12 @@ namespace Garage.Unity
             _lamp = new InputAction("Lamp", InputActionType.Button, keys.PathOf("lamp"));
             GameOptions.Track(_lamp, 0, "lamp");
             _lamp.AddBinding("<Gamepad>/dpad/up");
+            _sprint = new InputAction("Sprint", InputActionType.Button, keys.PathOf("sprint"));
+            _sprint.AddBinding("<Gamepad>/leftStickPress");
+            GameOptions.Track(_sprint, 0, "sprint");
+            _jump = new InputAction("Jump", InputActionType.Button, keys.PathOf("jump"));
+            _jump.AddBinding("<Gamepad>/buttonSouth");
+            GameOptions.Track(_jump, 0, "jump");
         }
 
         private void OnEnable()
@@ -63,13 +74,15 @@ namespace Garage.Unity
             _look.Enable();
             _crouch.Enable();
             _lamp.Enable();
+            _sprint.Enable();
+            _jump.Enable();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
         private void OnDestroy()
         {
-            foreach (InputAction a in new[] { _move, _look, _crouch, _lamp })
+            foreach (InputAction a in new[] { _move, _look, _crouch, _lamp, _sprint, _jump })
             {
                 GameOptions.Untrack(a);
                 a.Dispose();
@@ -82,6 +95,8 @@ namespace Garage.Unity
             _look.Disable();
             _crouch.Disable();
             _lamp.Disable();
+            _sprint.Disable();
+            _jump.Disable();
         }
 
         /// <summary>Freezes look/move (while using a device screen).</summary>
@@ -114,16 +129,34 @@ namespace Garage.Unity
             _cc.height = Mathf.Lerp(_cc.height, targetHeight, Time.deltaTime * 8f);
             _cc.center = new Vector3(0, _cc.height / 2, 0);
 
-            Vector2 mv = _move.ReadValue<Vector2>();
+            Vector2 mv = Vector2.ClampMagnitude(_move.ReadValue<Vector2>(), 1f);
             Vector3 dir = transform.right * mv.x + transform.forward * mv.y;
-            float speed = Crouching ? crouchSpeed : walkSpeed;
-            _verticalSpeed = _cc.isGrounded ? -1f : _verticalSpeed - 9.81f * Time.deltaTime;
-            _cc.Move((dir * speed + Vector3.up * _verticalSpeed) * Time.deltaTime);
+            bool grounded = _cc.isGrounded;
+            // Run only forwards and standing; speed changes smoothly (no instant 0 → 3.6 m/s).
+            bool running = _sprint.IsPressed() && !Crouching && mv.y > 0.3f;
+            float wanted = mv.sqrMagnitude < 0.01f ? 0f : Crouching ? crouchSpeed : running ? runSpeed : walkSpeed;
+            _speed = Mathf.MoveTowards(_speed, wanted, (grounded ? 9f : 2f) * Time.deltaTime);
+            if (grounded)
+            {
+                _verticalSpeed = -1f;
+                if (_jump.WasPressedThisFrame() && !Crouching)
+                {
+                    _verticalSpeed = Mathf.Sqrt(2f * 9.81f * jumpHeight);
+                }
+            }
+            else
+            {
+                _verticalSpeed -= 9.81f * Time.deltaTime;
+            }
+
+            _cc.Move((dir * _speed + Vector3.up * _verticalSpeed) * Time.deltaTime);
 
             if (head != null)
             {
-                float moving = Mathf.Clamp01(mv.magnitude);
-                _bobPhase += Time.deltaTime * bobFrequency * Mathf.PI * 2f * moving;
+                // Head bob follows the actual speed: faster and deeper when running, none in the air.
+                float moving = grounded ? Mathf.Clamp01(_speed / walkSpeed) : 0f;
+                float pace = Mathf.Lerp(1f, 1.45f, Mathf.InverseLerp(walkSpeed, runSpeed, _speed));
+                _bobPhase += Time.deltaTime * bobFrequency * pace * Mathf.PI * 2f * Mathf.Min(1f, moving);
                 float bob = Mathf.Sin(_bobPhase) * bobAmplitude * moving;
                 float eye = _eyeBase * (_cc.height / standHeight);
                 head.localPosition = new Vector3(0, eye + bob, 0);

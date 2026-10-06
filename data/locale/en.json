@@ -82,12 +82,14 @@
     "hud.free_hands": "Empty hands",
     "hud.holding": "Holding: {0}",
     "hud.lift_free": "Lift free — accept a job on the board ({0}).",
-    "hud.help": "{0}{1}{2}{3} move · mouse look · {4} crouch · {5} flashlight · {6} use/pick up · {7} drop · {8} remove/replace · {9} connector · {10} ignition/start · {11} car actions · {12} jobs · {13} work order · {14} shop · {15} storage · {16} tools · {17} ECU laptop · Esc pause",
+    "hud.help": "{0}{1}{2}{3} move · mouse look · Shift sprint · Space jump · {4} crouch · {5} flashlight · {6} use/pick up · {7} drop · {8} remove/replace · {9} connector · {10} ignition/start · {11} car actions · {12} jobs · {13} work order · {14} shop · {15} storage · {16} tools · {17} ECU laptop · Esc pause",
     "load.loading": "Loading…",
     "load.tip.1": "Tip: measure before replacing parts. A code says what the ECU sees, not what is broken.",
     "load.tip.2": "Tip: the freeze frame tells you the conditions when the fault appeared.",
     "load.tip.3": "Tip: measure voltage drop with the circuit under load, not open.",
     "load.tip.4": "Tip: the EVAP test only runs warm, at light load and in closed loop.",
-    "load.tip.5": "Tip: a diesel that only does city driving ends up with a full particulate filter."
+    "load.tip.5": "Tip: a diesel that only does city driving ends up with a full particulate filter.",
+    "key.sprint": "Sprint",
+    "key.jump": "Jump"
   }
 }

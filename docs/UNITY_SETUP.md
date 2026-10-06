@@ -97,6 +97,8 @@ por defecto. Esc (pausa) no se puede reasignar.
 | Acción | Tecla |
 |---|---|
 | Moverse / mirar / agacharse / linterna | WASD / ratón / Ctrl izq. / F |
+| Correr / saltar | Mayús izq. (mantener) / Espacio |
+| Abrir o cerrar puertas, capó y portón | E apuntando al panel |
 | Usar, coger, enchufar al OBD, abrir pieza | E |
 | Soltar la herramienta en la superficie apuntada | G |
 | Desenchufar el escáner del OBD | Q |

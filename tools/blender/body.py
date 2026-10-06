@@ -373,40 +373,68 @@ def lamps_and_grille(shell, m):
     return parts
 
 
-def open_bay(shell):
-    """Removes the hood panel (returned as its own object) so the engine bay is open."""
-    bpy.context.view_layer.objects.active = shell
+def extract(shell, name, pred):
+    """Moves the shell faces matching pred(z, x, y, nx, ny, nz) (Unity space) into a new object (materials kept)."""
     me = shell.data
     bm = bmesh.new()
     bm.from_mesh(me)
-    bm.faces.ensure_lookup_table()
-    hood_faces = []
+    picked = []
     for f in bm.faces:
-        c = f.calc_center_median()
-        z, x, y = -c.y, -c.x, c.z
-        if FIREWALL + 0.012 < z < FRONT - 0.07 and abs(x) < half_width(z) - 0.11 and y > belt(z) - 0.005 and f.normal.z > 0.35:
-            hood_faces.append(f)
-    hood_me = bpy.data.meshes.new("Hood")
-    hb = bmesh.new()
+        c, n = f.calc_center_median(), f.normal
+        if pred(-c.y, -c.x, c.z, -n.x, n.z, -n.y, f.material_index):
+            picked.append(f)
+    new_me = bpy.data.meshes.new(name)
+    nb = bmesh.new()
     vmap = {}
-    for f in hood_faces:
+    for f in picked:
         vs = []
         for v in f.verts:
             if v not in vmap:
-                vmap[v] = hb.verts.new(v.co)
+                vmap[v] = nb.verts.new(v.co)
             vs.append(vmap[v])
-        nf = hb.faces.new(vs)
-        nf.material_index = 0
+        nf = nb.faces.new(vs)
+        nf.material_index = f.material_index
         nf.smooth = True
-    hb.to_mesh(hood_me)
-    hb.free()
-    hood_me.materials.append(me.materials[0])
-    bmesh.ops.delete(bm, geom=hood_faces, context="FACES")
+    nb.to_mesh(new_me)
+    nb.free()
+    for mt in me.materials:
+        new_me.materials.append(mt)
+    bmesh.ops.delete(bm, geom=picked, context="FACES")
     bm.to_mesh(me)
     bm.free()
-    hood = bpy.data.objects.new("Hood", hood_me)
-    bpy.context.collection.objects.link(hood)
-    return hood
+    o = bpy.data.objects.new(name, new_me)
+    bpy.context.collection.objects.link(o)
+    return o
+
+
+def open_bay(shell):
+    """Removes the hood panel (returned as its own object) so the engine bay is open."""
+    return extract(shell, "Hood", lambda z, x, y, nx, ny, nz, mi:
+                   FIREWALL + 0.012 < z < FRONT - 0.07 and abs(x) < half_width(z) - 0.11 and y > belt(z) - 0.005 and ny > 0.35)
+
+
+DOOR_SPLITS = {"F": (-0.54, FIREWALL - 0.03), "R": (-1.46, -0.54)}
+
+
+def door_pivot(row, sgn):
+    z = DOOR_SPLITS[row][1] - 0.006
+    return (sgn * (half_width(z) + 0.01), 0.62, z)
+
+
+def doors_and_tailgate(shell):
+    """Opening panels as separate objects: four doors (with their side glass) and the tailgate (with the rear glass)."""
+    panels = {}
+    for row, (z0, z1) in DOOR_SPLITS.items():
+        for sgn, side in ((-1, "L"), (1, "R")):
+            def pred(z, x, y, nx, ny, nz, mi, z0=z0, z1=z1, sgn=sgn):
+                # Above the belt only the glass and its black frame belong to the door (pillars stay on the body).
+                return (z0 + 0.003 < z < z1 - 0.003 and x * sgn > 0.3 and nx * sgn > 0.15
+                        and bottom(z) + 0.07 < y < top(z) - 0.04 and (y < belt(z) + 0.03 or mi in (1, 2)))
+            panels[f"Door_{row}{side}"] = (extract(shell, f"Door_{row}{side}", pred), door_pivot(row, sgn))
+    tail = extract(shell, "Tailgate", lambda z, x, y, nx, ny, nz, mi:
+                   z < ROOF_REAR + 0.02 and nz < -0.2 and y > bottom(z) + 0.42 and abs(x) < half_width(z) - 0.04)
+    panels["Tailgate"] = (tail, (0.0, top(ROOF_REAR) - 0.01, ROOF_REAR))
+    return panels
 
 
 def solidify(obj, thickness):
@@ -529,6 +557,11 @@ def interior(m):
     parts = []
     dash_z = WS_BASE - 0.32
     parts.append(g.box("floor", (0, bottom(0) + 0.05, -0.45), (1.5, 0.04, 2.6), m["interior"], 0))
+    # Boot: floor, side trims and the parcel shelf behind the rear seat.
+    parts.append(g.box("boot_floor", (0, 0.5, -1.85), (1.3, 0.03, 0.62), m["fabric"], 0.01))
+    for sgn in (-1, 1):
+        parts.append(g.box("boot_side", (sgn * 0.68, 0.72, -1.82), (0.03, 0.45, 0.6), m["interior"], 0.01))
+    parts.append(g.box("parcel_shelf", (0, 1.0, -1.82), (1.28, 0.015, 0.55), m["interior"], 0.005))
     parts.append(g.box("dash", (0, 0.86, dash_z), (1.5, 0.2, 0.42), m["interior"], 0.05))
     parts.append(g.box("cluster", (-0.37, 0.98, dash_z - 0.12), (0.32, 0.09, 0.08), m["interior"], 0.03))
     parts.append(g.box("console", (0, 0.6, dash_z - 0.1), (0.24, 0.42, 0.38), m["interior"], 0.03))
@@ -559,27 +592,28 @@ def build(out_dir):
     arches_and_gaps(shell, m)
     lamps = lamps_and_grille(shell, m)
     hood = open_bay(shell)
+    panels = doors_and_tailgate(shell)
     solidify(shell, 0.008)
     solidify(hood, 0.012)
+    for o, _ in panels.values():
+        solidify(o, 0.03)                 # doors are thick: outer skin, inner trim
     parts = [shell] + lamps + details(m) + interior(m)
     for z in (FRONT_AXLE, REAR_AXLE):
         for sgn in (-1, 1):
             parts += wheel(m, sgn * TRACK, z, sgn)
     mesh = g.join("Hatch_tmp", parts)
     root = g.make_lods("Hatch", mesh, (1.0, 0.35, 0.1))
-    g.collider(root, "Hatch_0", (0, 0.6, -0.55), (HW * 2, 0.85, L - BAY))
+    g.collider(root, "Hatch_0", (0, 0.6, -0.55), (HW * 2 - 0.06, 0.85, L - BAY))
     g.collider(root, "Hatch_1", (0, 0.45, FIREWALL + BAY / 2), (HW * 2, 0.5, BAY))
     g.export(root, os.path.join(out_dir, "Hatch.fbx"))
 
-    # Hood: own file, pivot on the hinge line at the windshield base, closed position.
-    bpy.ops.object.select_all(action="DESELECT")
-    for o in list(bpy.context.scene.objects):
-        if o is not hood:
-            bpy.data.objects.remove(o, do_unlink=True)
-    pivot = g.U(0, top(FIREWALL + 0.012), FIREWALL + 0.012)
-    hood.data.transform(__import__("mathutils").Matrix.Translation(-pivot))
-    hroot = g.make_lods("Hatch_Hood", hood, (1.0, 0.4))
-    g.export(hroot, os.path.join(out_dir, "Hatch_Hood.fbx"))
+    # Opening panels: one file each, origin on the hinge line, closed position (CarAssembler animates them).
+    import mathutils
+    panels["Hood"] = (hood, (0.0, top(FIREWALL + 0.012), FIREWALL + 0.012))
+    for name, (obj, pivot) in panels.items():
+        obj.data.transform(mathutils.Matrix.Translation(-g.U(*pivot)))
+        proot = g.make_lods(f"Hatch_{name}", obj, (1.0, 0.4))
+        g.export(proot, os.path.join(out_dir, f"Hatch_{name}.fbx"))
 
 
 if __name__ == "__main__":

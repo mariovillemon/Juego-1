@@ -111,6 +111,13 @@ namespace Garage.Unity
                     }
 
                     break;
+                case Openable door:
+                    if (_use.WasPressedThisFrame())
+                    {
+                        door.Toggle();
+                    }
+
+                    break;
                 default:
                     if (_held != null && _click.WasPressedThisFrame())
                     {
@@ -140,6 +147,12 @@ namespace Garage.Unity
             if (s != null)
             {
                 return s;
+            }
+
+            Openable o = c.GetComponentInParent<Openable>();
+            if (o != null)
+            {
+                return o;
             }
 
             Usable u = c.GetComponentInParent<Usable>();
@@ -324,6 +337,8 @@ namespace Garage.Unity
                     return $"<b>{s.componentName}</b>\nE: ver pieza · R: sustituir{(s.hasConnector ? " · C: conector" : "")}{extra}{held}";
                 case Usable u:
                     return $"E: {u.label}{held}";
+                case Openable o:
+                    return o.Prompt + held;
                 default:
                     return _held != null ? $"Clic: usar {_held.displayName}{held}" : "";
             }
@@ -434,7 +449,8 @@ namespace Garage.Unity
 
         private void Highlight(Component target)
         {
-            Renderer r = target != null ? target.GetComponentInChildren<Renderer>() : null;
+            // Body panels are not tinted (the prompt is enough; a glowing door looks wrong).
+            Renderer r = target != null && !(target is Openable) ? target.GetComponentInChildren<Renderer>() : null;
             if (r == _hlRenderer)
             {
                 return;

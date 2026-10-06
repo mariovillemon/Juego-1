@@ -38,6 +38,8 @@ namespace Garage.Game.Settings
             new BindableAction("back", "<Keyboard>/s", "key.back"),
             new BindableAction("left", "<Keyboard>/a", "key.left"),
             new BindableAction("right", "<Keyboard>/d", "key.right"),
+            new BindableAction("sprint", "<Keyboard>/leftShift", "key.sprint"),
+            new BindableAction("jump", "<Keyboard>/space", "key.jump"),
             new BindableAction("crouch", "<Keyboard>/leftCtrl", "key.crouch"),
             new BindableAction("lamp", "<Keyboard>/f", "key.lamp"),
             new BindableAction("use", "<Keyboard>/e", "key.use"),
