@@ -36,6 +36,7 @@ namespace Garage.Unity.EditorTools
             }
 
             GraphicsSettings.defaultRenderPipeline = assets[2];
+            KeepBatchRendererGroupVariants();
             ConfigureQualityLevels(assets);
             CreateVolumeProfile();
             EditorUtil.SetLayerName(UnityCompat.DeviceUiLayer, "DeviceUI");
@@ -71,7 +72,16 @@ namespace Garage.Unity.EditorTools
             Set("m_RenderPipelineSettings.supportSSR", level >= 1);
             Set("m_RenderPipelineSettings.supportContactShadows", true);
             Set("m_RenderPipelineSettings.supportDecals", true);
-            Set("m_RenderPipelineSettings.supportVolumetrics", level >= 2);
+            Set("m_RenderPipelineSettings.supportVolumetrics", level >= 3);
+            Set("m_RenderPipelineSettings.supportSSGI", level >= 2);
+            Set("m_RenderPipelineSettings.supportSSRTransparent", level >= 2);
+            Set("m_RenderPipelineSettings.supportTransparentBackface", true);
+            Set("m_RenderPipelineSettings.hdShadowInitParams.shadowFilteringQuality", Mathf.Min(level, 2));
+            Set("m_RenderPipelineSettings.hdShadowInitParams.directionalShadowsDepthBits", level >= 2 ? 2 : 1);
+            // Unity 6 GPU Resident Drawer: instanced drawing of static meshes through BatchRendererGroup (big CPU win
+            // with many repeated parts: bolts, shelves, tools). Needs BRG variants kept (graphics settings, below).
+            Set("m_RenderPipelineSettings.gpuResidentDrawerSettings.mode", level >= 1 ? 1 : 0);
+            Set("m_RenderPipelineSettings.gpuResidentDrawerSettings.enableOcclusionCullingInCameras", level >= 1);
             Set("m_RenderPipelineSettings.supportMotionVectors", true);
             Set("m_RenderPipelineSettings.supportShadowMask", true);
             Set("m_RenderPipelineSettings.hdShadowInitParams.punctualLightShadowAtlas.shadowAtlasResolution", atlas[level]);
@@ -81,6 +91,24 @@ namespace Garage.Unity.EditorTools
             Set("m_RenderPipelineSettings.decalSettings.perChannelMask", level >= 2);
             so.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(asset);
+        }
+
+        /// <summary>The GPU Resident Drawer refuses to run when BatchRendererGroup shader variants are stripped.</summary>
+        private static void KeepBatchRendererGroupVariants()
+        {
+            Object[] gs = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/GraphicsSettings.asset");
+            if (gs.Length == 0)
+            {
+                return;
+            }
+
+            var so = new SerializedObject(gs[0]);
+            SerializedProperty p = so.FindProperty("m_BrgStripping");
+            if (p != null)
+            {
+                p.intValue = 1; // Keep All
+                so.ApplyModifiedPropertiesWithoutUndo();
+            }
         }
 
         private static void ConfigureQualityLevels(HDRenderPipelineAsset[] assets)
@@ -166,6 +194,22 @@ namespace Garage.Unity.EditorTools
 
             VolumeComponent ssr = EditorUtil.AddOverride(profile, "ScreenSpaceReflection");
             EditorUtil.SetParam(ssr, "enabled", true);
+
+            // Screen-space global illumination (only rendered by the Alto/Ultra assets that support it): bounce
+            // light from the floor and the car paint, the main cue that sells an interior as real.
+            VolumeComponent ssgi = EditorUtil.AddOverride(profile, "GlobalIllumination");
+            EditorUtil.SetParam(ssgi, "enable", true);
+
+            VolumeComponent micro = EditorUtil.AddOverride(profile, "MicroShadowing");
+            EditorUtil.SetParam(micro, "enable", true);
+            EditorUtil.SetParam(micro, "opacity", 0.8f);
+
+            // Indoor scene: short shadow distance keeps shadow maps sharp and cheap.
+            VolumeComponent shadows = EditorUtil.AddOverride(profile, "HDShadowSettings");
+            EditorUtil.SetParam(shadows, "maxShadowDistance", 35f);
+
+            VolumeComponent ca = EditorUtil.AddOverride(profile, "ChromaticAberration");
+            EditorUtil.SetParam(ca, "intensity", 0.04f);
 
             VolumeComponent contact = EditorUtil.AddOverride(profile, "ContactShadows");
             EditorUtil.SetParam(contact, "enable", true);

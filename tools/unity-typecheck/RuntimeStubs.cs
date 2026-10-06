@@ -104,7 +104,12 @@ namespace UnityEngine.Rendering.HighDefinition
         public DepthOfFieldModeParameter focusMode; public MinFloatParameter focusDistance, nearFocusStart, nearFocusEnd, farFocusStart, farFocusEnd;
     }
     public class HDAdditionalLightData : MonoBehaviour { }
-    public class HDAdditionalCameraData : MonoBehaviour { }
+    public class HDAdditionalCameraData : MonoBehaviour
+    {
+        public enum AntialiasingMode { None, FastApproximateAntialiasing, TemporalAntialiasing, SubpixelMorphologicalAntiAliasing }
+        public enum TAAQualityLevel { Low, Medium, High }
+        public AntialiasingMode antialiasing; public TAAQualityLevel TAAQuality; public float taaSharpenStrength; public bool allowDynamicResolution;
+    }
     public class DecalProjector : MonoBehaviour { public Material material; public Vector3 size; public Vector3 pivot; public float fadeFactor; public float drawDistance; }
 }
 

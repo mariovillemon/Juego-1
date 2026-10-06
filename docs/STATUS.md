@@ -50,6 +50,19 @@ Fecha: 2026-10-04. Rama: `claude/optimistic-fermat-k7qxj6`.
   - El resto de herramientas mecánicas se usan desde un panel.
 
 
+- **Hecho — Realismo visual (sesión 4)**:
+  - Carrocería nueva generada a partir de curvas de diseño, con capó articulado. Lleva lunas, montantes negros,
+    faros y pilotos integrados, parrilla, retrovisores, limpiaparabrisas, matrículas, pasos de rueda, interior
+    (salpicadero, volante y asientos) y ruedas 205/55 R16 con dibujo, llanta de 5 radios, disco y pinza.
+    Renders en `docs/img/`.
+  - Motor nuevo, con las mismas cotas para los huecos de las piezas: camisas y nervios, tapa de balancines,
+    correa de accesorios con poleas, colectores, rampa de inyección, pantalla térmica, manguitos, mazo de
+    cables, filtro de aceite y varilla.
+  - Materiales PBR ajustados por nombre (`MaterialTuning`).
+  - HDRP: SSGI, microsombras, TAA/SMAA según la calidad, GPU Resident Drawer y distancia de sombras ajustada.
+  - Sin verificar en el editor: el aspecto final en Unity, la transparencia de los cristales y la posición del
+    capó abierto.
+
 ## Hecho (compilado y verificado con tests)
 
 - **Núcleo `Garage.Sim`** (netstandard2.1, C# 9, sin warnings, documentación XML):

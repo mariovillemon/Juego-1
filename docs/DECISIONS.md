@@ -187,3 +187,18 @@ Fundamentals*, Bosch *Automotive Handbook*), no copia de datos propietarios.
   poco; un test exige que las dos tablas tengan las mismas claves.
 - **D-71 — Esc fija**: la pausa no se puede reasignar, para que nunca quede el jugador sin forma de salir de un
   panel. Durante la captura de una tecla, Esc cancela y no abre la pausa.
+- **D-72 — Carrocería por curvas de diseño**: `tools/blender/body.py` genera el coche a partir de la silueta, la
+  cintura, la anchura en planta y la caída del techo (*tumblehome*). Sale una sola malla de quads, con los arcos y
+  las juntas de puertas cortados por booleanas exactas. Los faros, la parrilla y los pilotos son piezas adaptadas
+  a la superficie (*shrinkwrap*). El capó se exporta aparte (`Hatch_Hood.fbx`) con el pivote en la bisagra.
+  `tools/blender/preview.py` renderiza con Cycles para revisar los modelos sin Unity.
+- **D-73 — Materiales por nombre**: el FBX solo lleva color, metálico y rugosidad. `MaterialTuning` completa los
+  valores PBR según el nombre del material: pintura con barniz (*clear coat*), cristal y tulipas transparentes,
+  cromados, goma y metales fundidos. Se aplica al importar y otra vez en tiempo de ejecución.
+- **D-74 — Calidad frente a coste**:
+  - SSGI y reflejos sobre transparentes solo en Alto y Ultra; niebla volumétrica solo en Ultra.
+  - TAA con nitidez en Medio o superior y SMAA en Bajo.
+  - GPU Resident Drawer y *occlusion culling* en GPU a partir de Medio.
+  - Distancia de sombras de 35 m, porque es un interior.
+  - El trazado de rayos y DLSS/FSR quedan fuera: exigen DX12 y hardware concreto, y no se pueden comprobar sin
+    el editor.

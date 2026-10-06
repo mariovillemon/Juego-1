@@ -124,6 +124,22 @@ namespace Garage.Unity
                 cam.Lens = lens;
             }
 
+            // Anti-aliasing per quality: SMAA on Low (cheap, no ghosting), TAA with sharpening above (needed for
+            // stable thin geometry such as wires, grilles and panel gaps, and by SSR/SSGI denoising).
+            foreach (UnityEngine.Rendering.HighDefinition.HDAdditionalCameraData hd in UnityEngine.Object.FindObjectsByType<UnityEngine.Rendering.HighDefinition.HDAdditionalCameraData>(FindObjectsSortMode.None))
+            {
+                if (hd.GetComponent<Camera>() == null || hd.GetComponent<Camera>().targetTexture != null)
+                {
+                    continue; // device screens render to textures
+                }
+
+                hd.antialiasing = s.Quality == 0
+                    ? UnityEngine.Rendering.HighDefinition.HDAdditionalCameraData.AntialiasingMode.SubpixelMorphologicalAntiAliasing
+                    : UnityEngine.Rendering.HighDefinition.HDAdditionalCameraData.AntialiasingMode.TemporalAntialiasing;
+                hd.TAAQuality = s.Quality >= 2 ? UnityEngine.Rendering.HighDefinition.HDAdditionalCameraData.TAAQualityLevel.High : UnityEngine.Rendering.HighDefinition.HDAdditionalCameraData.TAAQualityLevel.Medium;
+                hd.taaSharpenStrength = 0.6f;
+            }
+
             foreach (FocusDepthOfField dof in UnityEngine.Object.FindObjectsByType<FocusDepthOfField>(FindObjectsSortMode.None))
             {
                 dof.blurWhenInspecting = s.InspectBlur;
