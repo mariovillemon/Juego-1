@@ -47,40 +47,118 @@ def finish(name, parts, out, collider=None, lods=(1.0, 0.45, 0.15)):
 # --------------------------------------------------------------------------------------------- engine
 
 def engine(cyl, out):
-    """Engine without the parts that are separate interactive slots. Same dimensions as CarAssembler.BuildEngine."""
+    """Inline engine without the parts that are separate interactive slots (coils, plugs, injectors, sensors,
+    throttle, alternator, turbo...). Same envelope and cylinder spacing as CarAssembler (CylX, BlockH/D, HeadH),
+    so the slots sit on the right bosses. Intake on -z (firewall), exhaust on +z (radiator), timing end on -x."""
     m = M()
+    m["hose"] = g.mat("Hose", (0.025, 0.025, 0.025), 0.0, 0.6)
+    m["loom"] = g.mat("WireLoom", (0.02, 0.02, 0.02), 0.0, 0.75)
+    m["yellow"] = g.mat("DipstickYellow", (0.9, 0.65, 0.05), 0.0, 0.45)
+    m["blue_filter"] = g.mat("OilFilterBlue", (0.05, 0.12, 0.35), 0.4, 0.35)
+    m["heatshield"] = g.mat("HeatShield", (0.62, 0.6, 0.56), 1.0, 0.5)
     ew = 0.11 * cyl + 0.16
     bh, bd, hh = 0.32, 0.34, 0.13
     bt = bh / 2
     ht = bt + hh
+    cx = [0.0] if cyl == 1 else [-ew / 2 + 0.08 + (ew - 0.16) * i / (cyl - 1) for i in range(cyl)]
     p = []
-    p.append(g.box("block", (0, 0, 0), (ew, bh, bd), m["iron"], 0.01))
-    for i in range(cyl):  # cylinder bore bulges / ribs on the front face
-        x = -ew / 2 + 0.08 + (ew - 0.16) * i / max(1, cyl - 1)
-        p.append(g.box(f"rib{i}", (x, -0.02, -bd / 2 - 0.006), (0.012, bh * 0.8, 0.012), m["iron"], 0.002))
-    p.append(g.box("head", (0, bt + hh / 2, 0), (ew, hh, bd * 0.9), m["alu"], 0.008))
-    p.append(g.box("camcover", (0, ht + 0.025, 0.02), (ew - 0.04, 0.05, bd * 0.55), m["black"], 0.012))
-    for i in range(int(ew / 0.06)):
-        p.append(g.box(f"cover_rib{i}", (-ew / 2 + 0.05 + i * 0.06, ht + 0.052, 0.02), (0.008, 0.006, bd * 0.5), m["black"], 0.001))
-    p.append(g.cylinder("oilcap", (ew / 2 - 0.08, ht + 0.06, 0.06), 0.022, 0.02, "y", m["black"]))
-    p.append(g.box("oilpan", (0, -bh / 2 - 0.06, 0), (ew - 0.04, 0.12, bd * 0.85), m["alu"], 0.012))
-    p.append(g.cylinder("drainplug", (0.05, -bh / 2 - 0.125, 0.05), 0.01, 0.012, "y", m["steel"]))
-    # bell housing + gearbox
-    p.append(g.cylinder("bell", (ew / 2 + 0.07, -0.05, -0.02), 0.17, 0.14, "x", m["alu"], 32))
-    p.append(g.cylinder("gearbox", (ew / 2 + 0.22, -0.08, -0.02), 0.13, 0.22, "x", m["alu"], 32))
-    # intake plenum + runners (firewall side, -z)
+    # Block: deck, bore bulges on both faces, crankcase skirt flaring out, main bearing ribs.
+    p.append(g.box("deck", (0, bt - 0.09, 0), (ew, 0.18, bd - 0.04), m["iron"], 0.012))
+    for x in cx:
+        for side in (-1, 1):
+            p.append(g.cylinder("bore", (x, bt - 0.09, side * (bd / 2 - 0.05)), 0.052, 0.17, "y", m["iron"], 28, 0.006))
+    p.append(g.box("skirt", (0, -0.07, 0), (ew, 0.14, bd), m["iron"], 0.014))
+    for i in range(cyl + 1):
+        x = -ew / 2 + 0.03 + (ew - 0.06) * i / cyl
+        for side in (-1, 1):
+            p.append(g.box("web", (x, -0.07, side * (bd / 2 + 0.004)), (0.014, 0.12, 0.012), m["iron"], 0.003))
+    for x in cx[:: max(1, cyl // 2)]:
+        p.append(g.cylinder("freeze_plug", (x, -0.02, -bd / 2 - 0.004), 0.018, 0.01, "z", m["steel"], 20, 0.002))
+    # Cylinder head with cam carriers and the valve cover (centre channel left free for the coil slots).
+    p.append(g.box("head", (0, bt + hh / 2, 0), (ew, hh, bd * 0.9), m["alu"], 0.01))
+    p.append(g.box("head_gasket_line", (0, bt + 0.002, 0), (ew + 0.004, 0.004, bd * 0.91), m["steel"], 0.001))
+    cover_w = bd * 0.55
+    for side in (-1, 1):
+        p.append(g.box("cover_side", (0, ht + 0.022, 0.02 + side * (cover_w / 2 - 0.035)), (ew - 0.04, 0.045, 0.07), m["black"], 0.016))
+        for i in range(int((ew - 0.08) / 0.035)):
+            x = -ew / 2 + 0.05 + i * 0.035
+            p.append(g.box("cover_rib", (x, ht + 0.046, 0.02 + side * (cover_w / 2 - 0.035)), (0.006, 0.006, 0.055), m["black"], 0.001))
+    p.append(g.box("cover_floor", (0, ht + 0.006, 0.02), (ew - 0.05, 0.012, cover_w - 0.1), m["black"], 0.004))
+    p.append(g.box("cover_flange", (0, ht + 0.003, 0.02), (ew - 0.02, 0.008, cover_w + 0.01), m["alu"], 0.003))
+    for x in (-ew / 2 + 0.03, ew / 2 - 0.03):
+        for z in (0.02 - cover_w / 2 + 0.01, 0.02 + cover_w / 2 - 0.01):
+            p.append(g.cylinder("cover_bolt", (x, ht + 0.012, z), 0.006, 0.008, "y", m["steel"], 6, 0.001))
+    p.append(g.cylinder("oilcap", (ew / 2 - 0.08, ht + 0.06, 0.02 + cover_w / 2 - 0.035), 0.024, 0.02, "y", m["black"], 24, 0.003))
+    p.append(g.tube("pcv_hose", [(-ew / 2 + 0.06, ht + 0.045, 0.02 - cover_w / 2 + 0.02), (-ew / 2 + 0.04, ht + 0.03, -bd / 2 - 0.06), (-ew / 2 + 0.08, ht - 0.01, -bd / 2 - 0.12)], 0.008, m["hose"]))
+    # Sump with fins and drain plug.
+    p.append(g.box("oilpan", (0, -bh / 2 - 0.06, 0), (ew - 0.04, 0.12, bd * 0.85), m["alu"], 0.014))
+    for i in range(int((ew - 0.08) / 0.05)):
+        p.append(g.box("pan_fin", (-ew / 2 + 0.06 + i * 0.05, -bh / 2 - 0.1, 0), (0.006, 0.05, bd * 0.8), m["alu"], 0.002))
+    p.append(g.cylinder("drainplug", (0.05, -bh / 2 - 0.125, 0.05), 0.01, 0.012, "y", m["steel"], 6))
+    # Oil filter on the intake side, dipstick tube with yellow handle.
+    p.append(g.cylinder("oil_filter", (ew / 2 - 0.1, -0.08, -bd / 2 - 0.05), 0.038, 0.09, "z", m["blue_filter"], 32, 0.006))
+    p.append(g.cylinder("filter_base", (ew / 2 - 0.1, -0.08, -bd / 2 - 0.005), 0.042, 0.012, "z", m["alu"], 32, 0.002))
+    p.append(g.tube("dipstick", [(-ew / 2 + 0.12, -0.12, -bd / 2 - 0.01), (-ew / 2 + 0.13, 0.08, -bd / 2 - 0.03), (-ew / 2 + 0.14, ht + 0.02, -bd / 2 - 0.05)], 0.005, m["steel"]))
+    p.append(g.torus("dipstick_handle", (-ew / 2 + 0.14, ht + 0.04, -bd / 2 - 0.05), 0.016, 0.005, "z", m["yellow"]))
+    # Gearbox: bell housing with bolt bosses and a ribbed case.
+    p.append(g.cylinder("bell", (ew / 2 + 0.07, -0.05, -0.02), 0.17, 0.14, "x", m["alu"], 40, 0.01))
+    for i in range(8):
+        a = 2 * math.pi * i / 8
+        p.append(g.cylinder("bell_boss", (ew / 2 + 0.01, -0.05 + 0.172 * math.cos(a), -0.02 + 0.172 * math.sin(a)), 0.012, 0.02, "x", m["alu"], 12, 0.002))
+    p.append(g.cylinder("gearbox", (ew / 2 + 0.22, -0.08, -0.02), 0.13, 0.22, "x", m["alu"], 40, 0.01))
+    for i in range(4):
+        p.append(g.torus("case_rib", (ew / 2 + 0.15 + i * 0.045, -0.08, -0.02), 0.131, 0.006, "x", m["alu"]))
+    # Intake: plenum, curved runners into the head, throttle flange at +x.
     pz = -bd / 2 - 0.14
-    p.append(g.cylinder("plenum", (0, ht - 0.02, pz), 0.05, ew * 0.9, "x", m["black"], 24))
-    for i in range(cyl):
-        x = -ew / 2 + 0.08 + (ew - 0.16) * i / max(1, cyl - 1)
-        p.append(g.tube(f"runner{i}", [(x, ht - 0.02, pz + 0.04), (x, ht - 0.03, pz + 0.09), (x, ht - 0.06, -bd / 2 + 0.005)], 0.022, m["black"]))
-    # exhaust manifold (radiator side, +z): primaries merging to a collector
-    for i in range(cyl):
-        x = -ew / 2 + 0.08 + (ew - 0.16) * i / max(1, cyl - 1)
-        p.append(g.tube(f"primary{i}", [(x, bt + 0.04, bd / 2), (x * 0.7, bt + 0.0, bd / 2 + 0.06), (ew / 2 - 0.12, bt - 0.05, bd / 2 + 0.1)], 0.018, m["exhaust"]))
-    # front pulleys (timing side is a separate slot; accessory pulley on the crank)
-    p.append(g.cylinder("crank_pulley", (-ew / 2 - 0.02, -0.1, 0), 0.07, 0.03, "x", m["steel"], 32))
-    finish(f"Engine_I{cyl}", p, out, ((0, -0.03, 0), (ew + 0.1, bh + hh + 0.2, bd + 0.2)))
+    p.append(g.cylinder("plenum", (0, ht - 0.02, pz), 0.055, ew * 0.9, "x", m["black"], 32, 0.01))
+    for x in cx:
+        p.append(g.tube("runner", [(x, ht - 0.02, pz + 0.03), (x, ht + 0.01, pz + 0.08), (x, ht - 0.03, -bd / 2 - 0.01), (x, ht - 0.07, -bd / 2 + 0.01)], 0.024, m["black"]))
+    p.append(g.cylinder("throttle_flange", (ew * 0.45 + 0.01, ht - 0.02, pz), 0.06, 0.012, "x", m["alu"], 32, 0.002))
+    # Fuel rail along the injector bosses.
+    p.append(g.cylinder("fuel_rail", (0, ht + 0.02, -bd / 2 - 0.035), 0.012, ew - 0.06, "x", m["steel"], 16, 0.002))
+    for x in cx:
+        p.append(g.box("rail_clamp", (x + 0.03, ht + 0.02, -bd / 2 - 0.035), (0.012, 0.03, 0.03), m["alu"], 0.002))
+    # Exhaust: primaries, collector and a heat shield with ribs.
+    for x in cx:
+        p.append(g.tube("primary", [(x, bt + 0.05, bd / 2), (x, bt + 0.03, bd / 2 + 0.05), (x * 0.6, bt - 0.02, bd / 2 + 0.09), (ew / 2 - 0.12, bt - 0.06, bd / 2 + 0.11)], 0.019, m["exhaust"]))
+    p.append(g.box("heatshield", (0, bt + 0.02, bd / 2 + 0.115), (ew - 0.06, 0.12, 0.012), m["heatshield"], 0.004))
+    for i in range(int((ew - 0.1) / 0.03)):
+        p.append(g.box("shield_rib", (-ew / 2 + 0.06 + i * 0.03, bt + 0.02, bd / 2 + 0.122), (0.004, 0.1, 0.004), m["heatshield"], 0.001))
+    # Timing end: plastic cover, water pump and the serpentine accessory belt.
+    p.append(g.box("timing_cover", (-ew / 2 - 0.02, 0.02, 0.0), (0.035, bh + hh - 0.06, bd * 0.75), m["black"], 0.02))
+    pulleys = [((-0.12, 0.0), 0.07, "crank"), ((0.07, 0.07), 0.05, "water_pump"), ((-0.02, 0.15), 0.03, "tensioner"), ((-0.17, 0.15), 0.055, "ac")]
+    xb = -ew / 2 - 0.05
+    for (yy, zz), r, n in pulleys:
+        p.append(g.cylinder(n, (xb, yy, zz), r, 0.025, "x", m["steel"], 36, 0.003))
+        p.append(g.cylinder(n + "_hub", (xb - 0.015, yy, zz), r * 0.35, 0.01, "x", m["steel"], 18, 0.002))
+    belt = []
+    hull = [((-0.12, 0.0), 0.07), ((-0.17, 0.15), 0.055), ((-0.02, 0.15), 0.03), ((0.07, 0.07), 0.05)]
+    for i, ((yy, zz), r) in enumerate(hull):
+        (y0, z0), _ = hull[i - 1]
+        (y1, z1), _ = hull[(i + 1) % len(hull)]
+        a0 = math.atan2(zz - z0, yy - y0) - math.pi / 2
+        a1 = math.atan2(z1 - zz, y1 - yy) - math.pi / 2
+        while a1 < a0:
+            a1 += 2 * math.pi
+        for k in range(6):
+            a = a0 + (a1 - a0) * k / 5
+            belt.append((xb, yy + (r + 0.004) * math.cos(a), zz + (r + 0.004) * math.sin(a)))
+    belt.append(belt[0])
+    p.append(g.tube("belt", belt, 0.005, m["rubber"]))
+    # Coolant: thermostat housing outlet and the upper/lower radiator hoses heading to the front.
+    p.append(g.tube("upper_hose", [(-ew / 2 + 0.02, ht - 0.03, bd / 2 - 0.02), (-ew / 2 - 0.02, ht - 0.02, bd / 2 + 0.12), (-ew / 2 + 0.05, ht - 0.06, bd / 2 + 0.3)], 0.019, m["hose"]))
+    p.append(g.tube("lower_hose", [(-ew / 2 - 0.02, -0.06, 0.07), (-ew / 2 - 0.04, -0.12, bd / 2 + 0.1), (-ew / 2 + 0.08, -0.2, bd / 2 + 0.3)], 0.019, m["hose"]))
+    p.append(g.tube("heater_hose", [(ew / 2 - 0.05, ht - 0.04, -bd / 2 + 0.02), (ew / 2 - 0.02, ht - 0.1, -bd / 2 - 0.15), (ew / 2 - 0.1, ht - 0.12, -bd / 2 - 0.3)], 0.011, m["hose"]))
+    # Wiring harness along the intake side with branch leads to each injector and coil.
+    loom = [(-ew / 2 + 0.02, ht + 0.06, -bd / 2 - 0.08), (0, ht + 0.065, -bd / 2 - 0.085), (ew / 2 - 0.02, ht + 0.06, -bd / 2 - 0.08), (ew / 2 + 0.05, ht, -bd / 2 - 0.2)]
+    p.append(g.tube("loom", loom, 0.012, m["loom"]))
+    for x in cx:
+        p.append(g.tube("lead_inj", [(x, ht + 0.065, -bd / 2 - 0.085), (x + 0.01, ht + 0.05, -bd / 2 - 0.05), (x + 0.012, ht + 0.035, -bd / 2 - 0.035)], 0.004, m["loom"]))
+        p.append(g.tube("lead_coil", [(x, ht + 0.065, -bd / 2 - 0.085), (x + 0.015, ht + 0.07, -0.06), (x + 0.02, ht + 0.06, -0.02)], 0.004, m["loom"]))
+    # Engine mounts.
+    p.append(g.box("mount_l", (-ew / 2 - 0.02, 0.1, bd / 2 - 0.05), (0.06, 0.06, 0.08), m["alu"], 0.008))
+    p.append(g.cylinder("mount_rubber", (-ew / 2 - 0.02, 0.15, bd / 2 - 0.05), 0.03, 0.04, "y", m["rubber"], 20, 0.004))
+    finish(f"Engine_I{cyl}", p, out, ((0, -0.03, 0), (ew + 0.1, bh + hh + 0.2, bd + 0.2)), lods=(1.0, 0.4, 0.12))
 
 
 # ---------------------------------------------------------------------------------------------- parts
