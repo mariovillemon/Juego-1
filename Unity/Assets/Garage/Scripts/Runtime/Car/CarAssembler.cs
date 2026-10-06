@@ -121,7 +121,13 @@ namespace Garage.Unity
                 if (slot.hasConnector && ComponentKinds.IsSensor(c.Kind))
                 {
                     // Small connector plug, purely visual (clicks go to the parent slot).
-                    GameObject plug = Part(go.transform, "Connector", PrimitiveType.Cube, new Vector3(0, 0.6f, 0), new Vector3(0.7f, 0.35f, 0.7f), _dark);
+                    // Real size (≈22 × 12 × 18 mm) on top of the part, whatever the slot's scale (placeholder
+                    // primitives are scaled, generated models are not).
+                    Vector3 ls = go.transform.lossyScale;
+                    Vector3 inv = new Vector3(1f / Mathf.Max(1e-4f, ls.x), 1f / Mathf.Max(1e-4f, ls.y), 1f / Mathf.Max(1e-4f, ls.z));
+                    Renderer pr = go.GetComponentInChildren<Renderer>();
+                    float top = pr != null ? go.transform.InverseTransformPoint(new Vector3(pr.bounds.center.x, pr.bounds.max.y, pr.bounds.center.z)).y : 0.5f;
+                    GameObject plug = Part(go.transform, "Connector", PrimitiveType.Cube, new Vector3(0, top + 0.006f * inv.y, 0), Vector3.Scale(new Vector3(0.022f, 0.012f, 0.018f), inv), _dark);
                     Destroy(plug.GetComponent<Collider>());
                 }
             }
